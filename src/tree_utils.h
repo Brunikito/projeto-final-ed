@@ -51,4 +51,11 @@ struct SearchResult
     int numComparisons;
 };
 
+void recursivePrintIndex(Node* node, int& counter);
+void recursivePrintTree(Node* node, const std::string& prefix, bool isLeft);
+void printIndex(BinaryTree* tree);
+void printTree(BinaryTree* tree);
+void printInsertResult(const InsertResult& result);
+void printSearchResult(const SearchResult& result);
+
 #endif // TREE_UTILS_H

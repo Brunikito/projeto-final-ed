@@ -14,8 +14,8 @@
  * TestCase myTest() {
  *     auto initialTime = std::chrono::high_resolution_clock::now();
  *     TestCase test = initTest("myTest");
- *     assertTrue(&test, condition, "Condition failed");
- *     endTest(&test, initialTime);
+ *     assertTrue(test, condition, "Condition failed");
+ *     endTest(test, initialTime);
  *     return test;
  * }
  *
@@ -25,6 +25,8 @@
  * 
  * int main(){
  * auto allTests = initTestCases();
+ * addTest(allTests, myTest());
+ * printTestResults(allTests);
  * addTest(allTests, myTest());
  * printTestResults(allTests);
  * return 0;
