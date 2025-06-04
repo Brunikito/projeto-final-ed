@@ -32,15 +32,15 @@ Este arquivo `test_bst.cpp` contém uma suíte completa de testes para a impleme
 
 ## Como Compilar
 
+Vá até a raiz do repositório, em seguida:
 ```bash
-cd "/c/Users/guguo/OneDrive/Área de Trabalho/FGV/estrutura_de_dados/projeto-final-ed"
-g++ -o test_bst test/test_bst.cpp test/treetest.cpp src/bst.cpp -I. -std=c++11
+g++ -o test_tree_bst test/test_bst.cpp test/treetest.cpp src/bst.cpp -I. -std=c++17
 ```
 
 ## Como Executar
 
 ```bash
-./test_bst
+./test_tree_bst
 ```
 
 ## Saída Esperada

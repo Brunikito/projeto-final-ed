@@ -1,0 +1,6 @@
+# Build outputs
+*.exe
+test_tree_*
+
+# vscode
+.vscode/

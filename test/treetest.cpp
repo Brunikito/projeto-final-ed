@@ -48,17 +48,17 @@ namespace TreeTest {
                 executionTimeCorrect /= 1'000;
                 executionTimeUnit = "ms";
             }
-            if (test.executionTime > 1000){
-                executionTimeCorrect /= 1000;
+            if (test.executionTime > 1'000){
+                executionTimeCorrect /= 1'000;
                 executionTimeUnit = "s";
-            }
-            if (test.executionTime > 60){
-                executionTimeCorrect /= 60;
-                executionTimeUnit = "min";
-            }
-            if (test.executionTime > 60){
-                executionTimeCorrect /= 60;
-                executionTimeUnit = "h";
+                if (test.executionTime > 60){
+                    executionTimeCorrect /= 60;
+                    executionTimeUnit = "min";
+                }
+                if (test.executionTime > 60){
+                    executionTimeCorrect /= 60;
+                    executionTimeUnit = "h";
+                }
             }
 
             if (test.passed){
@@ -90,19 +90,20 @@ namespace TreeTest {
         if (totalExecutionTime > 1'000){
             totalExecutionTime /= 1'000;
             totalExecutionTimeUnit = "s";
+            if (totalExecutionTime > 60){
+                totalExecutionTime /= 60;
+                totalExecutionTimeUnit = "min";
+            }
+            if (totalExecutionTime > 60){
+                totalExecutionTime /= 60;
+                totalExecutionTimeUnit = "h";
+            }
         }
-        if (totalExecutionTime > 60){
-            totalExecutionTime /= 60;
-            totalExecutionTimeUnit = "min";
-        }
-        if (totalExecutionTime > 60){
-            totalExecutionTime /= 60;
-            totalExecutionTimeUnit = "h";
-        }
+        
 
         std::cout << "Total Execution Time: " << totalExecutionTime << totalExecutionTimeUnit << std::endl;
-        std::cout << passedCount << "Tests Passed." << std::endl;
-        std::cout << failedCount << "Tests Failed." << std::endl;
+        std::cout << passedCount << " Tests Passed." << std::endl;
+        std::cout << failedCount << " Tests Failed." << std::endl;
 
         if (failedCount == 0) {
             printGreen("All tests passed!\n");
