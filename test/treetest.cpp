@@ -23,9 +23,10 @@ namespace TreeTest {
         TestCase test;
         test.name = name;
         test.passed = true;
-        test.executionTime = 0;        return test;
+        test.executionTime = 0;
+        return test;
     }
-    void endTest(TestCase& test, std::chrono::system_clock::time_point initialTime){
+    void endTest(TestCase& test, std::chrono::_V2::system_clock::time_point initialTime){
         auto currentTime = std::chrono::high_resolution_clock::now();
         test.executionTime = std::chrono::duration_cast<std::chrono::duration<double, std::micro>>(currentTime - initialTime).count();
     }
@@ -36,14 +37,19 @@ namespace TreeTest {
         std::cout << "\nRunning Tests\n" << "-------------\n" << std::endl;
         int passedCount = 0;
         int failedCount = 0;
+        double totalExecutionTime = 0;
+        const char* totalExecutionTimeUnit = "us";
+        
         for (auto test : tests){
             double executionTimeCorrect = test.executionTime;
-            const char* executionTimeUnit = "us";            if (test.executionTime > 1000){
-                executionTimeCorrect /= 1000;
+            totalExecutionTime += test.executionTime;
+            const char* executionTimeUnit = "us";
+            if (test.executionTime > 1'000){
+                executionTimeCorrect /= 1'000;
                 executionTimeUnit = "ms";
             }
-            if (test.executionTime > 1000){
-                executionTimeCorrect /= 1000;
+            if (test.executionTime > 1'000){
+                executionTimeCorrect /= 1'000;
                 executionTimeUnit = "s";
                 if (test.executionTime > 60){
                     executionTimeCorrect /= 60;
@@ -71,7 +77,8 @@ namespace TreeTest {
                 printRed(executionTimeUnit);
                 printRed(".\n");
                 failedCount++;
-            }            std::cout << "-----------" << std::endl;
+            }
+            std::cout << "-----------" << std::endl;
         }
 
         // Imprime o resumo (passou em verde e falhou em vermelho)
