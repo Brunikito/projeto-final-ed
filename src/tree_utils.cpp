@@ -3,14 +3,31 @@
 #include <string>
 #include <iostream>
 
-void recursivePrintIndex(Node* node, int level){
+void recursivePrintIndex(Node* node, int& counter){
     if (node == nullptr) return;
-    recursivePrintIndex(node->left, level + 1);
-    std::cout << std::string(level * 2, ' ') << node->word << " (" << node->documentIds.size() << " docs)" << std::endl;
-    recursivePrintIndex(node->right, level + 1);
+    recursivePrintIndex(node->left, counter);
+    std::cout << ++counter << ". " << node->word << ": ";
+    for (size_t i = 0; i < node->documentIds.size(); ++i) {
+        std::cout << node->documentIds[i];
+        if (i != node->documentIds.size() - 1) std::cout << ", ";
+    }
+    std::cout << std::endl;
+    recursivePrintIndex(node->right, counter);
 }
-void recursivePrintTree(Node* node, int level){
+void recursivePrintTree(Node* node, const std::string& prefix, bool isLeft){
+    if (node == nullptr) return;
+    std::cout << prefix;
+    std::cout << (isLeft ? "├── " : "└── ");
+    std::cout << node->word << std::endl;
 
+    bool hasLeft = node->left != nullptr;
+    bool hasRight = node->right != nullptr;
+
+    if (hasLeft || hasRight) {
+        std::string newPrefix = prefix + (isLeft ? "│   " : "    ");
+        if (node->left) recursivePrintTree(node->left, newPrefix, true);
+        if (node->right) recursivePrintTree(node->right, newPrefix, false);
+    }
 }
 void printIndex(BinaryTree* tree){
 
