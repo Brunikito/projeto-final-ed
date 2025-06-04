@@ -7,19 +7,6 @@
 #include <iostream>
 #include "bst.h"
 
-/**
- * @file data.h
- * @brief Rotinas de pré‑processamento de documentos textuais.
- *
- * Este módulo contém funções auxiliares para:
- * * listar arquivos dentro de um diretório;
- * * ordenar esses arquivos numericamente pelo nome;
- * * carregar o conteúdo de `N` primeiros documentos em memória.
- *
- * A ideia é padronizar um pipeline de leitura que alimente a árvore de busca
- * binária (BST) definida em `bst.h` com as palavras de cada arquivo.
- *
- */
 namespace DATA {
     /**
      * @brief Ajuda o Heap‑Sort a manter a propriedade de max‑heap.
