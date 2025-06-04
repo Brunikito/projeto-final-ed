@@ -6,24 +6,41 @@ Implementação da Entrega 1 do Trabalho A2, focada na construção de um índic
 
 * Implementação da Árvore Binária de Busca (BST) para o índice invertido.
 * Leitura e processamento de arquivos `.txt` de um diretório.
-* CLI para indexar documentos e buscar palavras: `./bst search <n_docs> <diretório>`.
+* CLI para indexar documentos e buscar palavras: `./run_bst search <n_docs> <diretório>`.
 
 ## 2. Estrutura de Arquivos (Entrega 1)
 
 ```
 projeto-final/
 │
+│
+├── data/
+│   ...
+│   └── *.txt                 # Documentos .txt para indexação
+│
 ├── src/
 │   ├── main_bst.cpp          # CLI da BST
+│   ├── main_avl.cpp          # CLI da AVL
+│   ├── main_rbt.cpp          # CLI da RBT
 │   ├── bst.cpp               # Implementação da BST
+│   ├── avl.cpp               # Implementação da AVL
+│   ├── rbt.cpp               # Implementação da RBT
 │   ├── bst.h                 # Cabeçalho da BST
+│   ├── avl.h                 # Cabeçalho da AVL
+│   ├── rbt.h                 # Cabeçalho da RBT
 │   ├── tree_utils.cpp        # Structs (Node, etc.) e funções aux.
 │   ├── tree_utils.h          # Cabeçalho de tree_utils
 │   ├── data.cpp              # Leitura de arquivos
-│   ├── data.h                # Cabeçalho de data
+│   └── data.h                # Cabeçalho de data
 │
-├── data/                     # Documentos .txt para indexação
+├── test/
+│   ├── treetest.h            # Cabeçalho do framework de testes
+│   ├── treetest.cpp          # Implementação do framework de testes
+│   ├── test_bst.cpp          # Testes da BST
+│   ├── test_avl.cpp          # Testes da AVL
+│   └── test_rbt.cpp          # Testes da RBT
 │
+├── .gitignore
 └── README.md                 # Este arquivo
 ```
 
@@ -33,17 +50,17 @@ projeto-final/
 
 ```bash
 # Exemplo com g++
-g++ src/main_bst.cpp src/bst.cpp src/tree_utils.cpp src/data.cpp -o bst
+g++ src/main_bst.cpp src/bst.cpp src/tree_utils.cpp src/data.cpp -I. -std=c++17 -o run_bst
 ```
 
-Isso gera o executável `bst` no diretório raiz.
+Isso gera o executável `run_bst` no diretório raiz.
 
 ## 4. Como Executar
 
 Após compilar, execute o comando de busca:
 
 ```bash
-./bst search <n_docs> <diretório_documentos>
+./run_bst search <n_docs> <diretório_documentos>
 ```
 
 Onde:
@@ -54,7 +71,7 @@ Onde:
 Exemplo:
 
 ```bash
-./bst search 1000 ./data/corpus
+./run_bst search 1000 ./data/corpus
 ```
 
 O programa indexará os documentos e permitirá buscas por palavras.
@@ -62,12 +79,12 @@ O programa indexará os documentos e permitirá buscas por palavras.
 ## 5. Dependências
 
 * Compilador C++.
-* Bibliotecas padrão C++: `std::vector`, `std::string`, `chrono`, `iostream`, `fstream`.
+* Bibliotecas padrão C++: `std::vector`, `std::string`, `chrono`, `iostream`, `fstream`, `algorithm`.
 
 ## 6. Integrantes do Grupo
 
 * [Artur Vidal Krause](https://github.com/arturvidalkrause)
-* [Bruno Luis Zerbinato Rosa]()
-* [Bruno Cavalli]()
-* [Gustavo Oliveira]()
+* [Bruno Luis Zerbinato Rosa](https://github.com/Brunikito)
+* [Bruno Cavalli](https://github.com/BrunoCavalli)
+* [Gustavo Oliveira](https://github.com/GuOliv2306)
 * [Kauan Kevem Sousa Farias](https://github.com/kauankevem)
