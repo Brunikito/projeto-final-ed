@@ -70,4 +70,4 @@ O programa indexará os documentos e permitirá buscas por palavras.
 * [Bruno Luis Zerbinato Rosa]()
 * [Bruno Cavalli]()
 * [Gustavo Oliveira]()
-* []()
+* [Kauan Kevem Sousa Farias](https://github.com/kauankevem)
