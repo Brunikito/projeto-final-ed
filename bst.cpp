@@ -149,6 +149,7 @@ void destroyNode(Node* node) {
     destroyNode(node->left);
     destroyNode(node->right);
     delete node;
+    node = nullptr;
 }
 
 void destroy(BinaryTree* tree) {
@@ -159,6 +160,7 @@ void destroy(BinaryTree* tree) {
     // Inicia a recursão
     destroyNode(tree->root);
     delete tree;
+    tree = nullptr;
 }
 
 }
