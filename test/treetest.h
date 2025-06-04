@@ -8,8 +8,8 @@
  * TestCase myTest() {
  *     auto initialTime = std::chrono::high_resolution_clock::now();
  *     TestCase test = initTest("myTest");
- *     assertTrue(&test, condition, "Condition failed");
- *     endTest(&test, initialTime);
+ *     assertTrue(test, condition, "Condition failed");
+ *     endTest(test, initialTime);
  *     return test;
  * }
  *
@@ -19,8 +19,8 @@
  * 
  * int main(){
  * auto allTests = initTestCases();
- * addTest(&alltTests, myTest());
- * printTestResults(&allTests);
+ * addTest(allTests, myTest());
+ * printTestResults(allTests);
  * return 0;
  * }
  * 
@@ -30,6 +30,7 @@
 #define TREETEST_H
 #include <vector>
 #include <string>
+#include <chrono>
 
 namespace TreeTest {
     // Estrutura do teste
@@ -49,7 +50,7 @@ namespace TreeTest {
     // Funções de Teste
     std::vector<TestCase> initTestCases();
     TestCase initTest(const char* name);
-    void endTest(TestCase& test);
+    void endTest(TestCase& test, std::chrono::system_clock::time_point initialTime);
     void addTest(std::vector<TestCase>& allTests, TestCase test);
     void printTestResults(const std::vector<TestCase>& tests);
 
