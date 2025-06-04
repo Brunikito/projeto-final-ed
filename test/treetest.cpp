@@ -19,7 +19,6 @@ namespace TreeTest {
     std::vector<TestCase> initTestCases(){
         return std::vector<TestCase>{};
     }
-
     TestCase initTest(const char* name){
         TestCase test;
         test.name = name;
@@ -27,16 +26,13 @@ namespace TreeTest {
         test.executionTime = 0;
         return test;
     }
-
     void endTest(TestCase& test, std::chrono::_V2::system_clock::time_point initialTime){
         auto currentTime = std::chrono::high_resolution_clock::now();
         test.executionTime = std::chrono::duration_cast<std::chrono::duration<double, std::micro>>(currentTime - initialTime).count();
     }
-
     void addTest(std::vector<TestCase>& allTests, TestCase test){
         allTests.push_back(test);
     }
-
     void printTestResults(const std::vector<TestCase>& tests){
         std::cout << "\nRunning Tests\n" << "-------------\n" << std::endl;
         int passedCount = 0;
