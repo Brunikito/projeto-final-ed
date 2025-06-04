@@ -6,9 +6,10 @@
  * e finalize com o retorno do TestCase.
  * Exemplo:
  * TestCase myTest() {
+ *     auto initialTime = std::chrono::high_resolution_clock::now();
  *     TestCase test = initTest("myTest");
- *     assertTrue(test, condition, "Condition failed");
- *     endTest(test);
+ *     assertTrue(&test, condition, "Condition failed");
+ *     endTest(&test, initialTime);
  *     return test;
  * }
  *
@@ -39,8 +40,11 @@ namespace TreeTest {
     };
 
     // Funções auxiliares
-    void printGreen(const std::string& text);
-    void printRed(const std::string& text);
+    template <typename T>
+    void printGreen(const T& val);
+
+    template <typename T>
+    void printRed(const T& val);
 
     // Funções de Teste
     std::vector<TestCase> initTestCases();
@@ -50,10 +54,10 @@ namespace TreeTest {
     void printTestResults(const std::vector<TestCase>& tests);
 
     // Assertivas
-    void assertTrue(TestCase& test, bool condition, const char* message);
-    void assertFalse(TestCase& test, bool condition, const char* message);
-    void assertNotNull(TestCase& test, void* pointer, const char* message);
-    void assertNull(TestCase& test, void* pointer, const char* message);
+    void assertTrue(TestCase& test, bool condition, const char* failureMessage);
+    void assertFalse(TestCase& test, bool condition, const char* failureMessage);
+    void assertNotNull(TestCase& test, void* pointer, const char* failureMessage);
+    void assertNull(TestCase& test, void* pointer, const char* failureMessage);
 }
 
 #endif // TREETEST_H
