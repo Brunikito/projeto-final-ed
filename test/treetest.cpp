@@ -48,8 +48,8 @@ namespace TreeTest {
                 executionTimeCorrect /= 1'000;
                 executionTimeUnit = "ms";
             }
-            if (test.executionTime > 1'000){
-                executionTimeCorrect /= 1'000;
+            if (test.executionTime > 1000){
+                executionTimeCorrect /= 1000;
                 executionTimeUnit = "s";
             }
             if (test.executionTime > 60){
