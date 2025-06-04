@@ -33,7 +33,7 @@ projeto-final/
 
 ```bash
 # Exemplo com g++
-g++ src/main_bst.cpp src/bst.cpp src/tree_utils.cpp src/data.cpp -o bst
+g++ src/main_bst.cpp src/bst.cpp src/tree_utils.cpp src/data.cpp -o bst -std=c++17
 ```
 
 Isso gera o executável `bst` no diretório raiz.
