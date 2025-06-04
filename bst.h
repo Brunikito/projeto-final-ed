@@ -34,11 +34,11 @@
         int numComparisons;
     };
 
-        BinaryTree* create();
-        InsertResult insert(BinaryTree* tree, const std::string& word, int documentId);
-        SearchResult search(BinaryTree* tree, const std::string& word);
-        void destroy(BinaryTree* tree);
+    BinaryTree* create();
+    InsertResult insert(BinaryTree* tree, const std::string& word, int documentId);
+    SearchResult search(BinaryTree* tree, const std::string& word);
+    void destroy(BinaryTree* tree);
 
-    } // namespace BST
+} // namespace BST
 
-    #endif // BST_H
+#endif // BST_H
