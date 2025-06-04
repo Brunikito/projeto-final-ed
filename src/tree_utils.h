@@ -51,4 +51,11 @@ struct SearchResult
     int numComparisons;
 };
 
+void recursivePrintIndex(Node* node, int level);
+void recursivePrintTree(Node* node, int level);
+void printIndex(BinaryTree* tree);
+void printTree(BinaryTree* tree);
+void printInsertResult(const InsertResult& result);
+void printSearchResult(const SearchResult& result);
+
 #endif // TREE_UTILS_H
