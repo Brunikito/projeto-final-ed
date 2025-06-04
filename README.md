@@ -78,7 +78,7 @@ O programa indexará os documentos e permitirá buscas por palavras.
 ## 5. Dependências
 
 * Compilador C++17.
-* Bibliotecas padrão C++: `std::vector`, `std::string`, `chrono`, `iostream`, `fstream`, `algorithm`.
+* Bibliotecas padrão C++: `std::vector`, `std::string`, `chrono`, `iostream`, `fstream`.
 
 ## 6. Integrantes do Grupo
 
