@@ -50,7 +50,7 @@ projeto-final/
 
 ```bash
 # Exemplo com g++
-g++ src/main_bst.cpp src/bst.cpp src/tree_utils.cpp src/data.cpp -I. -std=c++17 -o run_bst
+g++ src/main_bst.cpp src/bst.cpp src/tree_utils.cpp src/data.cpp -o bst -std=c++17
 ```
 
 Isso gera o executável `run_bst` no diretório raiz.
@@ -78,8 +78,8 @@ O programa indexará os documentos e permitirá buscas por palavras.
 
 ## 5. Dependências
 
-* Compilador C++.
-* Bibliotecas padrão C++: `std::vector`, `std::string`, `chrono`, `iostream`, `fstream`, `algorithm`.
+* Compilador C++17.
+* Bibliotecas padrão C++: `std::vector`, `std::string`, `chrono`, `iostream`, `fstream`.
 
 ## 6. Integrantes do Grupo
 
