@@ -51,7 +51,7 @@ InsertResult insert(BinaryTree* tree, const std::string& word, int documentId){
 
     // Actual function
     Node* actualNode = tree->root;
-    while (actualNode->left != nullptr && actualNode->right != nullptr) {
+    while (actualNode->left != nullptr || actualNode->right != nullptr) {
         stats.numComparisons++;
         if (word == actualNode->word) {
             actualNode->documentIds.push_back(documentId);
