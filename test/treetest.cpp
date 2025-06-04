@@ -37,8 +37,12 @@ namespace TreeTest {
         std::cout << "\nRunning Tests\n" << "-------------\n" << std::endl;
         int passedCount = 0;
         int failedCount = 0;
+        double totalExecutionTime = 0;
+        const char* totalExecutionTimeUnit = "us";
+        
         for (auto test : tests){
             double executionTimeCorrect = test.executionTime;
+            totalExecutionTime += test.executionTime;
             const char* executionTimeUnit = "us";
             if (test.executionTime > 1'000){
                 executionTimeCorrect /= 1'000;
@@ -79,6 +83,24 @@ namespace TreeTest {
 
         // Imprime o resumo (passou em verde e falhou em vermelho)
         std::cout << "\nSummary:\n";
+        if (totalExecutionTime > 1'000){
+            totalExecutionTime /= 1'000;
+            totalExecutionTimeUnit = "ms";
+        }
+        if (totalExecutionTime > 1'000){
+            totalExecutionTime /= 1'000;
+            totalExecutionTimeUnit = "s";
+        }
+        if (totalExecutionTime > 60){
+            totalExecutionTime /= 60;
+            totalExecutionTimeUnit = "min";
+        }
+        if (totalExecutionTime > 60){
+            totalExecutionTime /= 60;
+            totalExecutionTimeUnit = "h";
+        }
+
+        std::cout << "Total Execution Time: " << totalExecutionTime << totalExecutionTimeUnit << std::endl;
         std::cout << passedCount << "Tests Passed." << std::endl;
         std::cout << failedCount << "Tests Failed." << std::endl;
 
