@@ -30,7 +30,7 @@ namespace TreeTest {
 
     void endTest(TestCase& test, std::chrono::_V2::system_clock::time_point initialTime){
         auto currentTime = std::chrono::high_resolution_clock::now();
-        test.executionTime = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(currentTime - initialTime).count();
+        test.executionTime = std::chrono::duration_cast<std::chrono::duration<double, std::micro>>(currentTime - initialTime).count();
     }
 
     void addTest(std::vector<TestCase>& allTests, TestCase test){
@@ -42,19 +42,40 @@ namespace TreeTest {
         int passedCount = 0;
         int failedCount = 0;
         for (auto test : tests){
+            double executionTimeCorrect = test.executionTime;
+            const char* executionTimeUnit = "us";
+            if (test.executionTime > 1'000){
+                executionTimeCorrect /= 1'000;
+                executionTimeUnit = "ms";
+            }
+            if (test.executionTime > 1'000){
+                executionTimeCorrect /= 1'000;
+                executionTimeUnit = "s";
+            }
+            if (test.executionTime > 60){
+                executionTimeCorrect /= 60;
+                executionTimeUnit = "min";
+            }
+            if (test.executionTime > 60){
+                executionTimeCorrect /= 60;
+                executionTimeUnit = "h";
+            }
+
             if (test.passed){
                 printGreen("Test ");
                 printGreen(test.name);
                 printGreen(" passed in ");
-                printGreen(test.executionTime / 1000);
-                printGreen("s.\n");
+                printGreen(executionTimeCorrect);
+                printGreen(executionTimeUnit);
+                printGreen(".\n");
                 passedCount++;
             } else {
                 printRed("Test ");
                 printRed(test.name);
                 printRed(" failed in ");
-                printRed(test.executionTime / 1000);
-                printRed("s.\n");
+                printRed(executionTimeCorrect);
+                printRed(executionTimeUnit);
+                printRed(".\n");
                 failedCount++;
             }
             std::cout << "-----------" << std::endl;
