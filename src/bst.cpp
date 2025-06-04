@@ -82,17 +82,23 @@ InsertResult insert(BinaryTree* tree, const std::string& word, int documentId){
     newNode->parent = parent;
     newNode->left = nullptr;
     newNode->right = nullptr;
-    newNode->height = parent != nullptr? parent->height + 1 : 0;
+    newNode->height = 0;
     newNode->isRed = -1;
 
     stats.numComparisons++;
     if (word < parent->word) {
         parent->left = newNode;
-        auto endTime = std::chrono::high_resolution_clock::now();
-        stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
-        return stats;
+        }
+    else parent->right = newNode;
+
+    while (parent != nullptr) {
+        if (parent->left == nullptr || parent->right == nullptr) {
+            parent->height++;
+        } else {
+            parent->height = std::max(parent->left->height, parent->right->height) + 1;
+        }
+        parent = parent->parent;
     }
-    parent->right = newNode;
 
     auto endTime = std::chrono::high_resolution_clock::now();
     stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
