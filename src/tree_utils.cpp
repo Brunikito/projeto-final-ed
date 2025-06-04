@@ -30,10 +30,17 @@ void recursivePrintTree(Node* node, const std::string& prefix, bool isLeft){
     }
 }
 void printIndex(BinaryTree* tree){
-
+    int counter = 0;
+    if (tree && tree->root)
+        recursivePrintIndex(tree->root, counter);
 }
 void printTree(BinaryTree* tree){
-
+    if (tree && tree->root)
+        std::cout << tree->root->word << std::endl;
+    if (tree && tree->root) {
+        if (tree->root->left) recursivePrintTree(tree->root->left, "", true);
+        if (tree->root->right) recursivePrintTree(tree->root->right, "", false);
+    }
 }
 void printSearchResult(const SearchResult& result, const std::string& word){
     if (result.found < 0) {
