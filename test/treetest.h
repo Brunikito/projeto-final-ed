@@ -17,7 +17,8 @@
  * adicionar os testes criados ao vetor retornado e chamar printTestResults(tests).
  * Exemplo:
  * 
- * int main(){ * auto allTests = initTestCases();
+ * int main(){
+ * auto allTests = initTestCases();
  * addTest(allTests, myTest());
  * printTestResults(allTests);
  * return 0;
@@ -29,6 +30,7 @@
 #define TREETEST_H
 #include <vector>
 #include <string>
+#include <chrono>
 
 namespace TreeTest {
     // Estrutura do teste
@@ -47,7 +49,8 @@ namespace TreeTest {
 
     // Funções de Teste
     std::vector<TestCase> initTestCases();
-    TestCase initTest(const char* name);    void endTest(TestCase& test, std::chrono::system_clock::time_point initialTime);
+    TestCase initTest(const char* name);
+    void endTest(TestCase& test, std::chrono::system_clock::time_point initialTime);
     void addTest(std::vector<TestCase>& allTests, TestCase test);
     void printTestResults(const std::vector<TestCase>& tests);
 

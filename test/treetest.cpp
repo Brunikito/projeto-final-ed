@@ -23,9 +23,9 @@ namespace TreeTest {
         TestCase test;
         test.name = name;
         test.passed = true;
-        test.executionTime = 0;
-        return test;
-    }    void endTest(TestCase& test, std::chrono::system_clock::time_point initialTime){
+        test.executionTime = 0;        return test;
+    }
+    void endTest(TestCase& test, std::chrono::system_clock::time_point initialTime){
         auto currentTime = std::chrono::high_resolution_clock::now();
         test.executionTime = std::chrono::duration_cast<std::chrono::duration<double, std::micro>>(currentTime - initialTime).count();
     }
@@ -38,13 +38,12 @@ namespace TreeTest {
         int failedCount = 0;
         for (auto test : tests){
             double executionTimeCorrect = test.executionTime;
-            const char* executionTimeUnit = "us";
-            if (test.executionTime > 1'000){
-                executionTimeCorrect /= 1'000;
+            const char* executionTimeUnit = "us";            if (test.executionTime > 1000){
+                executionTimeCorrect /= 1000;
                 executionTimeUnit = "ms";
             }
-            if (test.executionTime > 1'000){
-                executionTimeCorrect /= 1'000;
+            if (test.executionTime > 1000){
+                executionTimeCorrect /= 1000;
                 executionTimeUnit = "s";
             }
             if (test.executionTime > 60){
@@ -72,9 +71,10 @@ namespace TreeTest {
                 printRed(executionTimeUnit);
                 printRed(".\n");
                 failedCount++;
-            }
-            std::cout << "-----------" << std::endl;
-        }        // Imprime o resumo (passou em verde e falhou em vermelho)
+            }            std::cout << "-----------" << std::endl;
+        }
+
+        // Imprime o resumo (passou em verde e falhou em vermelho)
         std::cout << "\nSummary:\n";
         std::cout << passedCount << " Tests Passed." << std::endl;
         std::cout << failedCount << " Tests Failed." << std::endl;
