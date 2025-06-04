@@ -3,8 +3,6 @@
 #include <string>
 #include <vector>
 
-// Structs e Funções auxiliares, como Criar Nó, Computar altura, Busca, Exibir Árvore, etc/**
-
 /* @struct Node
 * @brief Nó da Árvore Binária de Busca.
 */
