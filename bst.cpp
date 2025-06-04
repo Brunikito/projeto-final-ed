@@ -67,6 +67,7 @@ InsertResult insert(BinaryTree* tree, const std::string& word, int documentId){
         actualNode = actualNode->right;
     }
 
+    // Last Node
     stats.numComparisons++;
     if (word == actualNode->word) {
         actualNode->documentIds.push_back(documentId);
@@ -105,7 +106,60 @@ InsertResult insert(BinaryTree* tree, const std::string& word, int documentId){
     return stats;
 }
 
+SearchResult search(BinaryTree* tree, const std::string& word){
+    auto startTime = std::chrono::high_resolution_clock::now();
+    SearchResult result;
+    result.found = 0;
+    result.documentIds = std::vector<int>{};
+    result.executionTime = 0;
+    result.numComparisons = 0;
+    if (!tree) {
+        std::cerr << "Erro: arvore nao inicializada." << std::endl;
+        auto endTime = std::chrono::high_resolution_clock::now();
+        result.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+        return result;
+    }
 
+    if (!tree->root) {
+        std::cerr << "Erro: arvore vazia." << std::endl;
+        auto endTime = std::chrono::high_resolution_clock::now();
+        result.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+        return result;
+    }
+
+    // Actual function
+    Node* actualNode = tree->root;
+    while (actualNode->left != nullptr && actualNode->right != nullptr) {
+        result.numComparisons++;
+        if (word == actualNode->word) {
+            result.found = 1;
+            result.documentIds = actualNode->documentIds;
+            auto endTime = std::chrono::high_resolution_clock::now();
+            result.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+            return result;
+        }
+        result.numComparisons++;
+        if (word < actualNode->word) {
+            actualNode = actualNode->left;
+            continue;
+        }
+        actualNode = actualNode->right;
+    }
+
+    // Last Node
+    result.numComparisons++;
+    if (word == actualNode->word) {
+        result.found = 1;
+        result.documentIds = actualNode->documentIds;
+        auto endTime = std::chrono::high_resolution_clock::now();
+        result.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+        return result;
+    }
+
+    auto endTime = std::chrono::high_resolution_clock::now();
+    result.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+    return result;
+}
 
 
 
