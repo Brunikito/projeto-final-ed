@@ -1,1 +1,2 @@
-// testes unitários e exemplos para implementação da Árvore Binária de Busca
+#include "../test/treetest.h"
+#include "../src/bst.h"
