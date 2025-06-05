@@ -20,6 +20,7 @@ namespace DATA {
             heapifyFiles(files, n, largest);
         }
     }
+	
     void heapifyWords(std::vector<std::string>& words, int n, int i) {
         int largest = i;
         int left = 2 * i + 1;
@@ -71,7 +72,7 @@ namespace DATA {
         sortFilesByName(files);
 
         // 3. Ler os arquivos na ordem correta
-        std::vector<std::vector<std::string>> documentWords(files.size());
+        std::vector<std::vector<std::string>> documentWords;
         for (const auto& entry : files) {
             if (verbose) std::cout << "Lendo arquivo: " << entry.path().string() << std::endl;
             std::ifstream file(entry.path());
@@ -85,14 +86,7 @@ namespace DATA {
                 words.push_back(word);
             }
             sortWords(words);
-            for (int i = 1; i < words.size(); ++i) {
-                // Remove palavras duplicadas
-                // (mantém apenas a primeira ocorrência)
-                if (words[i] == words[i - 1]) {
-                    words.erase(words.begin() + i);
-                    --i;
-                }
-            }
+            
             documentWords.push_back(words);
             file.close();
         }

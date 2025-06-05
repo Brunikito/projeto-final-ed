@@ -5,35 +5,64 @@
 
 void recursivePrintIndex(Node* node, int& counter){
     if (node == nullptr) return;
+
     recursivePrintIndex(node->left, counter);
     std::cout << ++counter << ". " << node->word << ": ";
-    for (size_t i = 0; i < node->documentIds.size(); ++i) {
-        std::cout << node->documentIds[i];
-        if (i != node->documentIds.size() - 1) std::cout << ", ";
+
+	std::vector<int> uniqueIds;
+    std::vector<int> counts;
+
+    for (int id : node->documentIds) {
+        bool found = false;
+        for (size_t i = 0; i < uniqueIds.size(); ++i) {
+            if (uniqueIds[i] == id) {
+                counts[i]++;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            uniqueIds.push_back(id);
+            counts.push_back(1);
+        }
     }
+
+    for (size_t i = 0; i < uniqueIds.size(); ++i) {
+        std::cout << uniqueIds[i];
+        if (counts[i] > 1) {
+            std::cout << " (x" << counts[i] << ")";
+        }
+        if (i < uniqueIds.size() - 1) {
+            std::cout << ", ";
+        }
+    }
+
     std::cout << std::endl;
     recursivePrintIndex(node->right, counter);
 }
+
 void recursivePrintTree(Node* node, const std::string& prefix, bool isLeft){
     if (node == nullptr) return;
     std::cout << prefix;
-    std::cout << (isLeft ? "├── " : "└── ");
+    std::cout << (isLeft ? "|-- " : "\\-- ");
     std::cout << node->word << std::endl;
 
     bool hasLeft = node->left != nullptr;
     bool hasRight = node->right != nullptr;
 
     if (hasLeft || hasRight) {
-        std::string newPrefix = prefix + (isLeft ? "│   " : "    ");
+        std::string newPrefix = prefix + (isLeft ? "|   " : "    ");
         if (node->left) recursivePrintTree(node->left, newPrefix, true);
         if (node->right) recursivePrintTree(node->right, newPrefix, false);
     }
 }
+
 void printIndex(BinaryTree* tree){
     int counter = 0;
     if (tree && tree->root)
         recursivePrintIndex(tree->root, counter);
 }
+
 void printTree(BinaryTree* tree){
     if (tree && tree->root)
         std::cout << tree->root->word << std::endl;
@@ -42,6 +71,7 @@ void printTree(BinaryTree* tree){
         if (tree->root->right) recursivePrintTree(tree->root->right, "", false);
     }
 }
+
 void printSearchResult(const SearchResult& result, const std::string& word){
     if (result.found < 0) {
         std::cerr << "Error: Found cannot be negative." << std::endl;
@@ -74,6 +104,7 @@ void printSearchResult(const SearchResult& result, const std::string& word){
     }
     std::cout << std::endl;
 }
+
 void printSearchStats(const SearchResult& result){
     if (result.found < 0) {
         std::cerr << "Error: Found cannot be negative." << std::endl;
