@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-/* @struct Node
+/** @struct Node
 * @brief Nó da Árvore Binária de Busca.
 */
 struct Node
@@ -19,7 +19,7 @@ struct Node
 
 /**
  * @struct BinaryTree
- * @brief Estrutura raiz que contém a árvore.
+ * @brief Estrutura que contém a raiz da árvore binária.
  */
 struct BinaryTree
 {
@@ -49,11 +49,42 @@ struct SearchResult
     int numComparisons;
 };
 
+/**
+ * @brief Percorre a árvore em ordem e imprime no formato "1. palavra: id1, id2, ...".
+ * @param node    Ponteiro para o nó atual (nenhuma ação se nullptr).
+ * @param counter Contador incremental, inicializado tipicamente em 0, exibido antes de cada palavra.
+ */
 void recursivePrintIndex(Node* node, int& counter);
+/**
+ * @brief Desenha recursivamente um diagrama ASCII da árvore.
+ *
+ * O formato utiliza caracteres ├──, └── e │ para representação hierárquica.
+ * @param node    Nó atual (nenhuma ação se nullptr).
+ * @param prefix  Prefixo acumulado (espaços ou │) para alinhamento, tipicamente vazio para a raiz.
+ * @param isLeft  True se o nó é filho esquerdo, false caso contrário.
+ */
 void recursivePrintTree(Node* node, const std::string& prefix, bool isLeft);
+/**
+ * @brief Imprime o índice completo da árvore em ordem, no formato "1. palavra: id1, id2, ...".
+ * @param tree Árvore contendo as palavras; se nullptr ou vazia, nenhuma saída é gerada.
+ */
 void printIndex(BinaryTree* tree);
+/**
+ * @brief Desenha um diagrama ASCII da árvore usando caracteres ├──, └── e │.
+ * @param tree Árvore de entrada; se nullptr ou com root == nullptr, nenhuma saída é gerada.
+ */
 void printTree(BinaryTree* tree);
-void printInsertResult(const InsertResult& result);
-void printSearchResult(const SearchResult& result);
+/**
+ * @brief Exibe no stdout o resultado da busca ou mensagens de erro.
+ * @param result Estrutura contendo o resultado da busca; valores inválidos geram mensagens de erro.
+ * @param word   Palavra buscada; se vazia, gera mensagem de erro.
+ */
+void printSearchResult(const SearchResult& result, const std::string& word);
+/**
+ * @brief Exibe no stdout as estatísticas de busca.
+ * @param result Estrutura contendo o resultado da busca; valores inválidos geram mensagens de erro.
+ * @note Imprime também o número de comparações realizadas.
+ */
+void printSearchStats(const SearchResult& result);
 
 #endif // TREE_UTILS_H
