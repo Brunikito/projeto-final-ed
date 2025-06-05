@@ -48,8 +48,8 @@ projeto-final/
 É necessário um compilador C++ (ex: g++). No diretório raiz do projeto:
 
 ```bash
-# Exemplo com g++
-g++ src/main_bst.cpp src/bst.cpp src/tree_utils.cpp src/data.cpp -I. -std=c++17 -o run_bst
+	# Exemplo com g++
+	g++ src/main_bst.cpp src/bst.cpp src/tree_utils.cpp src/data.cpp -I. -std=c++17 -o run_bst
 ```
 
 Isso gera o executável `run_bst` no diretório raiz.
@@ -70,7 +70,7 @@ Onde:
 Exemplo:
 
 ```bash
-./run_bst search 1000 ./data/corpus
+./run_bst search 1000 ./data
 ```
 
 O programa indexará os documentos e permitirá buscas por palavras.

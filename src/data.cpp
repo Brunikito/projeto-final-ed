@@ -32,7 +32,7 @@ namespace DATA {
 
     }
     // Função para ler os arquivos de um diretório e retornar o conteúdo em um vetor de vetores de strings
-    std::vector<std::vector<std::string>> readFiles(const std::string& dataPath, int numDocs, bool verbose = false){
+    std::vector<std::vector<std::string>> readFiles(const std::string& dataPath, int numDocs, bool verbose){
         std::vector<std::filesystem::directory_entry> files;
 
         // 1. Listar os arquivos no diretório
