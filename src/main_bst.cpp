@@ -8,7 +8,7 @@
 #include "data.h"
 
 void printUsage() {
-    std::cerr << "Uso: ./<arvore> search <n_docs> <diretorio>" << std::endl;
+    std::cerr << "Uso: ./<arvore> search\\stats <n_docs> <diretorio>" << std::endl;
     std::cerr << "Onde:" << std::endl;
     std::cerr << "  <arvore>    : nome do executavel da extrutura (ex: bst, avl, rbt)" << std::endl;
     std::cerr << "  search      : comando que permite realizar buscas por palavras" << std::endl;
