@@ -6,10 +6,14 @@
 
 /** 
  * TreeTest - Um simples framework de testes para o projeto
- * Para criar um teste, basta criar uma função de tipo TestCase
- * Dentro dela, faça um initTest com o nome da função
- * execute as verificações necessárias passando o TestCase
- * e finalize com o retorno do TestCase.
+ * ----------------------------------
+ * Para criar um teste, basta criar uma função de tipo TestCase.
+ * Dentro dela, faça um initTest com o nome da função, e guarde o tempo inicial.
+ * Em seguida, utilize as funções assertivas como assertTrue, assertFalse, etc.
+ * Essas funções irão atualizar o TestCase com o resultado da verificação.
+ * Chame endTest passando o TestCase e o tempo inicial.
+ * Finalize com o retorno do TestCase.
+ * 
  * Exemplo:
  * TestCase myTest() {
  *     auto initialTime = std::chrono::high_resolution_clock::now();
@@ -18,15 +22,14 @@
  *     endTest(test, initialTime);
  *     return test;
  * }
- *
- * Para rodar todos os testes, basta chamar initTestCases(),
- * adicionar os testes criados ao vetor retornado e chamar printTestResults(tests).
- * Exemplo:
+ * ----------------------------------
+ * Para executar todos os testes e imprimir os resultados, basta chamar initTestCases().
+ * Em seguida, adicione os testes com addTest passando o vetor retornado por initTestCases()
+ * Por fim, imprima os resultados com printTestResults.
  * 
+ * Exemplo:
  * int main(){
  * auto allTests = initTestCases();
- * addTest(allTests, myTest());
- * printTestResults(allTests);
  * addTest(allTests, myTest());
  * printTestResults(allTests);
  * return 0;

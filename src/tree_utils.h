@@ -75,14 +75,16 @@ void printIndex(BinaryTree* tree);
  */
 void printTree(BinaryTree* tree);
 /**
- * @brief Exibe no stdout o número de comparações e tempo de execução.
- * @param result Estrutura contendo estatísticas da inserção; valores inválidos podem gerar erros.
- */
-void printInsertResult(const InsertResult& result);
-/**
  * @brief Exibe no stdout o resultado da busca ou mensagens de erro.
  * @param result Estrutura contendo o resultado da busca; valores inválidos geram mensagens de erro.
+ * @param word   Palavra buscada; se vazia, gera mensagem de erro.
  */
-void printSearchResult(const SearchResult& result);
+void printSearchResult(const SearchResult& result, const std::string& word);
+/**
+ * @brief Exibe no stdout as estatísticas de busca.
+ * @param result Estrutura contendo o resultado da busca; valores inválidos geram mensagens de erro.
+ * @note Imprime também o número de comparações realizadas.
+ */
+void printSearchStats(const SearchResult& result);
 
 #endif // TREE_UTILS_H
