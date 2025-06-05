@@ -20,6 +20,29 @@ namespace DATA {
             heapifyFiles(files, n, largest);
         }
     }
+    void heapifyWords(std::vector<std::string>& words, int n, int i) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && words[left].size() > words[largest].size())
+            largest = left;
+        if (right < n && words[right].size() > words[largest].size())
+            largest = right;
+        if (largest != i) {
+            std::swap(words[i], words[largest]);
+            heapifyWords(words, n, largest);
+        }
+    }
+    void sortWords(std::vector<std::string>& words) {
+        int n = words.size();
+        for (int i = n / 2 - 1; i >= 0; i--)
+            heapifyWords(words, n, i);
+        for (int i = n - 1; i > 0; i--) {
+            std::swap(words[0], words[i]);
+            heapifyWords(words, i, 0);
+        }
+    }
     // Função para ordenar os arquivos por nome usando o algoritmo Heap Sort
     void sortFilesByName(std::vector<std::filesystem::directory_entry>& files) {
         int n = files.size();
@@ -60,6 +83,15 @@ namespace DATA {
             std::string word;
             while (file >> word) {
                 words.push_back(word);
+            }
+            sortWords(words);
+            for (int i = 1; i < words.size(); ++i) {
+                // Remove palavras duplicadas
+                // (mantém apenas a primeira ocorrência)
+                if (words[i] == words[i - 1]) {
+                    words.erase(words.begin() + i);
+                    --i;
+                }
             }
             documentWords.push_back(words);
             file.close();

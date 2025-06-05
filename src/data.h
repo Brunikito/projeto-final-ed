@@ -19,10 +19,25 @@ namespace DATA {
      */
     void heapifyFiles(std::vector<std::filesystem::directory_entry>& files, int n, int i);
     /**
+     * @brief Ajuda o Heap‑Sort a manter a propriedade de max‑heap para palavras.
+     *
+     * Chamado recursivamente por ::sortWords.
+     *
+     * @param words   Vetor de palavras a ser ordenado.
+     * @param n       Tamanho efetivo do heap.
+     * @param i       Índice do nó atual.
+     */
+    void heapifyWords(std::vector<std::string>& words, int n, int i);
+    /**
      * @brief Ordena `files` in‑place pelo nome do arquivo convertido em inteiro.
      * @param files Vetor de `directory_entry` que será reorganizado.
      */
     void sortFilesByName(std::vector<std::filesystem::directory_entry>& files);
+    /**
+     * @brief Ordena `words` in‑place pelo tamanho da palavra (maior para menor).
+     * @param words Vetor de palavras que será reorganizado.
+     */
+    void sortWords(std::vector<std::string>& words);
     /**
      * @brief Lê até `numDocs` arquivos de `dataPath` e devolve um vetor de palavras.
      *
