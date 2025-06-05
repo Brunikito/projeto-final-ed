@@ -3,7 +3,7 @@
 Implementação da Entrega 1 do Trabalho A2, focada na construção de um índice invertido utilizando uma **Árvore Binária de Busca (BST)**, leitura de dados e CLI para busca.
 
 ## Resumo da Entrega
-Para compilar os arquivos, basta ir até a pasta raíz do repositório, e executar:
+Para compilar os arquivos, basta ir até a pasta raiz do repositório, e executar:
 ```bash
 g++ test/test_bst.cpp test/treetest.cpp src/bst.cpp -I. -std=c++17 -o test_tree_bst
 ```
@@ -11,7 +11,7 @@ g++ test/test_bst.cpp test/treetest.cpp src/bst.cpp -I. -std=c++17 -o test_tree_
 g++ src/main_bst.cpp src/bst.cpp src/tree_utils.cpp src/data.cpp -std=c++17 -o run_bst
 ```
 
-Para executar os arquivos, também na raíz do repositório, basta fazer o seguinte:
+Para executar os arquivos, também na raiz do repositório, basta fazer o seguinte:
 
 Para rodar os testes:
 ```bash
@@ -86,17 +86,17 @@ projeto-final/
 g++ test/test_bst.cpp test/treetest.cpp src/bst.cpp -I. -std=c++17 -o test_tree_bst
 ```
 
-Isso gera o executável `test_tree_bst` no diretório raíz.
+Isso gera o executável `test_tree_bst` no diretório raiz.
 
 ```bash
 # Exemplo com g++
 g++ src/main_bst.cpp src/bst.cpp src/tree_utils.cpp src/data.cpp -std=c++17 -o run_bst
 ```
 
-Isso gera o executável `run_bst` no diretório raíz.
+Isso gera o executável `run_bst` no diretório raiz.
 
 ## 4. Como Executar
-Faça tudo a seguir na pasta raíz do repositório.
+Faça tudo a seguir na pasta raiz do repositório.
 
 ### Testes:
 Após compilar, execute os testes:
