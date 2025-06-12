@@ -255,23 +255,20 @@ void searchTree(const TreeOperations& ops, const std::string& arvore, const std:
 
 void runStats(const TreeOperations& ops, const std::string& arvore, const std::string& comand, int n_docs_inicial, const std::string& directoryFiles) {
     
-    // Variáveis de estado que persistirão durante a sessão interativa
     BinaryTree* tree = nullptr;
     std::vector<std::vector<std::string>> documents_words;
     int n_docs = n_docs_inicial;
     int choice = -1;
 
-    // Carrega os arquivos uma vez no início para conveniência
     std::cout << "Carregando " << n_docs << " documento(s) iniciais de " << directoryFiles << "..." << std::endl;
     try {
         documents_words = DATA::readFiles(directoryFiles, n_docs, false);
         std::cout << "Arquivos carregados com sucesso." << std::endl;
     } catch (const std::runtime_error& e) {
         std::cerr << "Erro critico ao ler arquivos iniciais: " << e.what() << std::endl;
-        return; // Sai se não conseguir carregar os arquivos iniciais
+        return; 
     }
 
-    // Loop do menu interativo
     while (true) {
         std::cout << "\n--- Menu Interativo de Estatisticas (" << arvore << ") ---" << std::endl;
         std::cout << "Documentos a serem lidos: " << n_docs << std::endl;
@@ -283,12 +280,10 @@ void runStats(const TreeOperations& ops, const std::string& arvore, const std::s
         std::cout << "Escolha uma opcao: ";
         std::cin >> choice;
 
-        // Limpa o buffer de entrada para evitar problemas com leituras futuras
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         switch (choice) {
             case 1: { // Executar Estatísticas
-                // Limpa a árvore anterior, se houver, para evitar vazamento de memória
                 if (tree != nullptr) {
                     ops.destroy(tree);
                     tree = nullptr;
@@ -299,14 +294,12 @@ void runStats(const TreeOperations& ops, const std::string& arvore, const std::s
                     break;
                 }
 
-                // Cria uma nova árvore
                 tree = ops.create();
                 if (!tree) {
                     std::cerr << "Erro: Falha ao criar a arvore." << std::endl;
                     break;
                 }
 
-                // --- Início da lógica de coleta de dados (código que já tínhamos) ---
                 long long total_comparisons = 0;
                 double total_time_microseconds = 0;
                 long long word_count = 0;
@@ -325,9 +318,7 @@ void runStats(const TreeOperations& ops, const std::string& arvore, const std::s
 
                 auto end_time = std::chrono::high_resolution_clock::now();
                 auto total_duration_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-                // --- Fim da lógica de coleta de dados ---
 
-                // --- Início da exibição do relatório (código que já tínhamos) ---
                 std::cout << "\n--- Relatorio de Desempenho ---" << std::endl;
                 std::cout << "Arvore utilizada: " << arvore << std::endl;
                 std::cout << "Total de palavras inseridas: " << word_count << std::endl;
@@ -340,7 +331,6 @@ void runStats(const TreeOperations& ops, const std::string& arvore, const std::s
                     std::cout << "Media de comparacoes por insercao: " << std::fixed << (double)total_comparisons / word_count << std::endl;
                 }
                 std::cout << "---------------------------------" << std::endl;
-                // --- Fim da exibição do relatório ---
                 break;
             }
             case 2: { // Alterar Número de Documentos
@@ -365,7 +355,7 @@ void runStats(const TreeOperations& ops, const std::string& arvore, const std::s
                     std::cout << "Arquivos recarregados com sucesso." << std::endl;
                 } catch (const std::runtime_error& e) {
                     std::cerr << "Erro ao recarregar arquivos: " << e.what() << std::endl;
-                    documents_words.clear(); // Limpa os dados em caso de erro
+                    documents_words.clear();
                 }
                 break;
             }
@@ -381,7 +371,6 @@ void runStats(const TreeOperations& ops, const std::string& arvore, const std::s
             }
             case 0: { // Sair
                 std::cout << "Encerrando modo de estatisticas..." << std::endl;
-                // Garante que a última árvore criada seja destruída antes de sair
                 if (tree != nullptr) {
                     ops.destroy(tree);
                 }

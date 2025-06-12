@@ -128,7 +128,10 @@ namespace AVL{
         }
 
         return node;
-    }Node* insertNode(Node* root, const std::string& word, int documentId, InsertResult& stats) {
+    }
+
+    Node* insertNode(Node* root, const std::string& word, int documentId, InsertResult& stats) {
+        Node* parent = root != nullptr? root->parent : nullptr;
         if (root == nullptr) {
             stats.numComparisons++;
             Node* newNode = new Node;
