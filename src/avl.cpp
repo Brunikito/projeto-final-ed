@@ -153,7 +153,7 @@ namespace AVL{
         return root;
     }
 
-    InsertResult insert(BinaryTree* tree, const std::string& word, int documentId){
+    InsertResult insert(BinaryTree* tree, const std::string& word, int documentId) {
         auto startTime = std::chrono::high_resolution_clock::now();
         InsertResult stats = InsertResult{0, 0};
         if (tree == nullptr) {
@@ -170,8 +170,7 @@ namespace AVL{
         return stats;
     }
 
-
-    SearchResult search(BinaryTree* tree, const std::string& word){
+    SearchResult search(BinaryTree* tree, const std::string& word) {
         auto startTime = std::chrono::high_resolution_clock::now();
         SearchResult result;
         result.found = 0;
