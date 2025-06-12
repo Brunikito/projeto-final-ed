@@ -1,7 +1,9 @@
 #ifndef TREE_UTILS_H
 #define TREE_UTILS_H
+
 #include <string>
 #include <vector>
+#include <iostream>
 
 /** @struct Node
 * @brief Nó da Árvore Binária de Busca.
@@ -86,5 +88,37 @@ void printSearchResult(const SearchResult& result, const std::string& word);
  * @note Imprime também o número de comparações realizadas.
  */
 void printSearchStats(const SearchResult& result);
+
+/**
+ * @brief Calcula recursivamente a altura de uma árvore/subárvore.
+ * @param node O nó raiz da árvore/subárvore.
+ * @return A altura da árvore. Uma árvore com um único nó tem altura 0.
+ */
+int getHeight(Node* node);
+
+/**
+ * @struct TreeOperations
+ * @brief Agrupa ponteiros para as funções de uma árvore específica.
+ *
+ * Isso permite que `searchTree` opere de forma genérica com BST, AVL ou RBT.
+ */
+struct TreeOperations {
+    BinaryTree* (*create)();
+    void (*destroy)(BinaryTree*);
+    InsertResult (*insert)(BinaryTree*, const std::string&, int);
+    SearchResult (*search)(BinaryTree*, const std::string&);
+};
+
+/**
+ * @brief Executa o processo de indexação e busca interativa para uma árvore.
+ * @param ops Estrutura com as funções (create, insert, etc.) da árvore específica.
+ * @param arvore Nome do executável para exibição.
+ * @param n_docs Número de documentos a serem indexados.
+ * @param directoryFiles Caminho para o diretório dos arquivos de dados.
+ */
+void searchTree(const TreeOperations& ops, const std::string& arvore, const std::string& comand, int n_docs_inicial, const std::string& directoryFiles);
+
+
+void runStats(const TreeOperations& ops, const std::string& arvore, const std::string& comand, int n_docs_inicial, const std::string& directoryFiles);
 
 #endif // TREE_UTILS_H
