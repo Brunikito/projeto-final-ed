@@ -68,6 +68,74 @@ TestCase testRotationRight() {
     return test;
 }
 
+// teste 3: Balanceamento
+// Teste 3: Teste da função getBalance
+TestCase testGetBalance() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+
+    TestCase test = initTest("testGetBalance");
+    BinaryTree* tree = create();
+    // Árvore:      b
+    //            /   \
+    //           a     c
+    insert(tree, "b", 1);
+    insert(tree, "a", 2);
+    insert(tree, "c", 3);
+
+    // O balanceamento da raiz deve ser 0 (mesma altura dos dois lados)
+    int balanceRoot = getBalance(tree->root);
+    assertTrue(test, balanceRoot == 0, "Balance da raiz deve ser 0");
+
+    // O balanceamento do filho esquerdo (a) deve ser 0 (folha)
+    if (tree->root->left)
+        assertTrue(test, getBalance(tree->root->left) == 0, "Balance do filho esquerdo deve ser 0");
+
+    // O balanceamento do filho direito (c) deve ser 0 (folha)
+    if (tree->root->right)
+        assertTrue(test, getBalance(tree->root->right) == 0, "Balance do filho direito deve ser 0");
+
+    destroy(tree);
+    endTest(test, initialTime);
+    return test;
+}
+
+// Adicione no main:
+
+
+
+// Teste 4: Teste da função height
+TestCase testHeight() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+
+    TestCase test = initTest("testHeight");
+    BinaryTree* tree = create();
+
+    // Árvore:      b
+    //            /   \
+    //           a     c
+    insert(tree, "b", 1);
+    insert(tree, "a", 2);
+    insert(tree, "c", 3);
+
+    // A altura da raiz deve ser 1 (duas folhas abaixo)
+    int hRoot = height(tree->root);
+    assertTrue(test, hRoot == 1 || hRoot == 2, "Altura da raiz deve ser 1 ou 2 (dependendo da implementação)");
+
+    // A altura das folhas deve ser 0
+    if (tree->root->left)
+        assertTrue(test, height(tree->root->left) == 0, "Altura do filho esquerdo deve ser 0");
+    if (tree->root->right)
+        assertTrue(test, height(tree->root->right) == 0, "Altura do filho direito deve ser 0");
+
+    destroy(tree);
+    endTest(test, initialTime);
+    return test;
+}
+
+// Adicione no main:
+
+
+// Teste 5: 
 
 
 // Teste 4: Rotação dupla direita-esquerda
@@ -78,6 +146,10 @@ int main() {
 
     TreeTest::addTest(allTests, testRotationLeft());
     TreeTest::addTest(allTests, testRotationRight());
+    TreeTest::addTest(allTests, testGetBalance());
+    TreeTest::addTest(allTests, testHeight());
+
+
 
 
     TreeTest::printTestResults(allTests);

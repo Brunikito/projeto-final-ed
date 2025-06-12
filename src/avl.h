@@ -15,7 +15,6 @@ namespace AVL {
     Node* rebalance(Node* node, int& numComparisons);
     Node* insertNode(Node* root, const std::string& word, int documentId, InsertResult& stats);
     InsertResult insert(BinaryTree* tree, const std::string& word, int documentId);
-    InsertResult insert(BinaryTree* tree, const std::string& word, int documentId);
     SearchResult search(BinaryTree* tree, const std::string& word);
     void destroyNode(Node* node);
     void destroy(BinaryTree* tree);
