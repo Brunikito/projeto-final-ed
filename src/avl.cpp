@@ -99,29 +99,36 @@ namespace AVL{
         updateHeight(z);
 
         return z;
-    }
-
-    Node* rebalance(Node* node, int& numComparisons) {
-        // updateHeight(node);
+    }    Node* rebalance(Node* node, int& numComparisons) {
+        if (node == nullptr) return node;
+        
+        updateHeight(node);
         int balance = getBalance(node);
 
+        // Rotação à direita
         if (balance < -1) {
-            if (getBalance(node->left) > 1) {
-                node->left = rightRotate(node->left);
+            numComparisons++;
+            if (getBalance(node->left) > 0) {
+                // Rotação dupla esquerda-direita
+                node->left = leftRotate(node->left);
+                numComparisons++;
             }
-            numComparisons+=2;
             return rightRotate(node);
         }
 
+        // Rotação à esquerda
         if (balance > 1) {
-            if (getBalance(node->right) < -1) {
-                node->right = leftRotate(node->right);
+            numComparisons++;
+            if (getBalance(node->right) < 0) {
+                // Rotação dupla direita-esquerda
+                node->right = rightRotate(node->right);
+                numComparisons++;
             }
-            numComparisons+=2;
             return leftRotate(node);
         }
+
         return node;
-    }    Node* insertNode(Node* root, const std::string& word, int documentId, InsertResult& stats) {
+    }Node* insertNode(Node* root, const std::string& word, int documentId, InsertResult& stats) {
         if (root == nullptr) {
             stats.numComparisons++;
             Node* newNode = new Node;
