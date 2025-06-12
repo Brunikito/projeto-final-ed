@@ -66,8 +66,11 @@ int main(int argc, char* argv[]){
 
     // Decida qual função chamar com base no comando
     if (command == "search") {
+		std::cout << "passou aq";
         searchTree(bst_ops, arvore, command, n_docs, directoryFiles);
     } else if (command == "stats") {
+		std::cout << "passou aq 2";
+
         runStats(bst_ops, arvore, command, n_docs, directoryFiles);
     } else {
         std::cerr << "Erro: Comando '" << command << "' desconhecido." << std::endl;

@@ -52,7 +52,7 @@ int main(int argc, char* argv[]){
     }
 
 	std::cout << "Criando arvore BST..." << std::endl;
-        BinaryTree* tree = BST::create();
+        BinaryTree* tree = AVL::create();
         if (!tree) {
             std::cerr << "Erro: Falha ao criar a arvore BST." << std::endl;
             return 1;
