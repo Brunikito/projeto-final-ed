@@ -159,9 +159,9 @@ namespace AVL{
             root->right = insertNode(root->right, word, documentId, stats);
             if (root->right != nullptr) {
                 root->right->parent = root;
-            }
-        } else {
+            }        } else {
             // Palavra já existe, adiciona o ID do documento
+            stats.numComparisons++;
             if (std::find(root->documentIds.begin(), root->documentIds.end(), documentId) == root->documentIds.end()) {
                 root->documentIds.push_back(documentId);
             }
