@@ -168,6 +168,175 @@ TestCase testInsertFirstElement() {
     return test;
 }
 
+// Teste 7: Inserção de palavra duplicada
+TestCase testInsertDuplicateWord() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testInsertDuplicateWord");
+    
+    BinaryTree* tree = create();
+    assertNotNull(test, tree, "Árvore deve ser criada");
+    
+    if (tree != nullptr) {
+        insert(tree, "word", 1);
+        InsertResult result = insert(tree, "word", 2);
+        
+        assertTrue(test, result.numComparisons >= 1, "Deve ter pelo menos 1 comparação para encontrar palavra existente");
+        assertNotNull(test, tree->root, "Root não deve ser NULL");
+        
+        if (tree->root != nullptr) {
+            assertTrue(test, tree->root->documentIds.size() == 2, "Deve ter dois documentos IDs");
+            assertTrue(test, tree->root->documentIds[0] == 1, "Primeiro documento deve ser 1");
+            assertTrue(test, tree->root->documentIds[1] == 2, "Segundo documento deve ser 2");
+        }
+        
+        destroy(tree);
+    }
+    
+    endTest(test, initialTime);
+    return test;
+}
+
+// Teste 8: Busca em árvore vazia
+TestCase testSearchEmptyTree() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testSearchEmptyTree");
+    
+    BinaryTree* tree = create();
+    assertNotNull(test, tree, "Árvore deve ser criada");
+    
+    if (tree != nullptr) {
+        SearchResult result = search(tree, "nonexistent");
+        
+        assertTrue(test, result.found == 0, "Não deve encontrar elemento em árvore vazia");
+        assertTrue(test, result.documentIds.size() == 0, "Lista de documentos deve estar vazia");
+        assertTrue(test, result.numComparisons == 0, "Não deve ter comparações em árvore vazia");
+        assertTrue(test, result.executionTime >= 0, "Tempo de execução deve ser não negativo");
+        
+        destroy(tree);
+    }
+    
+    endTest(test, initialTime);
+    return test;
+}
+
+// Teste 9: Busca encontrando elemento
+TestCase testSearchFoundElement() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testSearchFoundElement");
+    
+    BinaryTree* tree = create();
+    assertNotNull(test, tree, "Árvore deve ser criada");
+    
+    if (tree != nullptr) {
+        insert(tree, "apple", 1);
+        insert(tree, "apple", 3);
+        insert(tree, "banana", 2);
+        
+        SearchResult result = search(tree, "apple");
+        
+        assertTrue(test, result.found == 1, "Deve encontrar elemento existente");
+        assertTrue(test, result.documentIds.size() == 2, "Deve retornar dois documentos");
+        assertTrue(test, result.documentIds[0] == 1, "Primeiro documento deve ser 1");
+        assertTrue(test, result.documentIds[1] == 3, "Segundo documento deve ser 3");
+        assertTrue(test, result.numComparisons >= 1, "Deve ter pelo menos uma comparação");
+        assertTrue(test, result.executionTime >= 0, "Tempo de execução deve ser não negativo");
+        
+        destroy(tree);
+    }
+    
+    endTest(test, initialTime);
+    return test;
+}
+
+// Teste 10: Busca não encontrando elemento
+TestCase testSearchNotFoundElement() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testSearchNotFoundElement");
+    
+    BinaryTree* tree = create();
+    assertNotNull(test, tree, "Árvore deve ser criada");
+    
+    if (tree != nullptr) {
+        insert(tree, "dog", 1);
+        insert(tree, "cat", 2);
+        insert(tree, "elephant", 3);
+        
+        SearchResult result = search(tree, "zebra");
+        
+        assertTrue(test, result.found == 0, "Não deve encontrar elemento inexistente");
+        assertTrue(test, result.documentIds.size() == 0, "Lista de documentos deve estar vazia");
+        assertTrue(test, result.numComparisons > 0, "Deve ter pelo menos uma comparação");
+        assertTrue(test, result.executionTime >= 0, "Tempo de execução deve ser não negativo");
+        
+        destroy(tree);
+    }
+    
+    endTest(test, initialTime);
+    return test;
+}
+
+// Teste 11: Inserção múltipla criando estrutura de árvore
+TestCase testMultipleInserts() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testMultipleInserts");
+    
+    BinaryTree* tree = create();
+    assertNotNull(test, tree, "Árvore deve ser criada");
+    
+    if (tree != nullptr) {
+        // Inserir palavras que devem manter o balanceamento
+        insert(tree, "dog", 1);
+        insert(tree, "cat", 2);
+        insert(tree, "elephant", 3);
+        insert(tree, "ant", 4);
+        insert(tree, "fish", 5);
+        
+        assertNotNull(test, tree->root, "Root não deve ser NULL");
+        
+        // Verificar se a árvore está balanceada
+        bool isBalanced = true;
+        checkAVL(tree->root, isBalanced);
+        assertTrue(test, isBalanced, "Árvore deve estar balanceada após múltiplas inserções");
+        
+        destroy(tree);
+    }
+    
+    endTest(test, initialTime);
+    return test;
+}
+
+// Teste 12: Teste de inserção com árvore NULL
+TestCase testInsertNullTree() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testInsertNullTree");
+    
+    BinaryTree* tree = nullptr;
+    InsertResult result = insert(tree, "test", 1);
+    
+    assertTrue(test, result.numComparisons >= 1, "Deve ter pelo menos uma comparação para detectar árvore NULL");
+    assertTrue(test, result.executionTime >= 0, "Tempo deve ser não negativo");
+    
+    endTest(test, initialTime);
+    return test;
+}
+
+// Teste 13: Teste de busca com árvore NULL
+TestCase testSearchNullTree() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testSearchNullTree");
+    
+    BinaryTree* tree = nullptr;
+    SearchResult result = search(tree, "test");
+    
+    assertTrue(test, result.found == 0, "Não deve encontrar em árvore NULL");
+    assertTrue(test, result.documentIds.size() == 0, "Lista deve estar vazia");
+    assertTrue(test, result.numComparisons == 0, "Não deve ter comparações");
+    assertTrue(test, result.executionTime >= 0, "Tempo deve ser não negativo");
+    
+    endTest(test, initialTime);
+    return test;
+}
+
 // Função principal para executar todos os testes de balanceamento AVL
 int main() {
     auto allTests = TreeTest::initTestCases();
@@ -178,6 +347,13 @@ int main() {
     TreeTest::addTest(allTests, testDoubleRotationRightLeft());
     TreeTest::addTest(allTests, testCreateTree());
     TreeTest::addTest(allTests, testInsertFirstElement());
+    TreeTest::addTest(allTests, testInsertDuplicateWord());
+    TreeTest::addTest(allTests, testSearchEmptyTree());
+    TreeTest::addTest(allTests, testSearchFoundElement());
+    TreeTest::addTest(allTests, testSearchNotFoundElement());
+    TreeTest::addTest(allTests, testMultipleInserts());
+    TreeTest::addTest(allTests, testInsertNullTree());
+    TreeTest::addTest(allTests, testSearchNullTree());
 
     TreeTest::printTestResults(allTests);
 
