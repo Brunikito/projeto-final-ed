@@ -10,7 +10,7 @@
 void printUsage() {
     std::cerr << "Uso: ./<arvore> search\\stats <n_docs> <diretorio>" << std::endl;
     std::cerr << "Onde:" << std::endl;
-    std::cerr << "  <arvore>    : nome do executavel da extrutura (ex: bst, avl, rbt)" << std::endl;
+    std::cerr << "  <arvore>    : nome do executavel da extrutura (ex: avl, avl, rbt)" << std::endl;
     std::cerr << "  search      : comando que permite realizar buscas por palavras" << std::endl;
     std::cerr << "  stats       : comando que gera estatisticas de desempenho durante a indexacao" << std::endl;
     std::cerr << "  <n_docs>    : numero de documentos a indexar" << std::endl;
@@ -46,15 +46,15 @@ int main(int argc, char* argv[]){
     std::vector<std::string> comands = {"search", "stats"};
 
     if (std::find(comands.begin(), comands.end(), command) == comands.end()) {
-        std::cerr << "Erro: Comando '" << command << "' desconhecido ou não suportado para BST nesta entrega." << std::endl;
+        std::cerr << "Erro: Comando '" << command << "' desconhecido ou não suportado para AVL nesta entrega." << std::endl;
         printUsage();
         return 1;
     }
 
-	std::cout << "Criando arvore BST..." << std::endl;
-        BinaryTree* tree = BST::create();
+	std::cout << "Criando arvore AVL..." << std::endl;
+        BinaryTree* tree = AVL::create();
         if (!tree) {
-            std::cerr << "Erro: Falha ao criar a arvore BST." << std::endl;
+            std::cerr << "Erro: Falha ao criar a arvore AVL." << std::endl;
             return 1;
         }
 
@@ -64,6 +64,7 @@ int main(int argc, char* argv[]){
     avl_ops.insert = AVL::insert;
     avl_ops.search = AVL::search;
 
+    // Decida qual função chamar com base no comando
     if (command == "search") {
         searchTree(avl_ops, arvore, command, n_docs, directoryFiles);
     } else if (command == "stats") {
