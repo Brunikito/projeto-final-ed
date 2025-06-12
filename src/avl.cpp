@@ -214,3 +214,69 @@ InsertResult insert(BinaryTree* tree, const std::string& word, int documentId){
     return stats;
 }
 
+
+SearchResult search(BinaryTree* tree, const std::string& word){
+    auto startTime = std::chrono::high_resolution_clock::now();
+    SearchResult result;
+    result.found = 0;
+    result.documentIds = std::vector<int>{};
+    result.executionTime = 0;
+    result.numComparisons = 0;
+    if (tree == nullptr) {
+        std::cerr << "Erro: arvore nao inicializada." << std::endl;
+        auto endTime = std::chrono::high_resolution_clock::now();
+        result.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+        return result;
+    }
+
+    if (tree->root == nullptr) {
+        std::cerr << "Erro: arvore vazia." << std::endl;
+        auto endTime = std::chrono::high_resolution_clock::now();
+        result.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+        return result;
+    }
+
+    // Actual function
+    Node* actualNode = tree->root;
+    while (actualNode != nullptr) {
+        result.numComparisons++;
+        if (word == actualNode->word) {
+            result.found = 1;
+            result.documentIds = actualNode->documentIds;
+            auto endTime = std::chrono::high_resolution_clock::now();
+            result.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+            return result;
+        }
+        result.numComparisons++;
+        if (word < actualNode->word) {
+            actualNode = actualNode->left;
+            continue;
+        }
+        actualNode = actualNode->right;
+    }
+
+    auto endTime = std::chrono::high_resolution_clock::now();
+    result.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+    return result;
+}
+
+// Função auxiliar para recursão
+void destroyNode(Node* node) {
+    if (node == nullptr) return;
+    destroyNode(node->left);
+    destroyNode(node->right);
+    delete node;
+    node = nullptr;
+}
+
+void destroy(BinaryTree* tree) {
+    if (tree == nullptr) return;
+    if (tree->NIL != nullptr) {
+        delete tree->NIL;
+    }
+    // Inicia a recursão
+    destroyNode(tree->root);
+    delete tree;
+    tree = nullptr;
+}
+
