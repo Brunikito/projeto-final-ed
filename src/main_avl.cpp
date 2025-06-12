@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "bst.h"
+#include "avl.h"
 #include "tree_utils.h"
 #include "data.h"
 
@@ -58,17 +58,16 @@ int main(int argc, char* argv[]){
             return 1;
         }
 
-	TreeOperations bst_ops;
-    bst_ops.create = BST::create;
-    bst_ops.destroy = BST::destroy;
-    bst_ops.insert = BST::insert;
-    bst_ops.search = BST::search;
+	TreeOperations avl_ops;
+    avl_ops.create = AVL::create;
+    avl_ops.destroy = AVL::destroy;
+    avl_ops.insert = AVL::insert;
+    avl_ops.search = AVL::search;
 
-    // Decida qual função chamar com base no comando
     if (command == "search") {
-        searchTree(bst_ops, arvore, n_docs, directoryFiles);
+        searchTree(avl_ops, arvore, command, n_docs, directoryFiles);
     } else if (command == "stats") {
-        runStats(bst_ops, arvore, n_docs, directoryFiles);
+        runStats(avl_ops, arvore, command, n_docs, directoryFiles);
     } else {
         std::cerr << "Erro: Comando '" << command << "' desconhecido." << std::endl;
         printUsage();

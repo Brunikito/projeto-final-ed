@@ -253,7 +253,7 @@ void searchTree(const TreeOperations& ops, const std::string& arvore, const std:
         std::cout << "Memoria liberada." << std::endl;
 }
 
-void runStats(const TreeOperations& ops, const std::string& arvore, int n_docs_inicial, const std::string& directoryFiles) {
+void runStats(const TreeOperations& ops, const std::string& arvore, const std::string& comand, int n_docs_inicial, const std::string& directoryFiles) {
     
     // Variáveis de estado que persistirão durante a sessão interativa
     BinaryTree* tree = nullptr;

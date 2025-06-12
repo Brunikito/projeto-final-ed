@@ -119,4 +119,6 @@ struct TreeOperations {
 void searchTree(const TreeOperations& ops, const std::string& arvore, const std::string& comand, int n_docs_inicial, const std::string& directoryFiles);
 
 
+void runStats(const TreeOperations& ops, const std::string& arvore, const std::string& comand, int n_docs_inicial, const std::string& directoryFiles);
+
 #endif // TREE_UTILS_H
