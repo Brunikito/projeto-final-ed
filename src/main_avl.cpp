@@ -51,7 +51,7 @@ int main(int argc, char* argv[]){
         return 1;
     }
 
-	std::cout << "Criando arvore AVL..." << std::endl;
+	std::cout << "Criando arvore BST..." << std::endl;
         BinaryTree* tree = AVL::create();
         if (!tree) {
             std::cerr << "Erro: Falha ao criar a arvore AVL." << std::endl;

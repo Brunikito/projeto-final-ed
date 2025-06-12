@@ -118,7 +118,10 @@ namespace AVL{
     }
 
     Node* insertNode(Node* root, const std::string& word, int documentId, InsertResult& stats) {
+<<<<<<< HEAD
         
+=======
+>>>>>>> origin/artur
         Node* parent = root != nullptr? root->parent : nullptr;
         if (root == nullptr) {
             stats.numComparisons++;
