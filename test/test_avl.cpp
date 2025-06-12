@@ -181,7 +181,7 @@ TestCase testInsertDuplicateWord() {
         InsertResult result = insert(tree, "word", 2);
         
         assertTrue(test, result.numComparisons >= 1, "Deve ter pelo menos 1 comparação para encontrar palavra existente");
-        assertNotNull(test, tree->root, "Root não deve ser NULL");
+        assertNotNull(test, tree->root, "Raiz não deve ser nula");
         
         if (tree->root != nullptr) {
             assertTrue(test, tree->root->documentIds.size() == 2, "Deve ter dois documentos IDs");
@@ -337,6 +337,105 @@ TestCase testSearchNullTree() {
     return test;
 }
 
+// Teste 14: Teste de desempenho com muitos elementos
+TestCase testPerformanceWithManyElements() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testPerformanceWithManyElements");
+    
+    BinaryTree* tree = create();
+    assertNotNull(test, tree, "Árvore deve ser criada");
+    
+    if (tree != nullptr) {
+        // Inserir muitos elementos para testar o balanceamento
+        std::vector<std::string> words = {
+            "word01", "word02", "word03", "word04", "word05",
+            "word06", "word07", "word08", "word09", "word10",
+            "word11", "word12", "word13", "word14", "word15",
+            "word16", "word17", "word18", "word19", "word20"
+        };
+        
+        for (int i = 0; i < words.size(); i++) {
+            InsertResult result = insert(tree, words[i], i + 1);
+            assertTrue(test, result.executionTime >= 0, "Tempo de inserção deve ser não negativo");
+        }
+        
+        // Verificar se a árvore ainda está balanceada
+        bool isBalanced = true;
+        int height = checkAVL(tree->root, isBalanced);
+        assertTrue(test, isBalanced, "Árvore deve permanecer balanceada com muitos elementos");
+        
+        // Altura de uma AVL com 20 elementos deve ser aproximadamente log2(20) ≈ 4-5
+        assertTrue(test, height <= 6, "Altura da árvore deve ser logarítmica");
+        
+        // Buscar alguns elementos
+        SearchResult result1 = search(tree, "word01");
+        assertTrue(test, result1.found == 1, "Deve encontrar word01");
+        
+        SearchResult result2 = search(tree, "word15");
+        assertTrue(test, result2.found == 1, "Deve encontrar word15");
+        
+        SearchResult result3 = search(tree, "nonexistent");
+        assertTrue(test, result3.found == 0, "Não deve encontrar palavra inexistente");
+        
+        destroy(tree);
+    }
+    
+    endTest(test, initialTime);
+    return test;
+}
+
+// Teste 15: Teste de balanceamento em sequência ordenada
+TestCase testBalancingOrderedSequence() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testBalancingOrderedSequence");
+    
+    BinaryTree* tree = create();
+    assertNotNull(test, tree, "Árvore deve ser criada");
+    
+    if (tree != nullptr) {
+        // Inserir elementos em ordem para forçar rebalanceamentos
+        insert(tree, "item1", 1);
+        insert(tree, "item2", 2);
+        insert(tree, "item3", 3);
+        insert(tree, "item4", 4);
+        insert(tree, "item5", 5);
+        
+        // Verificar balanceamento final
+        bool isBalanced = true;
+        checkAVL(tree->root, isBalanced);
+        assertTrue(test, isBalanced, "Árvore deve estar balanceada após inserção em sequência ordenada");
+        
+        destroy(tree);
+    }
+    
+    endTest(test, initialTime);
+    return test;
+}
+
+// Teste 16: Teste de destruição de árvore
+TestCase testDestroyTree() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testDestroyTree");
+    
+    BinaryTree* tree = create();
+    assertNotNull(test, tree, "Árvore deve ser criada");
+    
+    if (tree != nullptr) {
+        // Adicionar alguns elementos
+        insert(tree, "test1", 1);
+        insert(tree, "test2", 2);
+        insert(tree, "test3", 3);
+        
+        // A função destroy deve ser chamada sem causar crash
+        // Não há muito o que testar aqui além de não travar
+        destroy(tree);
+        assertTrue(test, true, "Destruição da árvore deve ser bem-sucedida");
+    }
+    
+    endTest(test, initialTime);
+    return test;
+}
+
 // Função principal para executar todos os testes de balanceamento AVL
 int main() {
     auto allTests = TreeTest::initTestCases();
@@ -354,6 +453,9 @@ int main() {
     TreeTest::addTest(allTests, testMultipleInserts());
     TreeTest::addTest(allTests, testInsertNullTree());
     TreeTest::addTest(allTests, testSearchNullTree());
+    TreeTest::addTest(allTests, testPerformanceWithManyElements());
+    TreeTest::addTest(allTests, testBalancingOrderedSequence());
+    TreeTest::addTest(allTests, testDestroyTree());
 
     TreeTest::printTestResults(allTests);
 
