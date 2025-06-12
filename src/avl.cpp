@@ -164,7 +164,7 @@ namespace AVL{
             return stats;
         }
         Node* node = insertNode(tree->root, word, documentId, stats); // Insere o nó
-        rebalance(node); // Rebalanceia a árvore
+        rebalance(node, stats.numComparisons); // Rebalanceia a árvore
         auto endTime = std::chrono::high_resolution_clock::now();
         stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
         return stats;
