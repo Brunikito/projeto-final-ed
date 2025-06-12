@@ -17,15 +17,16 @@ namespace AVL {
      */
     int height(Node* node);
     /**
-     * @brief Atualiza o campo height de um no com base nos filhos.
-     * @param node  No cujo campo height deve ser ajustado.
+     * @brief Atualiza o campo height de um no com base nas alturas dos filhos.
+     * @param node No cujo campo height deve ser ajustado, ou nullptr.
+     * @note Nao faz nada se node == nullptr.
      */
     void updateHeight(Node* node);
     /**
-     * @brief Atualiza alturas subindo recursivamente ate a raiz.
+     * @brief Atualiza as alturas do no atual e de seu pai.
      *
-     * Incrementa numComparisons a cada comparacao interna.
-     * @param node            No inicial.
+     * Incrementa numComparisons para contabilizar verificacoes internas.
+     * @param node            No inicial ou nullptr.
      * @param numComparisons  Referencia ao contador de comparacoes.
      */
     void recursiveUpdateHeight(Node* node, int& numComparisons);
@@ -38,15 +39,19 @@ namespace AVL {
      */
     int getBalance(Node* node);
     /**
-     * @brief Rotacao simples a direita.
-     * @param y  Sub-raiz desequilibrada.
+     * @brief Executa uma rotacao simples a direita.
+     * @param y Sub-raiz desequilibrada (nao pode ser nullptr).
      * @return Nova sub-raiz apos a rotacao.
+     * @pre Assume que y e y->left sao nao-nulos.
+     * @note Atualiza as alturas dos nos afetados.
      */
     Node* rightRotate(Node* y);
     /**
-     * @brief Rotacao simples a esquerda.
-     * @param y  Sub-raiz desequilibrada.
+     * @brief Executa uma rotacao simples a esquerda.
+     * @param y Sub-raiz desequilibrada (nao pode ser nullptr).
      * @return Nova sub-raiz apos a rotacao.
+     * @pre Assume que y e y->right sao nao-nulos.
+     * @note Atualiza as alturas dos nos afetados.
      */
     Node* leftRotate(Node* y);
     /**
@@ -70,7 +75,7 @@ namespace AVL {
      * @param word        Palavra a ser inserida.
      * @param documentId  ID do documento associado.
      * @param stats       Estrutura de saida com contagem de comparacoes.
-     * @return Raiz (possivelmente nova) da sub-arvore.
+     * @return Raiz da sub-arvore.
      */
     Node* insertNode(Node* root, const std::string& word, int documentId, InsertResult& stats);
     /**
