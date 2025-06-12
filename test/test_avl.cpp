@@ -70,7 +70,103 @@ TestCase testRotationRight() {
 
 
 
+// Teste 3: Rotação dupla esquerda-direita
+TestCase testDoubleRotationLeftRight() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+
+    TestCase test = initTest("testDoubleRotationLeftRight");
+    BinaryTree* tree = create();
+    insert(tree, "c", 1);
+    insert(tree, "a", 2);
+    insert(tree, "b", 3); // Deve causar rotação dupla esquerda-direita
+
+    bool isBalanced = true;
+    checkAVL(tree->root, isBalanced);
+    assertTrue(test, isBalanced, "A árvore deve estar balanceada após rotação dupla esquerda-direita");
+    assertNotNull(test, tree->root, "Raiz não deve ser nula");
+    if (tree->root) {
+        assertTrue(test, tree->root->word == "b", "Raiz deve ser 'b'");
+        if (tree->root->left) assertTrue(test, tree->root->left->word == "a", "Filho esquerdo deve ser 'a'");
+        if (tree->root->right) assertTrue(test, tree->root->right->word == "c", "Filho direito deve ser 'c'");
+    }
+    destroy(tree);
+    endTest(test, initialTime);
+    return test;
+}
+
 // Teste 4: Rotação dupla direita-esquerda
+TestCase testDoubleRotationRightLeft() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+
+    TestCase test = initTest("testDoubleRotationRightLeft");
+    BinaryTree* tree = create();
+    insert(tree, "a", 1);
+    insert(tree, "c", 2);
+    insert(tree, "b", 3); // Deve causar rotação dupla direita-esquerda
+
+    bool isBalanced = true;
+    checkAVL(tree->root, isBalanced);
+    assertTrue(test, isBalanced, "A árvore deve estar balanceada após rotação dupla direita-esquerda");
+    assertNotNull(test, tree->root, "Raiz não deve ser nula");
+    if (tree->root) {
+        assertTrue(test, tree->root->word == "b", "Raiz deve ser 'b'");
+        if (tree->root->left) assertTrue(test, tree->root->left->word == "a", "Filho esquerdo deve ser 'a'");
+        if (tree->root->right) assertTrue(test, tree->root->right->word == "c", "Filho direito deve ser 'c'");
+    }
+    destroy(tree);
+    endTest(test, initialTime);
+    return test;
+}
+
+// Teste 5: Criação da árvore
+TestCase testCreateTree() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testCreateTree");
+    
+    BinaryTree* tree = create();
+    
+    assertNotNull(test, tree, "Árvore deve ser criada com sucesso");
+    if (tree != nullptr) {
+        assertNull(test, tree->root, "Root deve ser NULL em uma árvore vazia");
+        assertNull(test, tree->NIL, "NIL deve ser NULL na AVL");
+        destroy(tree);
+    }
+    
+    endTest(test, initialTime);
+    return test;
+}
+
+// Teste 6: Inserção em árvore vazia
+TestCase testInsertFirstElement() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testInsertFirstElement");
+    
+    BinaryTree* tree = create();
+    assertNotNull(test, tree, "Árvore deve ser criada");
+    
+    if (tree != nullptr) {
+        InsertResult result = insert(tree, "hello", 1);
+        
+        assertTrue(test, result.numComparisons >= 0, "Número de comparações deve ser não negativo");
+        assertTrue(test, result.executionTime >= 0, "Tempo de execução deve ser não negativo");
+        assertNotNull(test, tree->root, "Root não deve ser NULL após inserção");
+        
+        if (tree->root != nullptr) {
+            assertTrue(test, tree->root->word == "hello", "Palavra inserida deve estar na raiz");
+            assertTrue(test, tree->root->documentIds.size() == 1, "Deve ter um documento ID");
+            assertTrue(test, tree->root->documentIds[0] == 1, "Documento ID deve ser 1");
+            assertNull(test, tree->root->left, "Filho esquerdo deve ser NULL");
+            assertNull(test, tree->root->right, "Filho direito deve ser NULL");
+            assertNull(test, tree->root->parent, "Pai da raiz deve ser NULL");
+            assertTrue(test, tree->root->height == 1, "Altura deve ser 1");
+        }
+        
+        destroy(tree);
+    }
+    
+    endTest(test, initialTime);
+    return test;
+}
 
 // Função principal para executar todos os testes de balanceamento AVL
 int main() {
@@ -78,7 +174,10 @@ int main() {
 
     TreeTest::addTest(allTests, testRotationLeft());
     TreeTest::addTest(allTests, testRotationRight());
-
+    TreeTest::addTest(allTests, testDoubleRotationLeftRight());
+    TreeTest::addTest(allTests, testDoubleRotationRightLeft());
+    TreeTest::addTest(allTests, testCreateTree());
+    TreeTest::addTest(allTests, testInsertFirstElement());
 
     TreeTest::printTestResults(allTests);
 
