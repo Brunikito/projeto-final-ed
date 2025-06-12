@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++11 -Wall -Wextra -I./src -I./test
-TARGET = complete_test_avl
-SOURCES = test/complete_test_avl.cpp src/avl.cpp
+TARGET = test_avl
+SOURCES = test/test_avl.cpp test/treetest.cpp src/avl.cpp
 
 # Windows-specific settings
 ifeq ($(OS),Windows_NT)
