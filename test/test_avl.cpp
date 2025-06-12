@@ -436,6 +436,55 @@ TestCase testDestroyTree() {
     return test;
 }
 
+// Teste 17: Teste específico de todas as rotações AVL
+TestCase testAllRotationTypes() {
+    auto initialTime = std::chrono::high_resolution_clock::now();
+    TestCase test = initTest("testAllRotationTypes");
+    
+    // Teste de rotação simples à esquerda (caso LL)
+    BinaryTree* tree1 = create();
+    insert(tree1, "1", 1);
+    insert(tree1, "2", 2);
+    insert(tree1, "3", 3);
+    bool isBalanced1 = true;
+    checkAVL(tree1->root, isBalanced1);
+    assertTrue(test, isBalanced1, "Rotação LL deve manter árvore balanceada");
+    destroy(tree1);
+    
+    // Teste de rotação simples à direita (caso RR)
+    BinaryTree* tree2 = create();
+    insert(tree2, "3", 1);
+    insert(tree2, "2", 2);
+    insert(tree2, "1", 3);
+    bool isBalanced2 = true;
+    checkAVL(tree2->root, isBalanced2);
+    assertTrue(test, isBalanced2, "Rotação RR deve manter árvore balanceada");
+    destroy(tree2);
+    
+    // Teste de rotação dupla esquerda-direita (caso LR)
+    BinaryTree* tree3 = create();
+    insert(tree3, "3", 1);
+    insert(tree3, "1", 2);
+    insert(tree3, "2", 3);
+    bool isBalanced3 = true;
+    checkAVL(tree3->root, isBalanced3);
+    assertTrue(test, isBalanced3, "Rotação LR deve manter árvore balanceada");
+    destroy(tree3);
+    
+    // Teste de rotação dupla direita-esquerda (caso RL)
+    BinaryTree* tree4 = create();
+    insert(tree4, "1", 1);
+    insert(tree4, "3", 2);
+    insert(tree4, "2", 3);
+    bool isBalanced4 = true;
+    checkAVL(tree4->root, isBalanced4);
+    assertTrue(test, isBalanced4, "Rotação RL deve manter árvore balanceada");
+    destroy(tree4);
+    
+    endTest(test, initialTime);
+    return test;
+}
+
 // Função principal para executar todos os testes de balanceamento AVL
 int main() {
     auto allTests = TreeTest::initTestCases();
@@ -456,6 +505,7 @@ int main() {
     TreeTest::addTest(allTests, testPerformanceWithManyElements());
     TreeTest::addTest(allTests, testBalancingOrderedSequence());
     TreeTest::addTest(allTests, testDestroyTree());
+    TreeTest::addTest(allTests, testAllRotationTypes());
 
     TreeTest::printTestResults(allTests);
 
