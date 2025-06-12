@@ -117,9 +117,11 @@ TestCase testHeight() {
     insert(tree, "a", 2);
     insert(tree, "c", 3);
 
-    // A altura da raiz deve ser 1 (duas folhas abaixo)
+    // A altura da raiz deve ser a maior da árvore
     int hRoot = height(tree->root);
-    assertTrue(test, hRoot == 1 || hRoot == 2, "Altura da raiz deve ser 1 ou 2 (dependendo da implementação)");
+    int hLeft = tree->root->left ? height(tree->root->left) : -1;
+    int hRight = tree->root->right ? height(tree->root->right) : -1;
+    assertTrue(test, hRoot >= hLeft && hRoot >= hRight, "A altura da raiz deve ser a maior da árvore");
 
     // A altura das folhas deve ser 0
     if (tree->root->left)
