@@ -1,23 +1,3 @@
-# Testes BST - README Entrega 1
-
-## Visão Geral
-O `test_bst.cpp` contém uma suíte completa de testes para a implementação da Árvore Binária de Busca (BST) utilizando o framework de teste personalizado `TreeTest`.
-
-## Como Compilar
-
-Vá até a raiz do repositório, em seguida execute:
-```bash
-g++ test/test_bst.cpp test/treetest.cpp src/bst.cpp -I. -std=c++17 -o test_tree_bst
-```
-
-## Como Executar
-
-Para executar, vá até a raiz do repositório, em seguida execute:
-```bash
-./test_tree_bst
-```
-
-
 ## Estrutura de Arquivos
 
 ```
