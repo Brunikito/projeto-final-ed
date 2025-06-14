@@ -39,17 +39,16 @@ namespace TreeTest {
         int failedCount = 0;
         double totalExecutionTime = 0;
         const char* totalExecutionTimeUnit = "us";
-        
-        for (auto test : tests){
+          for (auto test : tests){
             double executionTimeCorrect = test.executionTime;
             totalExecutionTime += test.executionTime;
             const char* executionTimeUnit = "us";
-            if (test.executionTime > 1'000){
-                executionTimeCorrect /= 1'000;
+            if (test.executionTime > 1000){
+                executionTimeCorrect /= 1000;
                 executionTimeUnit = "ms";
             }
-            if (test.executionTime > 1'000){
-                executionTimeCorrect /= 1'000;
+            if (test.executionTime > 1000){
+                executionTimeCorrect /= 1000;
                 executionTimeUnit = "s";
                 if (test.executionTime > 60){
                     executionTimeCorrect /= 60;
@@ -81,14 +80,13 @@ namespace TreeTest {
             std::cout << "-----------" << std::endl;
         }
 
-        // Imprime o resumo (passou em verde e falhou em vermelho)
-        std::cout << "\nSummary:\n";
-        if (totalExecutionTime > 1'000){
-            totalExecutionTime /= 1'000;
+        // Imprime o resumo (passou em verde e falhou em vermelho)        std::cout << "\nSummary:\n";
+        if (totalExecutionTime > 1000){
+            totalExecutionTime /= 1000;
             totalExecutionTimeUnit = "ms";
         }
-        if (totalExecutionTime > 1'000){
-            totalExecutionTime /= 1'000;
+        if (totalExecutionTime > 1000){
+            totalExecutionTime /= 1000;
             totalExecutionTimeUnit = "s";
             if (totalExecutionTime > 60){
                 totalExecutionTime /= 60;
