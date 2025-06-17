@@ -29,7 +29,7 @@ namespace AVL{
         stats.numComparisons++;
         if(node != nullptr) {
             stats.numComparisons++;
-            node->height = ValueUtils::max(height(node->left), height(node->right)) + 1;
+            node->height = ValueUtils::max(height(node->left, stats), height(node->right, stats)) + 1;
         }
     }
 
