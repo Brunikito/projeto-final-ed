@@ -1,3 +1,11 @@
+> ⚠️ **Aviso:**  
+> Este espaço está vazio de propósito.  
+> Qualquer informação adicional aqui poderia mais atrapalhar do que ajudar.
+>
+> _Ass.: Brunikito_
+
+
+sketch:
 ```
 projeto-final/
 │

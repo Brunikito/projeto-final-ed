@@ -1,18 +1,8 @@
-## Estrutura de Arquivos
-
-```
-projeto-final-ed/
-│
-...
-├── test/
-│   ├── treetest.h            # Cabeçalho do framework de testes
-│   ├── treetest.cpp          # Implementação do framework de testes
-│   ├── test_bst.cpp          # Testes da BST
-│   ├── test_avl.cpp          # Testes da AVL
-│   └── test_rbt.cpp          # Testes da RBT
-└── ...
-```
-
+> ⚠️ **Aviso:**  
+> Este espaço está vazio de propósito.  
+> Qualquer informação adicional aqui poderia mais atrapalhar do que ajudar.
+>
+> _Ass.: Brunikito_
 
 ## Framework de Teste Utilizado
 

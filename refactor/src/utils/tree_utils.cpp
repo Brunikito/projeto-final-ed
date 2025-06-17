@@ -75,7 +75,7 @@ void printTree(BinaryTree* tree){
 
 int calculateTreeHeight(BinaryTree* tree) {
     if (tree == nullptr) return -1;
-    if (tree->root == nullptr) return 0;
+    if (tree->root == tree->NIL) return 0;
     return tree->root->height;
 }
 int calculateTotalNodes(Node* node, Node* NIL){
@@ -84,7 +84,7 @@ int calculateTotalNodes(Node* node, Node* NIL){
 }
 int calculateMaxWidth(BinaryTree* tree){
     if (tree == nullptr) return -1;
-    if (tree->root == nullptr) return 0;
+    if (tree->root == tree->NIL) return 0;
     std::vector<Node*> currentLevel;
     std::vector<Node*> nextLevel;
     
