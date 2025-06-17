@@ -4,10 +4,13 @@
 namespace ValueUtils {
 
     template<typename T>
-    T abs(const T value) { return std::max(value, -value); }
+    T max(const T& value1, const T& value2) { return value1 > value2 ? value1 : value2; };
+
+    template<typename T>
+    T abs(const T& value) { return max(value, -value); }
 
     template<typename T> 
-    double sqrt(const T value) {
+    double sqrt(const T& value) {
         if (value < 0){
             std::cerr << "Value must be non-negative." << std::endl;
             return -1;

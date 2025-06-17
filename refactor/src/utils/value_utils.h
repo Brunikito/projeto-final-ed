@@ -1,4 +1,4 @@
-// v1.0.0
+// v1.0.2
 
 #ifndef VALUE_UTILS_H
 #define VALUE_UTILS_H
@@ -6,11 +6,15 @@
 #include <vector>
 
 namespace ValueUtils {
+
     template<typename T>
-    T abs(const T value);
+    T max(const T& value1, const T& value2);
+
+    template<typename T>
+    T abs(const T& value);
 
     template<typename T> 
-    double sqrt(const T value);
+    double sqrt(const T& value);
 
     template<typename T>
     double mean(const std::vector<T>& arr);

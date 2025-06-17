@@ -7,7 +7,7 @@
 #include "utils/value_utils.h"
 #include "bst.h"
 
-namespace BST{
+namespace BST {
 
 BinaryTree* create() {
     BinaryTree* newTree = new BinaryTree;
@@ -104,7 +104,7 @@ InsertResult insert(BinaryTree* tree, const std::string& word, int documentId){
         if (parent->left == nullptr || parent->right == nullptr) {
             parent->height++;
         } else {
-            parent->height = std::max(parent->left->height, parent->right->height) + 1;
+            parent->height = ValueUtils::max(parent->left->height, parent->right->height) + 1;
         }
         parent = parent->parent;
     }
