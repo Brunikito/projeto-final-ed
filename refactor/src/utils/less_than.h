@@ -1,3 +1,5 @@
+// v1.0.1
+
 #ifndef LESS_THAN_H
 #define LESS_THAN_H
 

@@ -1,3 +1,5 @@
+// v1.0.0
+
 #ifndef VALUE_UTILS_H
 #define VALUE_UTILS_H
 
