@@ -1,4 +1,4 @@
-// v3.0.1
+// v3.1.0
 
 #ifndef TREE_UTILS_H
 #define TREE_UTILS_H
@@ -102,16 +102,17 @@ struct IndexStats {
 
 // Funções auxiliares para calcular as estatísticas da árvore (onde node é passado, a função é recursiva)
 int calculateTreeHeight(BinaryTree* tree);
-int calculateTotalNodes(Node* tree);
+int calculateTotalNodes(Node* node, Node* NIL);
 int calculateMaxWidth(BinaryTree* tree);
-GroupedStats calculateLeavesDepth(Node* node, int currentDepth = 0);
+GroupedStats calculateLeavesDepth(Node* node, Node* NIL, int currentDepth = 0);
 MemoryUsage calculateMemoryUsage(BinaryTree* tree);
 
-bool isBalanced(Node* node);
-bool isPerfect(Node* node, int depth, int level = 0);
-bool isFull(Node* node);
-bool isComplete(Node* node, int index, int totalNodes);
+bool isBalanced(Node* node, Node* NIL);
+bool isPerfect(Node* node, Node* NIL, int depth, int level = 0);
+bool isFull(Node* node, Node* NIL);
+bool isComplete(Node* node, Node* NIL, int index, int totalNodes);
 TreeFlags calculateTreeFlags(BinaryTree* tree);
+WordsStats getWordsStats(BinaryTree* tree);
 
 // Funções principais
 TreeStats getTreeStats(BinaryTree* tree);
