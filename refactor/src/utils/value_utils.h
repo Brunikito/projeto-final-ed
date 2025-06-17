@@ -4,6 +4,9 @@
 #include <vector>
 
 namespace ValueUtils {
+    template<typename T>
+    T abs(const T value);
+
     template<typename T> 
     double sqrt(const T value);
 
@@ -21,6 +24,11 @@ namespace ValueUtils {
     double stddev(const std::vector<T>& arr);
     template<typename Iterator>
     double stddev(Iterator begin, Iterator end);
+    
+    template<typename T, typename compareLT>
+    void heapify(std::vector<T>& arr, size_t n, size_t i, compareLT lt, bool ascending = true);
+    template<typename Iterator, typename compareLT>
+    void heapify(Iterator begin, Iterator end, size_t n, size_t i, compareLT lt, bool ascending = true);
 
     template<typename T, typename compareLT>
     void heapSort(std::vector<T>& arr, compareLT lt, bool ascending = true);
