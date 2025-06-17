@@ -1,4 +1,4 @@
-// v1.0.2
+// v1.0.3
 
 #ifndef BENCH_UTILS_H
 #define BENCH_UTILS_H
@@ -36,7 +36,7 @@ struct GroupedRotationStats{
 
 struct MemoryUsage{
     long long numBytes;
-    int scaleMultiplier;
+    float scaleMultiplier;
     std::string scale;
 };
 
