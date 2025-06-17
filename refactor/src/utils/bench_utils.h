@@ -1,4 +1,4 @@
-// v1.0.1
+// v1.0.2
 
 #ifndef BENCH_UTILS_H
 #define BENCH_UTILS_H
@@ -17,6 +17,7 @@ struct GroupedStats {
     void add(double stat);
     double mean() const;
     double stddev() const;
+    void merge(GroupedStats stats);
 };
 
 struct RotationStats {

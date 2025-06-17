@@ -22,3 +22,20 @@ double GroupedStats::stddev() const {
     return ValueUtils::sqrt((sum_sq - ((sum * sum) / (count - 1))) / (count - 1));
 }
 
+void GroupedStats::merge(GroupedStats stats) {
+    count += stats.count;  
+    sum += stats.sum;      
+    sum_sq += stats.sum_sq; 
+
+    if (stats.count > 0) {
+        if (count == 0 || stats.min < min) {
+            min = stats.min;
+        }
+    }
+
+    if (stats.count > 0) {
+        if (count == 0 || stats.max > max) {
+            max = stats.max;
+        }
+    }
+}
