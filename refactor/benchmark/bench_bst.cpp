@@ -5,7 +5,27 @@
 #include <fstream>
 #include "../src/bst.h"
 #include "../src/utils/bench_utils.h"
+#include "../src/utils/value_utils.h"
+#include "../src/utils/tree_utils.h"
+#include "../src/utils/less_than.h"
 #include "../src/data.h"
+
+std::vector<std::string> uniqueWords(BinaryTree* treeAllWords){
+    if (treeAllWords == nullptr) return {};
+    if (treeAllWords->root = treeAllWords->NIL) return {};
+    std::vector<std::string> uniqueWords;
+    Node* actualNode;
+    std::vector<Node*> nodesToSearch = {treeAllWords->root};
+    while (!nodesToSearch.empty()) {
+        actualNode = nodesToSearch.back();
+        nodesToSearch.pop_back();
+        uniqueWords.push_back(actualNode->word);
+        if (actualNode->left != treeAllWords->NIL) nodesToSearch.push_back(actualNode->left);
+        if (actualNode->right != treeAllWords->NIL) nodesToSearch.push_back(actualNode->right);
+    }
+    ValueUtils::heapSort(uniqueWords, LessThan::str, true);
+    return uniqueWords;
+}
 
 int main() {
     ReadDataStats stats;
@@ -25,46 +45,68 @@ int main() {
     }
     auto end = std::chrono::high_resolution_clock::now();
     indexAllWordsStats.totalIndexingTime = std::chrono::duration<double, std::micro>(end - start).count();
-    // Exibe estatísticas de indexação
-    std::cout << "==== Estatisticas de Indexacao (Todas as Palavras) ====\n";
-    std::cout << "Total de palavras processadas: " << indexAllWordsStats.totalWordsProcessed << "\n";
-    std::cout << "Tempo total de indexacao (microssegundos): " << indexAllWordsStats.totalIndexingTime << "\n";
-
-    std::cout << "\nComparacoes:\n";
-    std::cout << "  Total: " << indexAllWordsStats.comparisonStats.sum << "\n";
-    std::cout << "  Media: " << indexAllWordsStats.comparisonStats.mean() << "\n";
-    std::cout << "  Desvio padrao: " << indexAllWordsStats.comparisonStats.stddev() << "\n";
-
-    std::cout << "\nProfundidade de insercao:\n";
-    std::cout << "  Media: " << indexAllWordsStats.depthStats.mean() << "\n";
-    std::cout << "  Desvio padrao: " << indexAllWordsStats.depthStats.stddev() << "\n";
-
-    std::cout << "\nRecolorimentos:\n";
-    std::cout << "  Total: " << indexAllWordsStats.recoloringStats.sum << "\n";
-    std::cout << "  Media: " << indexAllWordsStats.recoloringStats.mean() << "\n";
-    std::cout << "  Desvio padrao: " << indexAllWordsStats.recoloringStats.stddev() << "\n";
-
-    std::cout << "\nRotacoes LL:\n";
-    std::cout << "  Total: " << indexAllWordsStats.rotationStats.LL.sum << "\n";
-    std::cout << "  Media: " << indexAllWordsStats.rotationStats.LL.mean() << "\n";
-    std::cout << "  Desvio padrao: " << indexAllWordsStats.rotationStats.LL.stddev() << "\n";
-
-    std::cout << "\nRotacoes RR:\n";
-    std::cout << "  Total: " << indexAllWordsStats.rotationStats.RR.sum << "\n";
-    std::cout << "  Media: " << indexAllWordsStats.rotationStats.RR.mean() << "\n";
-    std::cout << "  Desvio padrao: " << indexAllWordsStats.rotationStats.RR.stddev() << "\n";
-
-    std::cout << "\nRotacoes LR:\n";
-    std::cout << "  Total: " << indexAllWordsStats.rotationStats.LR.sum << "\n";
-    std::cout << "  Media: " << indexAllWordsStats.rotationStats.LR.mean() << "\n";
-    std::cout << "  Desvio padrao: " << indexAllWordsStats.rotationStats.LR.stddev() << "\n";
-
-    std::cout << "\nRotacoes RL:\n";
-    std::cout << "  Total: " << indexAllWordsStats.rotationStats.RL.sum << "\n";
-    std::cout << "  Media: " << indexAllWordsStats.rotationStats.RL.mean() << "\n";
-    std::cout << "  Desvio padrao: " << indexAllWordsStats.rotationStats.RL.stddev() << "\n";
-
+    std::vector<std::string> allWords = uniqueWords(treeAllWords);
     BST::destroy(treeAllWords);
+
+    // Testando agora para todos os diferentes tamanhos
+    std::vector<IndexingStats*> allIndexing;
+    std::vector<TreeStats*> allTree;
+    std::vector<GroupedStats*> allExecutionTime;
+    std::vector<GroupedStats*> allComparisons;
+    std::vector<GroupedStats*> allSearchDepth;
+    IndexingStats actualIndexing;
+    actualIndexing.totalIndexingTime = 0;
+    GroupedStats actualExecutionTime;
+    GroupedStats actualComparisons;
+    GroupedStats actualSearchDepth;
+    BinaryTree* actualTree = BST::create();
+    for (int documentId = 0; documentId < readData.size(); documentId++) {
+        auto start = std::chrono::high_resolution_clock::now();
+        for (std::string word : readData[documentId]) {
+            InsertResult result = BST::insert(treeAllWords, word, documentId);
+            actualIndexing.comparisonStats.add(result.numComparisons);
+            actualIndexing.depthStats.add(result.insertDepth);
+            actualIndexing.recoloringStats.add(result.numRecoloring);
+            actualIndexing.rotationStats.add(result.numRotations);
+            actualIndexing.totalWordsProcessed++;
+        }
+        auto end = std::chrono::high_resolution_clock::now();
+        actualIndexing.totalIndexingTime += std::chrono::duration<double, std::micro>(end - start).count();
+        IndexingStats* tempIndex = new IndexingStats;
+        if (tempIndex == nullptr) return 0;
+        tempIndex->comparisonStats = actualIndexing.comparisonStats;
+        tempIndex->depthStats = actualIndexing.depthStats;
+        tempIndex->recoloringStats = actualIndexing.recoloringStats;
+        tempIndex->rotationStats.LL = actualIndexing.rotationStats.LL;
+        tempIndex->rotationStats.RL = actualIndexing.rotationStats.RL;
+        tempIndex->rotationStats.RR = actualIndexing.rotationStats.RR;
+        tempIndex->rotationStats.LR = actualIndexing.rotationStats.LR;
+        tempIndex->totalIndexingTime = actualIndexing.totalIndexingTime;
+        tempIndex->totalWordsProcessed = actualIndexing.totalWordsProcessed;
+        allIndexing.push_back(tempIndex);
+        TreeStats* tempTree = new TreeStats;
+        if (tempTree == nullptr) return 0;
+        *tempTree = getTreeStats(actualTree);
+        tempTree->type = BSTTree;
+        allTree.push_back(tempTree);
+        for (std::string word : allWords){
+            SearchResult tempSR = BST::search(actualTree, word);
+            actualExecutionTime.add(tempSR.executionTime);
+            actualComparisons.add(tempSR.numComparisons);
+            actualSearchDepth.add(tempSR.searchDepth);
+        }
+        GroupedStats* tempExecutionTime = new GroupedStats(actualExecutionTime);
+        if (tempExecutionTime == nullptr) return 0;
+        GroupedStats* tempComparisons = new GroupedStats(actualComparisons);
+        if (tempComparisons == nullptr) return 0;
+        GroupedStats* tempSearchDepth = new GroupedStats(actualSearchDepth);
+        if (tempSearchDepth == nullptr) return 0;
+        allExecutionTime.push_back(tempExecutionTime);
+        allComparisons.push_back(tempComparisons);
+        allSearchDepth.push_back(tempSearchDepth);
+    }
+    
+    BST::destroy(actualTree);
     return 0;
 }
 
