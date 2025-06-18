@@ -5,7 +5,7 @@
 
 #include <vector>
 #include <iostream>
-#include <filesystem>
+// #include <filesystem> // Compatibilidade GCC 6.3.0
 
 /**
 /**
