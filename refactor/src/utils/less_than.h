@@ -1,4 +1,4 @@
-// v1.0.1
+// v1.0.2
 
 #ifndef LESS_THAN_H
 #define LESS_THAN_H
@@ -8,10 +8,8 @@
 
 
 namespace LessThan {
-    bool string(const std::string left, const std::string right);
-
+    bool str(const std::string& left, const std::string& right);
     bool intFile(const std::filesystem::directory_entry& left, const std::filesystem::directory_entry& right);
-
     template<typename T>
     bool standard(const T& left, const T& right);
 }

@@ -40,7 +40,7 @@ namespace DATA {
             while (file >> word) {
                 words.push_back(word);
             }
-            ValueUtils::heapSort(words, LessThan::string);
+            ValueUtils::heapSort(words, LessThan::str);
             
             documentWords.push_back(words);
             file.close();

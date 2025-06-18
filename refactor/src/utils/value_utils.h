@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <iostream>
+#include <filesystem>
 
 /**
 /**
@@ -231,7 +232,7 @@ namespace ValueUtils {
     }
 
     template<typename T, typename compareLT>
-    void heapSort(std::vector<T>& arr, compareLT lt, bool ascending){
+    void heapSort(std::vector<T>& arr, compareLT lt, bool ascending = true){
         size_t num_elements = arr.size();
         for (size_t i = num_elements / 2 - 1; i >= 0; i--) {
             heapify(arr, num_elements, i, lt, ascending);
@@ -243,7 +244,7 @@ namespace ValueUtils {
     }
 
     template<typename Iterator, typename compareLT>
-    void heapSort(Iterator begin, Iterator end, compareLT lt, bool ascending) {
+    void heapSort(Iterator begin, Iterator end, compareLT lt, bool ascending = true) {
         size_t num_elements = std::distance(begin, end);
         for (size_t i = num_elements / 2 - 1; i >= 0; i--) {
             heapify(begin, end, num_elements, i, lt, ascending);
