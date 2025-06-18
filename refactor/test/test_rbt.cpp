@@ -94,7 +94,6 @@ TestCase testMultipleInserts() {
     assertNotNull(test, tree, "Árvore deve ser criada");
     
     if (tree != nullptr) {
-        // Inserir palavras que possam testar o balanceamento RBT
         insert(tree, "dog", 1);      // root
         insert(tree, "cat", 2);      // left child
         insert(tree, "elephant", 3); // right child
@@ -103,10 +102,9 @@ TestCase testMultipleInserts() {
         
         assertNotNull(test, tree->root, "Root não deve ser NULL");
         if (tree->root != nullptr) {
-            // RBT pode rebalancear, então verificamos que os elementos existem
-            // mas não assumimos estrutura específica
+            
             assertTrue(test, tree->root->isRed == 0, "Raiz deve ser sempre preta");
-            // Verificamos que a árvore não está vazia
+    
             assertTrue(test, tree->root != tree->NIL, "Root deve ser diferente de NIL");
         }
         
@@ -209,7 +207,6 @@ TestCase testSearchInSpecificPosition() {
         insert(tree, "elephant", 3);
         insert(tree, "ant", 4);
         
-        // Buscar elemento que deve existir na árvore
         SearchResult result = search(tree, "ant");
         
         assertTrue(test, result.found == 1, "Deve encontrar 'ant'");
@@ -233,7 +230,7 @@ TestCase testPerformanceWithManyElements() {
     assertNotNull(test, tree, "Árvore deve ser criada");
     
     if (tree != nullptr) {
-        // Inserir muitos elementos
+        
         std::vector<std::string> words = {
             "word01", "word02", "word03", "word04", "word05",
             "word06", "word07", "word08", "word09", "word10",
@@ -245,10 +242,10 @@ TestCase testPerformanceWithManyElements() {
             assertTrue(test, result.executionTime >= 0, "Tempo de inserção deve ser não negativo");
         }
         
-        // Verificar que a raiz ainda é preta após todas as inserções
+        
         if (tree->root != nullptr) {
             assertTrue(test, tree->root->isRed == 0, "Raiz deve permanecer preta");
-        }        // Buscar alguns elementos
+        }        
         SearchResult result1 = search(tree, "word01");
         assertTrue(test, result1.found == 1, "Deve encontrar word01");
         
@@ -274,13 +271,12 @@ TestCase testDestroyTree() {
     assertNotNull(test, tree, "Árvore deve ser criada");
     
     if (tree != nullptr) {
-        // Adicionar alguns elementos
+        
         insert(tree, "test1", 1);
         insert(tree, "test2", 2);
         insert(tree, "test3", 3);
         
-        // A função destroy deve ser chamada sem causar crash
-        // Não há muito o que testar aqui além de não travar
+        
         destroy(tree);
         assertTrue(test, true, "Destruição da árvore deve ser bem-sucedida");
     }
