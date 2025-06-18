@@ -5,7 +5,70 @@
 #include <fstream>
 #include "../src/bst.h"
 #include "../src/utils/bench_utils.h"
+#include "../src/data.h"
 
+int main() {
+    ReadDataStats stats;
+    auto readData = DATA::readFiles("../data", 10'000, stats, false);
+    IndexingStats indexAllWordsStats;
+    auto start = std::chrono::high_resolution_clock::now();
+    BinaryTree* treeAllWords = BST::create();
+    for (int documentId = 0; documentId < readData.size(); documentId++) {
+        for (std::string word : readData[documentId]) {
+            InsertResult result = BST::insert(treeAllWords, word, documentId);
+            indexAllWordsStats.comparisonStats.add(result.numComparisons);
+            indexAllWordsStats.depthStats.add(result.insertDepth);
+            indexAllWordsStats.recoloringStats.add(result.numRecoloring);
+            indexAllWordsStats.rotationStats.add(result.numRotations);
+            indexAllWordsStats.totalWordsProcessed++;
+        }
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    indexAllWordsStats.totalIndexingTime = std::chrono::duration<double, std::micro>(end - start).count();
+    // Exibe estatísticas de indexação
+    std::cout << "==== Estatisticas de Indexacao (Todas as Palavras) ====\n";
+    std::cout << "Total de palavras processadas: " << indexAllWordsStats.totalWordsProcessed << "\n";
+    std::cout << "Tempo total de indexacao (microssegundos): " << indexAllWordsStats.totalIndexingTime << "\n";
+
+    std::cout << "\nComparacoes:\n";
+    std::cout << "  Total: " << indexAllWordsStats.comparisonStats.sum << "\n";
+    std::cout << "  Media: " << indexAllWordsStats.comparisonStats.mean() << "\n";
+    std::cout << "  Desvio padrao: " << indexAllWordsStats.comparisonStats.stddev() << "\n";
+
+    std::cout << "\nProfundidade de insercao:\n";
+    std::cout << "  Media: " << indexAllWordsStats.depthStats.mean() << "\n";
+    std::cout << "  Desvio padrao: " << indexAllWordsStats.depthStats.stddev() << "\n";
+
+    std::cout << "\nRecolorimentos:\n";
+    std::cout << "  Total: " << indexAllWordsStats.recoloringStats.sum << "\n";
+    std::cout << "  Media: " << indexAllWordsStats.recoloringStats.mean() << "\n";
+    std::cout << "  Desvio padrao: " << indexAllWordsStats.recoloringStats.stddev() << "\n";
+
+    std::cout << "\nRotacoes LL:\n";
+    std::cout << "  Total: " << indexAllWordsStats.rotationStats.LL.sum << "\n";
+    std::cout << "  Media: " << indexAllWordsStats.rotationStats.LL.mean() << "\n";
+    std::cout << "  Desvio padrao: " << indexAllWordsStats.rotationStats.LL.stddev() << "\n";
+
+    std::cout << "\nRotacoes RR:\n";
+    std::cout << "  Total: " << indexAllWordsStats.rotationStats.RR.sum << "\n";
+    std::cout << "  Media: " << indexAllWordsStats.rotationStats.RR.mean() << "\n";
+    std::cout << "  Desvio padrao: " << indexAllWordsStats.rotationStats.RR.stddev() << "\n";
+
+    std::cout << "\nRotacoes LR:\n";
+    std::cout << "  Total: " << indexAllWordsStats.rotationStats.LR.sum << "\n";
+    std::cout << "  Media: " << indexAllWordsStats.rotationStats.LR.mean() << "\n";
+    std::cout << "  Desvio padrao: " << indexAllWordsStats.rotationStats.LR.stddev() << "\n";
+
+    std::cout << "\nRotacoes RL:\n";
+    std::cout << "  Total: " << indexAllWordsStats.rotationStats.RL.sum << "\n";
+    std::cout << "  Media: " << indexAllWordsStats.rotationStats.RL.mean() << "\n";
+    std::cout << "  Desvio padrao: " << indexAllWordsStats.rotationStats.RL.stddev() << "\n";
+
+    BST::destroy(treeAllWords);
+    return 0;
+}
+
+/*
 // Função para gerar palavras de teste
 std::vector<std::string> generateWords(int n) {
     std::vector<std::string> words;
@@ -74,19 +137,4 @@ void benchmarkBSTSearch(int numWords, int numRuns, std::vector<std::tuple<std::s
         BST::destroy(tree);
     }
 }
-
-int main() {
-    int numWords = 10000;
-    int numRuns = 5;
-
-    std::vector<std::tuple<std::string, int, int, double>> results;
-
-    benchmarkBSTInsert(numWords, numRuns, results);
-    benchmarkBSTSearch(numWords, numRuns, results);
-
-    saveResultsToCSV(results, "bst_benchmark_results.csv");
-
-    std::cout << "Benchmark concluído! Resultados salvos em 'bst_benchmark_results.csv'.\n";
-
-    return 0;
-}
+*/
