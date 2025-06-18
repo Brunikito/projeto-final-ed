@@ -72,9 +72,9 @@ struct WordsStats {
 };
 
 enum TreeType {
-    BST,
-    AVL,
-    RBT
+    BSTTree,
+    AVLTree,
+    RBTTree
 };
 
 struct TreeFlags{

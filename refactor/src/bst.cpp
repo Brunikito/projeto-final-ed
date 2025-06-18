@@ -22,7 +22,7 @@ BinaryTree* create() {
 
 InsertResult insert(BinaryTree* tree, const std::string& word, int documentId){
     auto startTime = std::chrono::high_resolution_clock::now();
-    InsertResult stats = InsertResult{0, 0.0, {0, 0}, 0, 0, 0}; // tree_utils v>=3.0.0
+    InsertResult stats = InsertResult{0, 0.0, {0, 0, 0, 0}, 0, 0, 0}; // tree_utils v>=3.0.0
     if (tree == nullptr) {
         std::cerr << "Erro: arvore nao inicializada." << std::endl;
         auto endTime = std::chrono::high_resolution_clock::now();
