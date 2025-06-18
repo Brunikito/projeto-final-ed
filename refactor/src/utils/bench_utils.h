@@ -1,4 +1,4 @@
-// v1.1.0
+// v1.1.1
 
 #ifndef BENCH_UTILS_H
 #define BENCH_UTILS_H
@@ -49,7 +49,6 @@ struct ReadDataStats {
 
 struct IndexingStats {
     double totalIndexingTime;
-    GroupedStats treeInsertionStats;
     GroupedStats depthStats;
     GroupedStats comparisonStats;
     GroupedStats recoloringStats;
