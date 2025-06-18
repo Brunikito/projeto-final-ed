@@ -6,10 +6,11 @@
 #include "../src/bst.h"
 #include "../src/utils/bench_utils.h"
 #include "../src/data.h"
+#include "../src/utils/less_than.h"
 
 int main() {
     ReadDataStats stats;
-    auto readData = DATA::readFiles("../data", 10'000, stats, false);
+    auto readData = DATA::readFiles("../data", 1'000, stats, false);
     IndexingStats indexAllWordsStats;
     auto start = std::chrono::high_resolution_clock::now();
     BinaryTree* treeAllWords = BST::create();
@@ -64,9 +65,34 @@ int main() {
     std::cout << "  Media: " << indexAllWordsStats.rotationStats.RL.mean() << "\n";
     std::cout << "  Desvio padrao: " << indexAllWordsStats.rotationStats.RL.stddev() << "\n";
 
+
+    // salva os resultados em um arquivo CSV
+
+    std::ofstream csvFile("stats_bst.csv");
+    if (csvFile.is_open()) {
+    csvFile << "Metrica,Total,Media,DesvioPadrao\n";
+    csvFile << "Total de Palavras Processadas," << indexAllWordsStats.totalWordsProcessed << ",,\n";
+    csvFile << "Tempo Total de Indexacao (microssegundos)," << indexAllWordsStats.totalIndexingTime << ",,\n";
+
+    csvFile << "Comparacoes," << indexAllWordsStats.comparisonStats.sum << "," << indexAllWordsStats.comparisonStats.mean() << "," << indexAllWordsStats.comparisonStats.stddev() << "\n";
+    csvFile << "Profundidade de Insercao,," << indexAllWordsStats.depthStats.mean() << "," << indexAllWordsStats.depthStats.stddev() << "\n";
+    csvFile << "Recolorimentos," << indexAllWordsStats.recoloringStats.sum << "," << indexAllWordsStats.recoloringStats.mean() << "," << indexAllWordsStats.recoloringStats.stddev() << "\n";
+
+    csvFile << "Rotacoes LL," << indexAllWordsStats.rotationStats.LL.sum << "," << indexAllWordsStats.rotationStats.LL.mean() << "," << indexAllWordsStats.rotationStats.LL.stddev() << "\n";
+    csvFile << "Rotacoes RR," << indexAllWordsStats.rotationStats.RR.sum << "," << indexAllWordsStats.rotationStats.RR.mean() << "," << indexAllWordsStats.rotationStats.RR.stddev() << "\n";
+    csvFile << "Rotacoes LR," << indexAllWordsStats.rotationStats.LR.sum << "," << indexAllWordsStats.rotationStats.LR.mean() << "," << indexAllWordsStats.rotationStats.LR.stddev() << "\n";
+    csvFile << "Rotacoes RL," << indexAllWordsStats.rotationStats.RL.sum << "," << indexAllWordsStats.rotationStats.RL.mean() << "," << indexAllWordsStats.rotationStats.RL.stddev() << "\n";
+
+    csvFile.close();
+    std::cout << "\nEstatísticas também foram salvas em 'indexing_stats.csv'.\n";
+} else {
+    std::cerr << "Erro ao abrir o arquivo CSV para escrita.\n";
+}
+
     BST::destroy(treeAllWords);
     return 0;
 }
+
 
 /*
 // Função para gerar palavras de teste
