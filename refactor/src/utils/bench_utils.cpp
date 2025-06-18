@@ -39,3 +39,10 @@ void GroupedStats::merge(GroupedStats stats) {
         }
     }
 }
+
+void GroupedRotationStats::add(RotationStats stat) {
+    LL.add(stat.LL);
+    LR.add(stat.LR);
+    RR.add(stat.RR);
+    RL.add(stat.RL);
+}

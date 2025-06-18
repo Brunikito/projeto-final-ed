@@ -5,6 +5,32 @@
 #include <fstream>
 #include "../src/bst.h"
 #include "../src/utils/bench_utils.h"
+#include "../src/data.h"
+
+int main() {
+    ReadDataStats stats;
+    auto readData = DATA::readFiles("../data", 10'000, stats);
+    IndexingStats indexAllWordsStats;
+    auto start = std::chrono::high_resolution_clock::now();
+    BinaryTree* treeAllWords = BST::create();
+    for (int documentId = 0; documentId < readData.size(); documentId++) {
+        for (std::string word : readData[documentId]) {
+            InsertResult result = BST::insert(treeAllWords, word, documentId);
+            indexAllWordsStats.comparisonStats.add(result.numComparisons);
+            indexAllWordsStats.depthStats.add(result.insertDepth);
+            indexAllWordsStats.recoloringStats.add(result.numRecoloring);
+            indexAllWordsStats.rotationStats.add(result.numRotations);
+            indexAllWordsStats.totalWordsProcessed++;
+        }
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    indexAllWordsStats.totalIndexingTime = std::chrono::duration<double, std::micro>(end - start).count();
+    // finished the benchmark for all Words.
+
+
+    return 0;
+}
+
 
 // Função para gerar palavras de teste
 std::vector<std::string> generateWords(int n) {
