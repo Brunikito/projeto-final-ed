@@ -1,4 +1,4 @@
-// v1.0.2
+// v1.1.0
 
 #ifndef LESS_THAN_H
 #define LESS_THAN_H

@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <chrono>
+#include <string>
 
 #include "data.h"
 #include "utils/bench_utils.h"
@@ -10,14 +11,14 @@
 #include "utils/less_than.h"
 
 namespace DATA {
-    std::vector<std::vector<std::string>> readFiles(const std::string& dataPath, int numDocs, ReadDataStats& readStats, bool verbose = false){
+    std::vector<std::vector<std::string>> readFiles(const std::string& dataPath, int numDocs, ReadDataStats& readStats, bool verbose){
         auto start = std::chrono::high_resolution_clock::now();
         std::vector<std::filesystem::directory_entry> files;
 
         // 1. Listar os arquivos no diretório
         for (const auto& entry : std::filesystem::directory_iterator(dataPath)) {
             if (entry.is_regular_file()) {
-                if (std::stoi(entry.path().filename().string()) < numDocs) {
+                if (std::stoi(entry.path().stem().string()) < numDocs) {
                     files.push_back(entry);
                 }
             }
