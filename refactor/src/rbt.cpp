@@ -328,7 +328,4 @@ namespace RBT {
         tree = nullptr;
     }
 
-    
-
-
 } // namespace RBT
