@@ -1,1 +1,0 @@
-// Interface via linha de comando (indexação e busca) da Árvore Rubro Negra
