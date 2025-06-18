@@ -5,6 +5,7 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <chrono>
 
 using namespace TreeTest;
 using namespace AVL;

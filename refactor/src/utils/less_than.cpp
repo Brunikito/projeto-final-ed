@@ -8,7 +8,7 @@ namespace LessThan {
     }
 
     bool intFile(const std::filesystem::directory_entry& left, const std::filesystem::directory_entry& right){
-        return std::stoi(left.path().filename().string()) < std::stoi(right.path().filename().string());
+        return std::stoi(left.path().stem().string()) < std::stoi(right.path().stem().string());
     }
 
     template<typename T>

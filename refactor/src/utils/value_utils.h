@@ -5,6 +5,88 @@
 
 #include <vector>
 #include <iostream>
+#include <filesystem>
+
+/**
+/**
+ * @namespace ValueUtils
+ * @brief Funções utilitárias para manipulação de valores, estatísticas e ordenação.
+ *
+ * Este namespace fornece uma coleção de funções utilitárias com templates para:
+ *   - Operações matemáticas básicas (max, abs, sqrt)
+ *   - Cálculos estatísticos (mean, variance, standard deviation)
+ *   - Algoritmos de ordenação baseados em heap (heapify, heapSort)
+ *
+ * Funções:
+ * 
+ * @tparam T Tipo dos valores de entrada ou elementos do container.
+ * @tparam Iterator Tipo de iterador para intervalos genéricos.
+ * @tparam compareLT Functor de comparação (ex.: std::less, std::greater).
+ *
+ * -------------------------------------------
+ * @function max
+ * @brief Retorna o maior entre dois valores.
+ * @param value1 Primeiro valor.
+ * @param value2 Segundo valor.
+ * @return O maior dos dois valores.
+ *
+ * -------------------------------------------
+ * @function abs
+ * @brief Retorna o valor absoluto.
+ * @param value Valor de entrada.
+ * @return Valor absoluto da entrada.
+ *
+ * -------------------------------------------
+ * @function sqrt
+ * @brief Calcula a raiz quadrada usando o método de Newton-Raphson.
+ * @param value Valor de entrada (deve ser não negativo).
+ * @return Raiz quadrada da entrada. Retorna -1 e imprime uma mensagem de erro se o valor for negativo.
+ *
+ * -------------------------------------------
+ * @function mean (versão com vetor)
+ * @brief Calcula a média (média aritmética) de um vetor.
+ * @param arr Vetor de entrada.
+ * @return Média dos elementos.
+ *
+ * @function mean (versão com iteradores)
+ * @brief Calcula a média (média aritmética) de um intervalo genérico.
+ * @param begin Iterador para o início do intervalo.
+ * @param end Iterador para o fim do intervalo.
+ * @return Média dos elementos no intervalo.
+ *
+ * -------------------------------------------
+ * @function var
+ * @brief Calcula a variância de um vetor ou intervalo de iteradores.
+ * @param arr Vetor de elementos. (Para a primeira sobrecarga)
+ * @param begin Iterador para o início. (Para a segunda sobrecarga)
+ * @param end Iterador para o fim.
+ * @return Variância dos elementos.
+ *
+ * -------------------------------------------
+ * @function stddev
+ * @brief Calcula o desvio padrão.
+ * @param arr Vetor de elementos. (Para a primeira sobrecarga)
+ * @param begin Iterador para o início. (Para a segunda sobrecarga)
+ * @param end Iterador para o fim.
+ * @return Desvio padrão dos elementos.
+ *
+ * -------------------------------------------
+ * @function heapify
+ * @brief Mantém a propriedade de heap em um índice específico.
+ * @param arr Vetor (para a primeira sobrecarga) ou intervalo de iteradores (para a segunda sobrecarga).
+ * @param n Número de elementos no heap.
+ * @param i Índice atual onde será aplicado o heapify.
+ * @param lt Functor de comparação (define a regra de prioridade).
+ * @param ascending Se verdadeiro, constrói um max-heap (ordem crescente); se falso, constrói um min-heap (ordem decrescente).
+ *
+ * -------------------------------------------
+ * @function heapSort
+ * @brief Ordena os elementos usando o algoritmo de heap sort.
+ * @param arr Vetor (para a primeira sobrecarga) ou intervalo de iteradores (para a segunda sobrecarga).
+ * @param lt Functor de comparação.
+ * @param ascending Direção da ordenação: true = ordem crescente, false = ordem decrescente.
+ */
+
 
 namespace ValueUtils {
 
@@ -150,24 +232,24 @@ namespace ValueUtils {
     }
 
     template<typename T, typename compareLT>
-    void heapSort(std::vector<T>& arr, compareLT lt, bool ascending){
+    void heapSort(std::vector<T>& arr, compareLT lt, bool ascending = true){
         size_t num_elements = arr.size();
-        for (size_t i = num_elements / 2 - 1; i >= 0; i--) {
+        for (int i = num_elements / 2 - 1; i >= 0; i--) {
             heapify(arr, num_elements, i, lt, ascending);
         }
-        for (size_t i = num_elements - 1; i > 0; i--) {
+        for (int i = num_elements - 1; i > 0; i--) {
             std::swap(arr[0], arr[i]);
             heapify(arr, i, 0, lt, ascending);
         }
     }
 
     template<typename Iterator, typename compareLT>
-    void heapSort(Iterator begin, Iterator end, compareLT lt, bool ascending) {
+    void heapSort(Iterator begin, Iterator end, compareLT lt, bool ascending = true) {
         size_t num_elements = std::distance(begin, end);
-        for (size_t i = num_elements / 2 - 1; i >= 0; i--) {
+        for (int i = num_elements / 2 - 1; i >= 0; i--) {
             heapify(begin, end, num_elements, i, lt, ascending);
         }
-        for (size_t i = num_elements - 1; i > 0; i--) {
+        for (int i = num_elements - 1; i > 0; i--) {
             std::swap(*begin, *(begin + i));
             heapify(begin, end, i, 0, lt, ascending);
         }

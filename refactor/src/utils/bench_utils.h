@@ -1,4 +1,4 @@
-// v1.0.3
+// v1.1.0
 
 #ifndef BENCH_UTILS_H
 #define BENCH_UTILS_H
@@ -53,6 +53,8 @@ struct GroupedRotationStats{
     GroupedStats RR;
     GroupedStats LR;
     GroupedStats RL;
+
+    void add(RotationStats stat);
 };
 
 /**
