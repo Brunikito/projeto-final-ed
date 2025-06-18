@@ -1,5 +1,5 @@
 #include "treetest.h"
-#include "avl_simple.h"
+#include "../src/avl.h"
 #include <iostream>
 #include <string>
 #include <vector>

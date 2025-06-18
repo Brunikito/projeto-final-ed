@@ -1,5 +1,5 @@
 #include "treetest.h"
-#include "bst_simple.h"
+#include "../src/bst.h"
 #include <chrono>
 #include <iostream>
 #include <string>
