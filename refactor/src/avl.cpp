@@ -112,19 +112,18 @@ namespace AVL{
 
         return z;
     }    
-    
-    Node* rebalance(Node* node, InsertResult& stats) {
+      Node* rebalance(Node* node, InsertResult& stats) {
         stats.numComparisons++;
         if (node == nullptr) return node;
         
         updateHeight(node, stats);
         int balance = getBalance(node, stats);
 
-        // Rotação à direita
+        // Rotação à direita (caso esquerda-esquerda ou esquerda-direita)
         stats.numComparisons++;
         if (balance < -1) {
             stats.numComparisons++;
-            if (getBalance(node->left, stats) > 1) {
+            if (getBalance(node->left, stats) > 0) {
                 // Rotação dupla esquerda-direita
                 node->left = leftRotate(node->left, stats);
                 stats.numRotations.LR++;
@@ -133,11 +132,11 @@ namespace AVL{
             return rightRotate(node, stats);
         }
 
-        // Rotação à esquerda
+        // Rotação à esquerda (caso direita-direita ou direita-esquerda)
         stats.numComparisons++;
         if (balance > 1) {
             stats.numComparisons++;
-            if (getBalance(node->right, stats) < -1) {
+            if (getBalance(node->right, stats) < 0) {
                 // Rotação dupla direita-esquerda
                 node->right = rightRotate(node->right, stats);
                 stats.numRotations.RL++;

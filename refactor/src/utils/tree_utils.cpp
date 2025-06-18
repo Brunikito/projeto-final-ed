@@ -105,7 +105,7 @@ int calculateMaxWidth(BinaryTree* tree){
 
     return maxWidth;
 }
-GroupedStats calculateLeavesDepth(Node* node, Node* NIL, int currentDepth = 0){
+GroupedStats calculateLeavesDepth(Node* node, Node* NIL, int currentDepth){
     GroupedStats stats;
     if (node == NIL) return stats;
 
@@ -172,7 +172,7 @@ bool isBalanced(Node* node, Node* NIL) {
     if (ValueUtils::abs(node->left->height - node->right->height) > 1) return false;
     return isBalanced(node->left, NIL) && isBalanced(node->right, NIL);
 }
-bool isPerfect(Node* node, Node* NIL, int depth, int level = 0) {
+bool isPerfect(Node* node, Node* NIL, int depth, int level) {
     if (node == nullptr) return true;
     if (node->left == nullptr && node->right == nullptr)
         return (depth == level + 1);
