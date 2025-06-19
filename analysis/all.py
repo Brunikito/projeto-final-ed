@@ -8,8 +8,6 @@ def plot_comparisons(data, output_dir):
     """
     os.makedirs(output_dir, exist_ok=True)
     
-    # Dicionário de métricas a serem plotadas.
-    # Formato: {coluna_csv: ("Título do Gráfico", "Rótulo Eixo Y", "nome_arquivo.png")}
     metrics_to_plot = {
         "tempo_insercao_doc_ms": (
             "Comparativo: Tempo de Inserção",
@@ -40,7 +38,6 @@ def plot_comparisons(data, output_dir):
     
     x_axis = "num_docs_processados"
     
-    # Itera sobre cada métrica e gera um gráfico
     for column, (title, ylabel, filename) in metrics_to_plot.items():
         plt.figure(figsize=(11, 7))
         
@@ -54,22 +51,18 @@ def plot_comparisons(data, output_dir):
         plt.legend()
         plt.grid(True, which='both', linestyle='--', linewidth=0.5)
         
-        # Salva o gráfico na pasta de saída
         plt.savefig(f"{output_dir}/{filename}")
         plt.close()
     
     print(f"5 gráficos comparativos foram salvos com sucesso em '{output_dir}'.")
 
 if __name__ == "__main__":
-    # Define os caminhos para os arquivos de dados
     data_paths = {
         "bst": "../benchmark/results/bst.csv",
         "avl": "../benchmark/results/avl.csv",
         "rbt": "../benchmark/results/rbt.csv",
     }
     
-    # Carrega os dados em um dicionário de DataFrames
     all_data = {name: pd.read_csv(path) for name, path in data_paths.items()}
     
-    # Chama a função para gerar os gráficos
     plot_comparisons(all_data, "graphs")
