@@ -511,10 +511,11 @@ Papel: Testes e Correções
 ---
 
 ### Artur Vidal Krause  
-Papel: Responsável pela CLI e Estrutura do Repositório
+Papel: Responsável pela CLI, Estrutura do Repositório e Desenvolvimento do relatorio
 
 - Definiu a estrutura de pastas e adicionou o corpus de 10 000 documentos.  
 - Desenvolveu a CLI completa (search, stats) com parsing robusto; criou funções genéricas searchTree e runStats.  
-- Implementou main_avl integrando AVL ao fluxo da CLI.  
+- Implementou main_avl, main_bst e main_rbt integrando AVL, BST e RBT ao fluxo da CLI.  
 - Atualizou o README com exemplos de uso e preparo do corpus.  
-- Realizou merges (main, kauan, blzbranch) para manter a branch artur sincronizada.
+- Realizou merges (main, kauan, blzbranch, ...) para manter as branchs de entrega sincronizadas.
+- Auxilou no desenvolvimento do relatório e implementação gráfica
