@@ -181,13 +181,13 @@ A implementação da Árvore AVL é uma solução robusta e eficiente para o pro
 
 ### **Relatório de Análise da Implementação da Árvore Rubro-Negra (RBT)**
 
-### 1. Visão Geral
+### 1.4.1 Visão Geral
 
 O código implementa uma Árvore Rubro-Negra, um outro tipo de árvore de busca binária autobalanceada. Assim como as implementações de BST e AVL, seu propósito é servir como um índice invertido. O balanceamento na RBT não é alcançado através de um fator de balanceamento de altura (como na AVL), mas sim através de um conjunto de propriedades baseadas na coloração dos nós (vermelho ou preto). Após cada inserção, a árvore é verificada e reestruturada através de rotações e re-colorações para garantir que essas propriedades sejam mantidas.
 
 Uma característica fundamental desta implementação é o uso de um **nó sentinela `NIL`**, que representa todas as folhas da árvore, simplificando a lógica de balanceamento.
 
-### 2. Funcionalidades Públicas (API do Namespace `RBT`)
+### 1.4.2 Funcionalidades Públicas (API do Namespace `RBT`)
 
 Estas são as funções expostas pela interface `rbt.h` para manipulação da árvore.
 
@@ -200,7 +200,7 @@ Estas são as funções expostas pela interface `rbt.h` para manipulação da á
 - **`void destroy(BinaryTree* tree)`**
     - **Funcionalidade**: Libera toda a memória associada à árvore. Ela utiliza a função recursiva `destroyNode`, que usa o `NIL` como caso base, e ao final deleta também o próprio nó sentinela `NIL`.
 
-### 3. Mecanismos Internos e Lógica de Autobalanceamento
+### 1.4.3 Mecanismos Internos e Lógica de Autobalanceamento
 
 A "magia" da RBT reside em sua lógica interna de inserção e correção, que mantém a árvore aproximadamente balanceada.
 
@@ -217,7 +217,7 @@ A "magia" da RBT reside em sua lógica interna de inserção e correção, que m
 - **Operações de Rotação (`leftRotate` e `rightRotate`)**
     - **Funcionalidade**: São as mesmas operações estruturais vistas na AVL, usadas para rearranjar subárvores. No contexto da RBT, elas são chamadas pela `fixInsert` para resolver os casos em que o tio do nó inserido é preto.
 
-### 4. Análise e Conclusões
+### 1.4.4 Análise e Conclusões
 
 **Pontos Fortes:**
 
@@ -278,55 +278,55 @@ A etapa inicial de carregar os dados dos arquivos para a memória também teve s
 # 3. Divisão de tarefas
 
 ### Bruno Cavalli  
-*Papel:* Benchmark & AVL Developer
+Papel: Responsável por Benchmarks e Implementação da AVL
 
 - Organizou a estrutura inicial do repositório (src/, data/, docs/) e realocou arquivos nas pastas corretas.  
-- Implementou *AVL*: inserção, rotações, balanceamento e testes de getBalance/height; ajustou a lógica até compatibilizar com o framework.  
-- Escreveu rotinas de *leitura do corpus* (10 000 documentos) e integrou-as às mains.  
-- Criou benchmarks padronizados para *BST* e *AVL* — coleta de tempo, altura, nº de comparações — com *exportação CSV* automática.  
+- Implementou AVL: inserção, rotações, balanceamento e testes de getBalance/height; ajustou a lógica até compatibilizar com o framework.  
+- Escreveu rotinas de leitura do corpus (10 000 documentos) e integrou-as às mains.  
+- Criou benchmarks padronizados para BST e AVL — coleta de tempo, altura, nº de comparações — com exportação CSV automática.  
 - Documentou e expandiu value_utils; removeu binários/temporários, mantendo o repositório enxuto.  
 - Sincronizou constantemente a branch bruno2branch com main e blzrefactor, resolvendo conflitos de benchmarks e leitura.
 
 ---
 
-### Bruno “Brunikito”  
-*Papel:* Core Developer & Benchmarking Lead
+### Bruno Luis Zerbinato Rosa
+Papel: Desenvolvedor Principal de Algoritmos e Benchmarks
 
-- Implementou a *BST* completa (v 1.0 → 2.0) e entregou a *RBT* estável (v 1.2.5); corrigiu pontos críticos da AVL.  
-- Criou o módulo **bench_utils**, programas bench_*, test_framework (v 0.1 → 1.2) e Makefiles dedicados.  
+- Implementou a BST completa (v 1.0 → 2.0) e entregou a RBT estável (v 1.2.5); corrigiu pontos críticos da AVL.  
+- Criou o módulo *bench_utils, programas bench_, test_framework (v 0.1 → 1.2) e Makefiles dedicados.  
 - Desenvolveu as mains main_bst, main_avl, main_rbt e iniciou cli_utils.  
 - Adicionou utilidades (value_utils, less_than, tree_utils) e heap-sort para ordenar arquivos.  
 - Automatizou build/limpeza (.gitignore) e conduziu merges entre main, blzbranch, kauanrefactor, revisando o código integrado.
 
 ---
 
-### Kauan Kevem (Bruno Rosa)  
-*Papel:* Documentation & Integration Lead
+### Kauan Kevem Sousa Farias 
+Papel: Documentação e Integração
 
-- Padronizou *todos os cabeçalhos* (*.h) com Doxygen, exemplos e pré/pós-condições.  
-- Atualizou o *README* com instruções de build (make) e uso da CLI (search, stats).  
-- Realizou múltiplos *merges* (main, kauan, blzbranch, kauanrefactor), resolvendo conflitos de código e documentação.  
+- Padronizou todos os cabeçalhos (*.h) com Doxygen, exemplos e pré/pós-condições.  
+- Atualizou o README com instruções de build (make) e uso da CLI (search, stats).  
+- Realizou múltiplos merges (main, kauan, blzbranch, kauanrefactor), resolvendo conflitos de código e documentação.  
 - Definiu convenções de nomenclatura/comentário; forneceu templates de docstring e checklist de boas práticas.  
 - Atuou como ponto de contato para dúvidas de documentação e estrutura de pastas.
 
 ---
 
-### Gustavo (“GuOliv2306”)  
-*Papel:* Testing & Bug-Fix Lead
+### Gustavo Oliveira 
+Papel: Testes e Correções
 
-- Criou **test_bst.cpp**, **test_avl.cpp**, **test_rbt.cpp** cobrindo inserção, busca, rotações e destruição; ampliou a AVL para *17 cenários*.  
+- Criou *test_bst.cpp, **test_avl.cpp, **test_rbt.cpp* cobrindo inserção, busca, rotações e destruição; ampliou a AVL para 17 cenários.  
 - Refinou o framework de testes, Makefile dedicado e README da suíte.  
-- Corrigiu rebalanceamento da *AVL* e rotações da *RBT*; implementou funções de comparação em LessThan.  
+- Corrigiu rebalanceamento da AVL e rotações da RBT; implementou funções de comparação em LessThan.  
 - Removeu binários/temporários, padronizou .gitignore, limpou comentários obsoletos.  
 - Manteve integração contínua com main, blzbranch, kauan, artur.
 
 ---
 
 ### Artur Vidal Krause  
-*Papel:* CLI & Repository Setup
+Papel: Responsável pela CLI e Estrutura do Repositório
 
-- Definiu a *estrutura de pastas* e adicionou o *corpus de 10 000 documentos*.  
-- Desenvolveu a *CLI completa* (search, stats) com parsing robusto; criou funções genéricas searchTree e runStats.  
+- Definiu a estrutura de pastas e adicionou o corpus de 10 000 documentos.  
+- Desenvolveu a CLI completa (search, stats) com parsing robusto; criou funções genéricas searchTree e runStats.  
 - Implementou main_avl integrando AVL ao fluxo da CLI.  
 - Atualizou o README com exemplos de uso e preparo do corpus.  
-- Realizou merges (main, kauan, blzbranch) para manter a branch artur sincronizada.
+- Realizou merges (main, kauan, blzbranch) para manter a branch artur sincronizada.
