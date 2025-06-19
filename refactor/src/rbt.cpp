@@ -9,7 +9,7 @@
 #include "utils/value_utils.h"
 
 namespace RBT {
-
+    // cria uma nova Árvore Rubro-Negra com nó sentinela NIL
     BinaryTree* create() {
         BinaryTree* newtree = new BinaryTree;
         if (!newtree) {
@@ -31,11 +31,12 @@ namespace RBT {
         newtree->NIL = nil;
         return newtree;    
     }
-
+    // retorna a altura de um nó
     int height(Node* node, Node* NIL, InsertResult& stats){
         return node->height;
     }
 
+    // atualiza a altura de um nó com base em seus filhos
     void updateHeight(Node* node, Node* NIL, InsertResult& stats){
         stats.numComparisons++;
         if(node != NIL) {
@@ -44,6 +45,7 @@ namespace RBT {
         }
     }
 
+    // atualiza recursivamente a altura de um nó e seu pai
     void recursiveUpdateHeight(Node* node, Node* NIL, InsertResult& stats){
         stats.numComparisons++;
         if (node == NIL) return;
@@ -52,15 +54,16 @@ namespace RBT {
 
     }
 
+    // realiza rotação à direita para balanceamento
     Node* rightRotate(Node* y, Node* NIL, InsertResult& stats) {
         Node* x = y->left;
         Node* T2 = x->right;
 
-        // Perform rotation
+        // performa rotatacao
         x->right = y;
         y->left = T2;
 
-        // Update parents
+        // atualiza parents
         x->parent = y->parent;
         y->parent = x;
 
@@ -69,7 +72,7 @@ namespace RBT {
             T2->parent = y;
         }
 
-        // Update heights
+        // atualiza heights
         updateHeight(y, NIL, stats);
         updateHeight(x, NIL, stats);
         recursiveUpdateHeight(x, NIL, stats);
@@ -77,15 +80,16 @@ namespace RBT {
         return x;
     }
 
+    // realiza rotação à esquerda para balanceamento
     Node* leftRotate(Node* y, Node* NIL, InsertResult& stats) {
         Node* z = y->right;
         Node* T3 = z->left;
 
-        // Perform rotation
+        // performa rotacao
         z->left = y;
         y->right = T3;
 
-        // Update parents
+        // atualiza parents
         z->parent = y->parent;
         y->parent = z;
         stats.numComparisons++;
@@ -93,7 +97,7 @@ namespace RBT {
             T3->parent = y;
         }
 
-        // Update heights
+        // atualiza heights
         updateHeight(y, NIL, stats);
         updateHeight(z, NIL, stats);
         recursiveUpdateHeight(z, NIL, stats);
@@ -101,6 +105,7 @@ namespace RBT {
         return z;
     }
 
+    // Insere um novo nó com palavra e documentId
     Node* insertNode(BinaryTree* tree, const std::string& word, int documentId, InsertResult& stats){
         stats.numComparisons++;
         if (tree == nullptr) {
@@ -159,6 +164,7 @@ namespace RBT {
         return newNode;
     }
     
+    // corrige as propriedades da árvore após inserção
     void fixInsert(BinaryTree* tree, Node* insertedNode, InsertResult& stats) {
         stats.numComparisons++;
         if (tree == nullptr) {
@@ -224,6 +230,7 @@ namespace RBT {
         }
     }
     
+    // insere palavra ou adiciona documentId e balanceia a árvore
     InsertResult insert(BinaryTree* tree, const std::string& word, int documentId) {
         auto startTime = std::chrono::high_resolution_clock::now();
         InsertResult stats = InsertResult{0, 0.0, {0, 0, 0, 0}, 0, 0, 0}; // tree_utils v>=3.0.0
@@ -252,6 +259,7 @@ namespace RBT {
         return stats;
     }
 
+    // Busca palavra e retorna documentos associados
     SearchResult search(BinaryTree* tree, const std::string& word) {
         auto startTime = std::chrono::high_resolution_clock::now();
         SearchResult stats = SearchResult{0, {}, 0.0, 0, 0};
