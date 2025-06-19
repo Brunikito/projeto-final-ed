@@ -86,7 +86,7 @@ O módulo `data.cpp` é crucial para entender o comportamento do sistema.
 - **Estrutura de Análise Robusta**: O conjunto de funções em `tree_utils` para calcular altura, balanceamento, perfeição, completude e uso de memória é extremamente poderoso para avaliar a qualidade estrutural da árvore resultante.
 - **Código Modular e Documentado**: A separação em namespaces e os comentários claros no estilo Doxygen facilitam a compreensão e a manutenção do código.
 
-**Pontos Fracos e Falhas de Design:**
+**Pontos Fracos e Dificuldades:**
 
 - **A Falha Fundamental: Ausência de Autobalanceamento**: A implementação é de uma BST clássica, que não realiza qualquer tipo de rotação ou reestruturação para manter o balanceamento. Esta é a sua maior vulnerabilidade.
 - **Cenário de Pior Caso Induzido pelo Próprio Sistema**: O ponto mais crítico é que o módulo de pré-processamento **ordena as palavras de cada documento antes da inserção**. Inserir dados pré-ordenados em uma BST simples é o método canônico para gerar uma árvore degenerada (com a forma de uma lista ligada). Isso significa que a arquitetura do sistema ativamente cria as piores condições possíveis para a estrutura de dados escolhida, resultando em um desempenho de busca e inserção de complexidade O(n) em vez de O(logn).
@@ -168,7 +168,7 @@ Estas são as funções auxiliares que implementam a lógica central da Árvore 
 - **Instrumentação Detalhada**: Assim como a BST, a implementação da AVL coleta estatísticas detalhadas, incluindo o número de rotações de cada tipo (`numRotations`), o que é extremamente útil para análises de desempenho e fins acadêmicos.
 - **Manutenção de Ponteiros de Pai**: A implementação atualiza corretamente os ponteiros `parent` durante as rotações, uma etapa importante que é por vezes omitida em implementações mais simples, mas que é crucial para certas aplicações ou algoritmos iterativos.
 
-**Limitações:**
+**Limitações e Dificuldades:**
 
 - **Complexidade de Implementação**: A lógica da AVL é inerentemente mais complexa que a de uma BST simples, como pode ser visto pelo número de funções auxiliares dedicadas ao balanceamento.
 - **Overhead de Rotações**: Cada inserção pode desencadear até duas rotações (no caso de rotação dupla) para manter o balanceamento. Embora isso garanta um bom desempenho assintótico, o custo constante de inserção na AVL é ligeiramente maior que na BST devido às verificações de balanceamento e possíveis rotações.
@@ -181,13 +181,13 @@ A implementação da Árvore AVL é uma solução robusta e eficiente para o pro
 
 ### **Relatório de Análise da Implementação da Árvore Rubro-Negra (RBT)**
 
-### 1. Visão Geral
+### 1.4.1 Visão Geral
 
 O código implementa uma Árvore Rubro-Negra, um outro tipo de árvore de busca binária autobalanceada. Assim como as implementações de BST e AVL, seu propósito é servir como um índice invertido. O balanceamento na RBT não é alcançado através de um fator de balanceamento de altura (como na AVL), mas sim através de um conjunto de propriedades baseadas na coloração dos nós (vermelho ou preto). Após cada inserção, a árvore é verificada e reestruturada através de rotações e re-colorações para garantir que essas propriedades sejam mantidas.
 
 Uma característica fundamental desta implementação é o uso de um **nó sentinela `NIL`**, que representa todas as folhas da árvore, simplificando a lógica de balanceamento.
 
-### 2. Funcionalidades Públicas (API do Namespace `RBT`)
+### 1.4.2 Funcionalidades Públicas (API do Namespace `RBT`)
 
 Estas são as funções expostas pela interface `rbt.h` para manipulação da árvore.
 
@@ -200,7 +200,7 @@ Estas são as funções expostas pela interface `rbt.h` para manipulação da á
 - **`void destroy(BinaryTree* tree)`**
     - **Funcionalidade**: Libera toda a memória associada à árvore. Ela utiliza a função recursiva `destroyNode`, que usa o `NIL` como caso base, e ao final deleta também o próprio nó sentinela `NIL`.
 
-### 3. Mecanismos Internos e Lógica de Autobalanceamento
+### 1.4.3 Mecanismos Internos e Lógica de Autobalanceamento
 
 A "magia" da RBT reside em sua lógica interna de inserção e correção, que mantém a árvore aproximadamente balanceada.
 
@@ -217,7 +217,7 @@ A "magia" da RBT reside em sua lógica interna de inserção e correção, que m
 - **Operações de Rotação (`leftRotate` e `rightRotate`)**
     - **Funcionalidade**: São as mesmas operações estruturais vistas na AVL, usadas para rearranjar subárvores. No contexto da RBT, elas são chamadas pela `fixInsert` para resolver os casos em que o tio do nó inserido é preto.
 
-### 4. Análise e Conclusões
+### 1.4.4 Análise e Conclusões
 
 **Pontos Fortes:**
 
@@ -225,7 +225,7 @@ A "magia" da RBT reside em sua lógica interna de inserção e correção, que m
 - **Desempenho de Busca Garantido**: Assim como a AVL, a RBT garante uma altura logarítmica ($O(logn)$), o que se traduz em um desempenho de busca, inserção e remoção no pior caso de $O(logn)$.
 - **Implementação Clássica e Robusta**: O código segue fielmente o algoritmo canônico da RBT, incluindo o uso inteligente do nó sentinela `NIL`, que elimina a necessidade de muitas verificações de ponteiros nulos, tornando o código mais limpo e menos propenso a erros.
 
-**Limitações e Complexidade:**
+**Limitações e Dificuldades:**
 
 - **Algoritmo Mais Complexo**: As regras de balanceamento da RBT (análise de casos do tio, re-colorações e rotações) são consideradas menos intuitivas do que o fator de balanceamento numérico da AVL, o que pode tornar o código mais difícil de entender e depurar.
 - **Balanceamento Menos Rígido**: Uma RBT não é tão estritamente balanceada quanto uma AVL. O caminho mais longo do topo à base pode ser até duas vezes o comprimento do caminho mais curto. Isso pode, em teoria, levar a tempos de busca ligeiramente mais lentos em média, embora a complexidade assintótica permaneça a mesma.
@@ -234,50 +234,99 @@ A "magia" da RBT reside em sua lógica interna de inserção e correção, que m
 
 A implementação da RBT é uma solução de alto desempenho e industrialmente comprovada para o problema de manter uma árvore de busca balanceada. Ela oferece garantias de desempenho logarítmico semelhantes à AVL, mas com um custo potencialmente menor para operações de escrita (inserções). A escolha entre RBT e AVL muitas vezes se resume a uma troca entre a complexidade do algoritmo e as otimizações para operações de leitura (AVL) versus escrita (RBT).
 
-# 2. Divisão de tarefas
 
-## Bruno Cavalli
 
-### Contribuições:
+---
 
-- Bruno Cavalli assumiu a frente da instrumentação de benchmarks e da implementação inicial da AVL. Ele começou organizando a estrutura básica do repositório, criando diretórios e realocando arquivos para as pastas corretas. Em seguida, concentrou-se na leitura do corpus: escreveu rotinas que percorrem diretórios e carregam milhares de documentos-texto, permitindo que o índice invertido fosse alimentado com um fluxo contínuo de dados reais.
-- No âmbito dos algoritmos, Bruno desenvolveu a inserção, as rotações e o balanceamento da AVL, além de testes unitários específicos para validar as funções de altura e fator de balanceamento. Depois de sucessivas tentativas, refinou a lógica da árvore para torná-la compatível com o framework de testes do grupo. Paralelamente, implementou os benchmarks da BST e, em seguida, da AVL, padronizando a coleta de métricas de tempo, número de comparações e altura da árvore. Para facilitar a análise posterior, acrescentou ao bench_bst uma exportação automática de resultados em formato CSV, o que permitiu gerar gráficos diretamente no Python ou em planilhas.
-- Bruno também deu manutenção ao módulo value_utils, documentando e ampliando suas funções, e manteve o repositório limpo ao remover arquivos executáveis e temporários. Durante todo o processo, sincronizou a sua bruno2branch com as branches principais (main e blzrefactor), resolvendo conflitos ligados a benchmarks e leitura de dados. Graças ao seu trabalho, a equipe pôde colher dados brutos confiáveis para a análise comparativa e contar com uma AVL funcional e testada.
-- Benchmarks e geração de dados brutos
-- Implementou o benchmark da BST e, em seguida, do benchmark da AVL, padronizando a coleta de tempo, altura e comparações.
-- Adicionou exportação automática para CSV no bench_bst, facilitando a criação de gráficos no relatório.
-- Implementação e testes da AVL
-- Desenvolveu as funções de inserção, rotações e balanceamento da AVL; criou testes unitários para getBalance e height.
-- Refinou a AVL após tentativas iniciais, resolvendo erros de lógica e garantindo compatibilidade com o framework de testes.
-- Leitura de corpus e utilitários
-- Escreveu rotinas de leitura de arquivos na main e no módulo data, possibilitando indexar diretórios inteiros de documentos.
-- Documentou e expandiu value_utils.
-- Estrutura inicial do repositório
-- Criou diretórios base e organizou arquivos nas pastas corretas logo no começo do projeto.
-- Integração e sincronização
-- Fez merges frequentes de blzrefactor e main para a sua bruno2branch, resolvendo conflitos relacionados a benchmarks e leitura de dados.
-- Sincronizou suas contribuições com as de outros membros, mantendo o fluxo de trabalho contínuo.
-- Limpeza e manutenção
-- Removeu arquivos executáveis de teste e temporários, mantendo o repositório enxuto.
-- Atualizou documentação auxiliar no README.
+## **Elaboração sobre as Dificuldades Gerais do Projeto**
 
-## Bruno Rosa
+#### 1. Dificuldades na Implementação das Árvores (BST, AVL, RBT)
 
-### Contribuições:
+A implementação das estruturas de árvore, do modelo mais simples ao mais complexo, apresentou uma curva de dificuldade acentuada, com desafios específicos em cada etapa.
 
-- Durante o desenvolvimento do projeto, Kauan Kevem atuou como líder de documentação e integração de código. Coube-lhe garantir que todas as estruturas de dados — BST, AVL e RBT — e os módulos auxiliares estivessem plenamente documentados e padronizados. Ele redigiu e refinou os cabeçalhos (*.h) de cada componente, incluindo descrições detalhadas, exemplos de uso e tags Doxygen para facilitar a leitura e a geração automática de referências. Manteve o [README.md](http://readme.md/) constantemente atualizado com instruções claras de compilação e execução, contribuindo decisivamente para a reprodutibilidade do trabalho.
-- Além da documentação, Kauan desempenhou o papel de integrador de branches, realizando múltiplos merges entre as ramificações main, kauan, blzbranch e kauanrefactor, resolvendo conflitos e assegurando um histórico de commits limpo e coerente. Cada integração envolveu revisão criteriosa do código produzido pelos colegas, verificando a compatibilidade com as especificações do projeto e alinhando os comentários técnicos às implementações finais. Dessa forma, garantiu que toda nova funcionalidade viesse acompanhada de documentação atualizada, permitindo que o restante da equipe se concentrasse nas otimizações de desempenho, nos testes de unidade e na análise comparativa das estruturas.
-- Documentação técnica completa
-- Escreveu e padronizou cabeçalhos (*.h) de todos os módulos centrais (bst, avl, rbt, tree_utils, data, bench_utils, treetest, less_than), inserindo descrições, pré-condições, pós-condições, exemplos de uso e tags Doxygen.
-- Realizou revisões sucessivas (mais de 10 commits entre 4 e 18/06) para harmonizar estilo, corrigir imprecisões e manter consistência entre declarações e implementações.
-- Manutenção do README e guias de uso
-- Atualizou o [README.md](http://readme.md/) com instruções de compilação (make), execução dos binários e exemplos de chamadas da CLI (search, stats), garantindo reprodutibilidade para avaliadores e colegas.
-- Integração de branches e controle de versões
-- Conduziu múltiplos merges (main, kauan, blzbranch, kauanrefactor), resolvendo conflitos de código e documentação.
-- Validou cada integração com revisões de código (“pull-request review”) e commits assinados/“Verified”, mantendo o histórico linear e rastreável.
-- Padronização de estilo e comentários
-- Criou convenções de nomenclatura e comentários que foram adotadas por todo o time.
-- Inseriu exemplos mínimos nos cabeçalhos para uso automático em testes unitários.
-- Suporte à equipe
-- Disponibilizou templates de docstring e checklist de boas práticas, agilizando o trabalho de quem focou em algoritmos e benchmark.
-- Atuou como ponto de contato para dúvidas sobre Doxygen e estrutura de pastas.
+* **BST (Árvore de Busca Binária):**
+    * **Gerenciamento de Ponteiros**: Embora conceitualmente simples, a implementação exigiu um gerenciamento cuidadoso dos ponteiros `left`, `right` e `parent`. Um único erro na atribuição desses ponteiros durante a inserção poderia corromper toda a estrutura da árvore.
+    * **Lógica de Destruição**: A implementação de uma função `destroy` que evita vazamentos de memória não é trivial. Foi necessário utilizar um percurso em pós-ordem (`destroyNode`) para garantir que os nós filhos fossem deletados antes de seus respectivos pais, uma lógica recursiva que exige atenção aos detalhes para ser correta.
+    * **Atualização de Altura**: Uma complexidade específica desta implementação foi a decisão de atualizar a altura dos nós mesmo na BST, onde ela não é usada para balanceamento. Isso exigiu um laço adicional que percorre o caminho do nó inserido de volta à raiz, adicionando sobrecarga e complexidade à operação de inserção.
+
+* **AVL:**
+    * **Lógica de Rotação**: A principal dificuldade foi a implementação correta das funções `leftRotate` e `rightRotate`. Essas operações são o coração do balanceamento e envolvem a manipulação precisa de múltiplos ponteiros entre o nó, seu filho e seu neto. Um erro em qualquer uma das reatribuições de ponteiros (`parent`, `left`, `right`) resultaria em uma árvore inconsistente. Os diagramas ASCII nos comentários do código são uma evidência dessa complexidade, servindo como um auxílio visual para o desenvolvedor.
+    * **Diagnóstico de Desbalanceamento**: A função `rebalance` precisou diagnosticar corretamente os quatro casos de desbalanceamento (Esquerda-Esquerda, Direita-Direita, e os casos duplos Esquerda-Direita e Direita-Esquerda). Isso envolve uma lógica condicional aninhada que verifica o fator de balanceamento de um nó e também o de seu filho para decidir se uma rotação simples ou dupla é necessária.
+    * **Manutenção da Recursão**: A natureza recursiva da função `insertNode` significou que o rebalanceamento ocorre na "subida" da pilha de chamadas. Garantir que o nó correto seja retornado e reatribuído em cada nível da recursão após uma possível rotação foi um desafio significativo.
+
+* **RBT (Árvore Rubro-Negra):**
+    * **Abstração do Nó Sentinela `NIL`**: A RBT introduziu um conceito novo: o nó sentinela `NIL`. A implementação precisou ser adaptada para usar este nó preto para representar todas as folhas, em vez de `nullptr`. Isso impactou a lógica de criação (`create` precisa criar o `NIL`), destruição (`destroy` precisa deletar o `NIL`) e todas as travessias, que agora usam `tree->NIL` como condição de parada.
+    * **Complexidade do `fixInsert`**: O algoritmo `fixInsert` é notoriamente complexo. A dificuldade residiu em implementar corretamente a análise de casos baseada na cor do "tio" do nó inserido. O laço `while` que corrige as violações da propriedade do vermelho exigiu uma lógica intrincada para tratar o caso do "tio vermelho" (que envolve apenas recolorações e move o problema para cima na árvore) e o caso do "tio preto" (que exige rotações e resolve o problema).
+    * **Gerenciamento de Cores e Ponteiros**: Durante o `fixInsert`, a manipulação simultânea das cores dos nós (`isRed`) e a reestruturação da árvore através de rotações é extremamente propensa a erros. Garantir que as cinco propriedades da RBT fossem mantidas após todas essas operações foi o maior desafio desta implementação.
+
+#### 2. Dificuldades na Implementação dos Benchmarks
+
+A criação de um sistema de benchmark significativo e robusto apresentou seus próprios desafios, indo muito além de simplesmente medir o tempo.
+
+
+* **Implementação da Coleta Estatística**: O uso de `GroupedStats` em vez de variáveis simples para as métricas representou um desafio de implementação. Foi necessário criar uma estrutura que acumulasse não apenas a soma, mas também a contagem, a soma dos quadrados, o mínimo e o máximo, e que implementasse corretamente as fórmulas para média e desvio-padrão.
+* **Gerenciamento de Memória e Dados**: A estratégia de benchmark incremental em `bench_bst.cpp` envolve o gerenciamento complexo de múltiplos vetores de ponteiros para as estatísticas (`allIndexing`, `allTree`, etc.), exigindo alocação dinâmica (`new`) a cada passo do laço. Gerenciar essa memória corretamente para evitar vazamentos em um laço longo e complexo é uma tarefa difícil.
+
+#### 3. Dificuldades na Leitura e Processamento dos Arquivos
+
+A etapa inicial de carregar os dados dos arquivos para a memória também teve suas complexidades.
+
+* **Manipulação do Sistema de Arquivos**: O uso da biblioteca `<filesystem>` para listar arquivos de um diretório, embora poderoso, requer o tratamento correto de caminhos (paths) e a filtragem de arquivos com base em seus nomes, que precisavam ser convertidos para inteiros (`std::stoi`) para comparação.
+* **Implementação de Ordenação Customizada**: Uma versão do `data.cpp` implementa o algoritmo Heap Sort do zero para ordenar tanto os arquivos quanto as palavras (`heapifyFiles`, `sortWords`). Implementar um algoritmo de ordenação eficiente e sem bugs é um desafio clássico da ciência da computação. A outra versão utiliza uma biblioteca, mas ainda requer a criação de functores de comparação corretos.
+* **Eficiência e Uso de Memória**: O processo de ler múltiplos arquivos de texto e armazenar todas as palavras em um `std::vector<std::vector<std::string>>` pode consumir uma quantidade significativa de memória RAM. O desafio foi fazer isso de forma eficiente para que a etapa de pré-processamento não se tornasse um gargalo de desempenho maior que a própria indexação nas árvores.
+
+# 3. Divisão de tarefas
+
+### Bruno Cavalli  
+Papel: Responsável por Benchmarks e Implementação da AVL
+
+- Organizou a estrutura inicial do repositório (src/, data/, docs/) e realocou arquivos nas pastas corretas.  
+- Implementou AVL: inserção, rotações, balanceamento e testes de getBalance/height; ajustou a lógica até compatibilizar com o framework.  
+- Escreveu rotinas de leitura do corpus (10 000 documentos) e integrou-as às mains.  
+- Criou benchmarks padronizados para BST e AVL — coleta de tempo, altura, nº de comparações — com exportação CSV automática.  
+- Documentou e expandiu value_utils; removeu binários/temporários, mantendo o repositório enxuto.  
+- Sincronizou constantemente a branch bruno2branch com main e blzrefactor, resolvendo conflitos de benchmarks e leitura.
+
+---
+
+### Bruno Luis Zerbinato Rosa
+Papel: Desenvolvedor Principal de Algoritmos e Benchmarks
+
+- Implementou a BST completa (v 1.0 → 2.0) e entregou a RBT estável (v 1.2.5); corrigiu pontos críticos da AVL.  
+- Criou o módulo *bench_utils, programas bench_, test_framework (v 0.1 → 1.2) e Makefiles dedicados.  
+- Desenvolveu as mains main_bst, main_avl, main_rbt e iniciou cli_utils.  
+- Adicionou utilidades (value_utils, less_than, tree_utils) e heap-sort para ordenar arquivos.  
+- Automatizou build/limpeza (.gitignore) e conduziu merges entre main, blzbranch, kauanrefactor, revisando o código integrado.
+
+---
+
+### Kauan Kevem Sousa Farias 
+Papel: Documentação e Integração
+
+- Padronizou todos os cabeçalhos (*.h) com Doxygen, exemplos e pré/pós-condições.  
+- Atualizou o README com instruções de build (make) e uso da CLI (search, stats).  
+- Realizou múltiplos merges (main, kauan, blzbranch, kauanrefactor), resolvendo conflitos de código e documentação.  
+- Definiu convenções de nomenclatura/comentário; forneceu templates de docstring e checklist de boas práticas.  
+- Atuou como ponto de contato para dúvidas de documentação e estrutura de pastas.
+
+---
+
+### Gustavo Oliveira 
+Papel: Testes e Correções
+
+- Criou *test_bst.cpp, **test_avl.cpp, **test_rbt.cpp* cobrindo inserção, busca, rotações e destruição; ampliou a AVL para 17 cenários.  
+- Refinou o framework de testes, Makefile dedicado e README da suíte.  
+- Corrigiu rebalanceamento da AVL e rotações da RBT; implementou funções de comparação em LessThan.  
+- Removeu binários/temporários, padronizou .gitignore, limpou comentários obsoletos.  
+- Manteve integração contínua com main, blzbranch, kauan, artur.
+
+---
+
+### Artur Vidal Krause  
+Papel: Responsável pela CLI e Estrutura do Repositório
+
+- Definiu a estrutura de pastas e adicionou o corpus de 10 000 documentos.  
+- Desenvolveu a CLI completa (search, stats) com parsing robusto; criou funções genéricas searchTree e runStats.  
+- Implementou main_avl integrando AVL ao fluxo da CLI.  
+- Atualizou o README com exemplos de uso e preparo do corpus.  
+- Realizou merges (main, kauan, blzbranch) para manter a branch artur sincronizada.
