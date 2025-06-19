@@ -323,55 +323,76 @@ A escolha entre BST, AVL e RBT depende inteiramente dos requisitos da aplicaçã
 - **Escolha a AVL** quando seu sistema realizar um volume muito maior de buscas do que de inserções. O custo extra para manter a árvore perfeitamente compacta se paga com buscas mais rápidas.
 - **Opte pela RBT** como a escolha padrão para a maioria das aplicações. Ela oferece um excelente equilíbrio entre o desempenho de leitura e escrita, sendo particularmente forte em cenários com modificações frequentes na estrutura de dados.
 
-# Análise Gráfica: BST vs AVL
-
-## Gráficos AVL
-
-### Análise Completa da AVL
-![Análise completa da árvore AVL](graphs/avl_analise_completa.png)
-
-### Comparações Médias na AVL
-![Média de comparações na AVL](graphs/avl_comparacoes_media.png)
-
-### Altura da AVL
-![Altura da árvore AVL](graphs/avl_altura.png)
-
-### Profundidade Média na AVL
-![Profundidade média na AVL](graphs/avl_profundidade_media.png)
-
-### Tempo de Busca na AVL
-![Tempo de busca na AVL](graphs/avl_tempo_busca.png)
-
-### Tempo de Inserção na AVL
-![Tempo de inserção na AVL](graphs/avl_tempo_insercao.png)
-
-### Total de Nós na AVL
-![Total de nós na AVL](graphs/avl_total_nos.png)
+# Análise Gráfica: BST vs AVL vs RBT
 
 ## Gráficos BST
 
 ### Análise Completa da BST
-![Análise completa da árvore BST](graphs/bst_analise_completa.png)
+![Análise completa da árvore BST](../analysis/graphs/bst_analise_completa.png)
 
 ### Comparações Médias na BST
-![Média de comparações na BST](graphs/bst_comparacoes_media.png)
+![Média de comparações na BST](../analysis/graphs/bst_comparacoes_media.png)
 
 ### Altura da BST
-![Altura da árvore BST](graphs/bst_altura.png)
+![Altura da árvore BST](../analysis/graphs/bst_altura.png)
 
 ### Profundidade Média na BST
-![Profundidade média na BST](graphs/bst_profundidade_media.png)
+![Profundidade média na BST](../analysis/graphs/bst_profundidade_media.png)
 
 ### Tempo de Busca na BST
-![Tempo de busca na BST](graphs/bst_tempo_busca.png)
+![Tempo de busca na BST](../analysis/graphs/bst_tempo_busca.png)
 
 ### Tempo de Inserção na BST
-![Tempo de inserção na BST](graphs/bst_tempo_insercao.png)
+![Tempo de inserção na BST](../analysis/graphs/bst_tempo_insercao.png)
 
 ### Total de Nós na BST
-![Total de nós na BST](graphs/bst_total_nos.png)
+![Total de nós na BST](../analysis/graphs/bst_total_nos.png)
 
+## Gráficos AVL
 
+### Análise Completa da AVL
+![Análise completa da árvore AVL](../analysis/graphs/avl_analise_completa.png)
+
+### Comparações Médias na AVL
+![Média de comparações na AVL](../analysis/graphs/avl_comparacoes_media.png)
+
+### Altura da AVL
+![Altura da árvore AVL](../analysis/graphs/avl_altura.png)
+
+### Profundidade Média na AVL
+![Profundidade média na AVL](../analysis/graphs/avl_profundidade_media.png)
+
+### Tempo de Busca na AVL
+![Tempo de busca na AVL](../analysis/graphs/avl_tempo_busca.png)
+
+### Tempo de Inserção na AVL
+![Tempo de inserção na AVL](../analysis/graphs/avl_tempo_insercao.png)
+
+### Total de Nós na AVL
+![Total de nós na AVL](../analysis/graphs/avl_total_nos.png)
+
+## Gráficos RBT
+
+### Análise Completa da RBT
+![Análise completa da árvore RBT](../analysis/graphs/rbt_analise_completa.png)
+
+### Comparações Médias na RBT
+![Média de comparações na RBT](../analysis/graphs/rbt_comparacoes_media.png)
+
+### Altura da RBT
+![Altura da árvore RBT](../analysis/graphs/rbt_altura.png)
+
+### Profundidade Média na RBT
+![Profundidade média na RBT](../analysis/graphs/rbt_profundidade_media.png)
+
+### Tempo de Busca na RBT
+![Tempo de busca na RBT](../analysis/graphs/rbt_tempo_busca.png)
+
+### Tempo de Inserção na RBT
+![Tempo de inserção na RBT](../analysis/graphs/rbt_tempo_insercao.png)
+
+### Total de Nós na RBT
+![Total de nós na RBT](../analysis/graphs/rbt_total_nos.png)
 
 
 
