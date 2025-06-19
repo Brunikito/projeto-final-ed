@@ -11,25 +11,30 @@
 namespace RBT {
     // cria uma nova Árvore Rubro-Negra com nó sentinela NIL
     BinaryTree* create() {
-        BinaryTree* newtree = new BinaryTree;
-        if (!newtree) {
+        BinaryTree* tree = new BinaryTree;
+         if (!tree) {
             std::cerr << "Erro na alocacao da arvore" << std::endl;
             return nullptr;
         }
-
-        Node* nil = new Node;
-        if (!nil) {
+        tree->NIL = new Node;
+        if (!tree->NIL) {
             std::cerr << "Erro na alocacao do NIL" << std::endl;
             return nullptr;
         }
-        nil->parent = nil;
-        nil->left = nil;
-        nil->right = nil;
-        nil->height = 0;
-        nil->isRed = 0;
-        newtree->root = nil;
-        newtree->NIL = nil;
-        return newtree;    
+        tree->NIL->isRed = false; // O nó sentinela é sempre preto.
+        tree->NIL->word = "";     // Inicialização opcional para clareza.
+        tree->NIL->documentIds = {};  // Inicialização opcional.
+        
+        // CORREÇÃO CRÍTICA: O sentinela deve apontar para si mesmo.
+        tree->NIL->left = tree->NIL;
+        tree->NIL->right = tree->NIL;
+        tree->NIL->parent = tree->NIL;
+
+        // A raiz inicialmente aponta para o sentinela.
+        tree->root = tree->NIL;
+        tree->root->parent = tree->NIL; // Garante que a raiz também aponta para o NIL como pai.
+
+        return tree;
     }
     // retorna a altura de um nó
     int height(Node* node, Node* NIL, InsertResult& stats){
