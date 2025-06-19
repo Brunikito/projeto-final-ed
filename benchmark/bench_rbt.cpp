@@ -16,24 +16,26 @@
  * @return Um vetor de strings contendo as palavras únicas.
  */
 std::vector<std::string> get_unique_words(BinaryTree* tree) {
-    if (!tree || !tree->root) {
+    if (tree == nullptr) {
+        return {};
+    }
+    if (tree->NIL == nullptr) {
+        return {};
+    }
+    if (tree->root == tree->NIL) {
         return {};
     }
     
     std::vector<std::string> words;
-    std::vector<Node*> stack;
-    Node* current = tree->root;
+    std::vector<Node*> stack = {tree->root};
+    Node* current;
 
-    // Travessia in-order para obter as palavras
-    while (current != nullptr || !stack.empty()) {
-        while (current != nullptr) {
-            stack.push_back(current);
-            current = current->left;
-        }
+    while (!stack.empty()) {
         current = stack.back();
-        stack.pop_back();
         words.push_back(current->word);
-        current = current->right;
+        stack.pop_back();
+        if (current->left != tree->NIL) stack.push_back(current->left);
+        if (current->right != tree->NIL) stack.push_back(current->right);
     }
     return words;
 }

@@ -25,8 +25,8 @@ std::vector<std::string> get_unique_words(BinaryTree* tree) {
     Node* current = tree->root;
 
     // Travessia in-order para obter as palavras
-    while (current != nullptr || !stack.empty()) {
-        while (current != nullptr) {
+    while (current != tree->NIL || !stack.empty()) {
+        while (current != tree->NIL) {
             stack.push_back(current);
             current = current->left;
         }
