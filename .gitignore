@@ -12,4 +12,7 @@ node_modules/
 .DS_Store
 Thumbs.db
 
+.idea
+.vscode
+
 *.exe
