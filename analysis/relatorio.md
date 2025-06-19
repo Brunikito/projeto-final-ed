@@ -86,7 +86,7 @@ O módulo `data.cpp` é crucial para entender o comportamento do sistema.
 - **Estrutura de Análise Robusta**: O conjunto de funções em `tree_utils` para calcular altura, balanceamento, perfeição, completude e uso de memória é extremamente poderoso para avaliar a qualidade estrutural da árvore resultante.
 - **Código Modular e Documentado**: A separação em namespaces e os comentários claros no estilo Doxygen facilitam a compreensão e a manutenção do código.
 
-**Pontos Fracos e Falhas de Design:**
+**Pontos Fracos e Dificuldades:**
 
 - **A Falha Fundamental: Ausência de Autobalanceamento**: A implementação é de uma BST clássica, que não realiza qualquer tipo de rotação ou reestruturação para manter o balanceamento. Esta é a sua maior vulnerabilidade.
 - **Cenário de Pior Caso Induzido pelo Próprio Sistema**: O ponto mais crítico é que o módulo de pré-processamento **ordena as palavras de cada documento antes da inserção**. Inserir dados pré-ordenados em uma BST simples é o método canônico para gerar uma árvore degenerada (com a forma de uma lista ligada). Isso significa que a arquitetura do sistema ativamente cria as piores condições possíveis para a estrutura de dados escolhida, resultando em um desempenho de busca e inserção de complexidade O(n) em vez de O(logn).
@@ -236,48 +236,56 @@ A implementação da RBT é uma solução de alto desempenho e industrialmente c
 
 # 2. Divisão de tarefas
 
-## Bruno Cavalli
+### Bruno Cavalli  
+*Papel:* Benchmark & AVL Developer
 
-### Contribuições:
+- Organizou a estrutura inicial do repositório (src/, data/, docs/) e realocou arquivos nas pastas corretas.  
+- Implementou *AVL*: inserção, rotações, balanceamento e testes de getBalance/height; ajustou a lógica até compatibilizar com o framework.  
+- Escreveu rotinas de *leitura do corpus* (10 000 documentos) e integrou-as às mains.  
+- Criou benchmarks padronizados para *BST* e *AVL* — coleta de tempo, altura, nº de comparações — com *exportação CSV* automática.  
+- Documentou e expandiu value_utils; removeu binários/temporários, mantendo o repositório enxuto.  
+- Sincronizou constantemente a branch bruno2branch com main e blzrefactor, resolvendo conflitos de benchmarks e leitura.
 
-- Bruno Cavalli assumiu a frente da instrumentação de benchmarks e da implementação inicial da AVL. Ele começou organizando a estrutura básica do repositório, criando diretórios e realocando arquivos para as pastas corretas. Em seguida, concentrou-se na leitura do corpus: escreveu rotinas que percorrem diretórios e carregam milhares de documentos-texto, permitindo que o índice invertido fosse alimentado com um fluxo contínuo de dados reais.
-- No âmbito dos algoritmos, Bruno desenvolveu a inserção, as rotações e o balanceamento da AVL, além de testes unitários específicos para validar as funções de altura e fator de balanceamento. Depois de sucessivas tentativas, refinou a lógica da árvore para torná-la compatível com o framework de testes do grupo. Paralelamente, implementou os benchmarks da BST e, em seguida, da AVL, padronizando a coleta de métricas de tempo, número de comparações e altura da árvore. Para facilitar a análise posterior, acrescentou ao bench_bst uma exportação automática de resultados em formato CSV, o que permitiu gerar gráficos diretamente no Python ou em planilhas.
-- Bruno também deu manutenção ao módulo value_utils, documentando e ampliando suas funções, e manteve o repositório limpo ao remover arquivos executáveis e temporários. Durante todo o processo, sincronizou a sua bruno2branch com as branches principais (main e blzrefactor), resolvendo conflitos ligados a benchmarks e leitura de dados. Graças ao seu trabalho, a equipe pôde colher dados brutos confiáveis para a análise comparativa e contar com uma AVL funcional e testada.
-- Benchmarks e geração de dados brutos
-- Implementou o benchmark da BST e, em seguida, do benchmark da AVL, padronizando a coleta de tempo, altura e comparações.
-- Adicionou exportação automática para CSV no bench_bst, facilitando a criação de gráficos no relatório.
-- Implementação e testes da AVL
-- Desenvolveu as funções de inserção, rotações e balanceamento da AVL; criou testes unitários para getBalance e height.
-- Refinou a AVL após tentativas iniciais, resolvendo erros de lógica e garantindo compatibilidade com o framework de testes.
-- Leitura de corpus e utilitários
-- Escreveu rotinas de leitura de arquivos na main e no módulo data, possibilitando indexar diretórios inteiros de documentos.
-- Documentou e expandiu value_utils.
-- Estrutura inicial do repositório
-- Criou diretórios base e organizou arquivos nas pastas corretas logo no começo do projeto.
-- Integração e sincronização
-- Fez merges frequentes de blzrefactor e main para a sua bruno2branch, resolvendo conflitos relacionados a benchmarks e leitura de dados.
-- Sincronizou suas contribuições com as de outros membros, mantendo o fluxo de trabalho contínuo.
-- Limpeza e manutenção
-- Removeu arquivos executáveis de teste e temporários, mantendo o repositório enxuto.
-- Atualizou documentação auxiliar no README.
+---
 
-## Bruno Rosa
+### Bruno “Brunikito”  
+*Papel:* Core Developer & Benchmarking Lead
 
-### Contribuições:
+- Implementou a *BST* completa (v 1.0 → 2.0) e entregou a *RBT* estável (v 1.2.5); corrigiu pontos críticos da AVL.  
+- Criou o módulo **bench_utils**, programas bench_*, test_framework (v 0.1 → 1.2) e Makefiles dedicados.  
+- Desenvolveu as mains main_bst, main_avl, main_rbt e iniciou cli_utils.  
+- Adicionou utilidades (value_utils, less_than, tree_utils) e heap-sort para ordenar arquivos.  
+- Automatizou build/limpeza (.gitignore) e conduziu merges entre main, blzbranch, kauanrefactor, revisando o código integrado.
 
-- Durante o desenvolvimento do projeto, Kauan Kevem atuou como líder de documentação e integração de código. Coube-lhe garantir que todas as estruturas de dados — BST, AVL e RBT — e os módulos auxiliares estivessem plenamente documentados e padronizados. Ele redigiu e refinou os cabeçalhos (*.h) de cada componente, incluindo descrições detalhadas, exemplos de uso e tags Doxygen para facilitar a leitura e a geração automática de referências. Manteve o [README.md](http://readme.md/) constantemente atualizado com instruções claras de compilação e execução, contribuindo decisivamente para a reprodutibilidade do trabalho.
-- Além da documentação, Kauan desempenhou o papel de integrador de branches, realizando múltiplos merges entre as ramificações main, kauan, blzbranch e kauanrefactor, resolvendo conflitos e assegurando um histórico de commits limpo e coerente. Cada integração envolveu revisão criteriosa do código produzido pelos colegas, verificando a compatibilidade com as especificações do projeto e alinhando os comentários técnicos às implementações finais. Dessa forma, garantiu que toda nova funcionalidade viesse acompanhada de documentação atualizada, permitindo que o restante da equipe se concentrasse nas otimizações de desempenho, nos testes de unidade e na análise comparativa das estruturas.
-- Documentação técnica completa
-- Escreveu e padronizou cabeçalhos (*.h) de todos os módulos centrais (bst, avl, rbt, tree_utils, data, bench_utils, treetest, less_than), inserindo descrições, pré-condições, pós-condições, exemplos de uso e tags Doxygen.
-- Realizou revisões sucessivas (mais de 10 commits entre 4 e 18/06) para harmonizar estilo, corrigir imprecisões e manter consistência entre declarações e implementações.
-- Manutenção do README e guias de uso
-- Atualizou o [README.md](http://readme.md/) com instruções de compilação (make), execução dos binários e exemplos de chamadas da CLI (search, stats), garantindo reprodutibilidade para avaliadores e colegas.
-- Integração de branches e controle de versões
-- Conduziu múltiplos merges (main, kauan, blzbranch, kauanrefactor), resolvendo conflitos de código e documentação.
-- Validou cada integração com revisões de código (“pull-request review”) e commits assinados/“Verified”, mantendo o histórico linear e rastreável.
-- Padronização de estilo e comentários
-- Criou convenções de nomenclatura e comentários que foram adotadas por todo o time.
-- Inseriu exemplos mínimos nos cabeçalhos para uso automático em testes unitários.
-- Suporte à equipe
-- Disponibilizou templates de docstring e checklist de boas práticas, agilizando o trabalho de quem focou em algoritmos e benchmark.
-- Atuou como ponto de contato para dúvidas sobre Doxygen e estrutura de pastas.
+---
+
+### Kauan Kevem (Bruno Rosa)  
+*Papel:* Documentation & Integration Lead
+
+- Padronizou *todos os cabeçalhos* (*.h) com Doxygen, exemplos e pré/pós-condições.  
+- Atualizou o *README* com instruções de build (make) e uso da CLI (search, stats).  
+- Realizou múltiplos *merges* (main, kauan, blzbranch, kauanrefactor), resolvendo conflitos de código e documentação.  
+- Definiu convenções de nomenclatura/comentário; forneceu templates de docstring e checklist de boas práticas.  
+- Atuou como ponto de contato para dúvidas de documentação e estrutura de pastas.
+
+---
+
+### Gustavo (“GuOliv2306”)  
+*Papel:* Testing & Bug-Fix Lead
+
+- Criou **test_bst.cpp**, **test_avl.cpp**, **test_rbt.cpp** cobrindo inserção, busca, rotações e destruição; ampliou a AVL para *17 cenários*.  
+- Refinou o framework de testes, Makefile dedicado e README da suíte.  
+- Corrigiu rebalanceamento da *AVL* e rotações da *RBT*; implementou funções de comparação em LessThan.  
+- Removeu binários/temporários, padronizou .gitignore, limpou comentários obsoletos.  
+- Manteve integração contínua com main, blzbranch, kauan, artur.
+
+---
+
+### Artur Vidal Krause  
+*Papel:* CLI & Repository Setup
+
+- Definiu a *estrutura de pastas* e adicionou o *corpus de 10 000 documentos*.  
+- Desenvolveu a *CLI completa* (search, stats) com parsing robusto; criou funções genéricas searchTree e runStats.  
+- Implementou main_avl integrando AVL ao fluxo da CLI.  
+- Atualizou o README com exemplos de uso e preparo do corpus.  
+- Realizou merges (main, kauan, blzbranch) para manter a branch artur sincronizada.
