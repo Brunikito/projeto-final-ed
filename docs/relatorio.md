@@ -330,71 +330,111 @@ A escolha entre BST, AVL e RBT depende inteiramente dos requisitos da aplicaçã
 ### Análise Completa da BST
 ![Análise completa da árvore BST](../analysis/graphs/bst_analise_completa.png)
 
+Figura 1. Análise completa da árvore BST. Observa-se que todas as métricas de desempenho da BST se degradam significativamente conforme mais elementos são inseridos. O tempo de operações cresce rapidamente, a altura da árvore aumenta drasticamente e as comparações e profundidades tornam-se elevadas, refletindo a degeneração severa da BST sem qualquer balanceamento.
+
 ### Comparações Médias na BST
 ![Média de comparações na BST](../analysis/graphs/bst_comparacoes_media.png)
+
+Figura 2. Comparações médias na BST (inserção vs busca). Nota-se que o número médio de comparações tanto para inserções quanto para buscas na BST cresce quase linearmente à medida que a estrutura aumenta. Sem balanceamento, cada operação passa a examinar muitos nós, resultando em comparações proporcionalmente maiores (complexidade aproximada de O(n)) conforme o volume de dados cresce.
 
 ### Altura da BST
 ![Altura da árvore BST](../analysis/graphs/bst_altura.png)
 
+Figura 3. Altura da BST ao longo das inserções. A altura da árvore BST aumenta de forma acentuada e praticamente linear em relação ao número de nós inseridos. Isso evidencia que a BST está se tornando extremamente alta e desbalanceada (próxima de uma lista ligada), confirmando o comportamento de pior caso em que a altura cresce proporcionalmente a n.
+
 ### Profundidade Média na BST
 ![Profundidade média na BST](../analysis/graphs/bst_profundidade_media.png)
+
+Figura 4. Profundidade média na BST (inserção vs busca). Verifica-se que as profundidades médias das operações de inserção e busca na BST elevam-se significativamente conforme a árvore cresce. Em uma BST degenerada, novas inserções ocorrem em níveis cada vez mais profundos e as buscas percorrem longos caminhos na árvore, levando a profundidades médias altas e praticamente proporcionais ao tamanho total da árvore.
 
 ### Tempo de Busca na BST
 ![Tempo de busca na BST](../analysis/graphs/bst_tempo_busca.png)
 
+Figura 5. Tempo de busca na BST. O tempo de busca na BST aumenta consideravelmente conforme mais elementos são inseridos. Devido à estrutura desbalanceada (muitos nós em sequência), as operações de busca tornam-se cada vez mais lentas, aproximando-se de comportamento O(n) e evidenciando o impacto negativo da falta de balanceamento na eficiência das buscas. 
+
 ### Tempo de Inserção na BST
 ![Tempo de inserção na BST](../analysis/graphs/bst_tempo_insercao.png)
 
+Figura 6. Tempo de inserção na BST. Observa-se que o tempo de inserção na BST cresce drasticamente conforme o número de inserções aumenta. A inserção de palavras em ordem (pré-ordenadas) faz com que a árvore se degenere, obrigando cada nova inserção a percorrer quase toda a extensão da árvore. Esse comportamento desbalanceado resulta em desempenho de inserção próximo de O(n), deteriorando fortemente a eficiência à medida que a quantidade de dados cresce.
+
 ### Total de Nós na BST
 ![Total de nós na BST](../analysis/graphs/bst_total_nos.png)
+
+Figura 7. Total de nós na BST. O total de nós na BST cresce linearmente com o número de palavras únicas inseridas. Cada nova palavra distinta adicionada gera um novo nó na árvore, de modo que a contagem de nós acompanha diretamente a quantidade de inserções realizadas – comportamento esperado e similar nas três estruturas, já que todas inserem o mesmo conjunto de chaves.
 
 ## Gráficos AVL
 
 ### Análise Completa da AVL
 ![Análise completa da árvore AVL](../analysis/graphs/avl_analise_completa.png)
 
+Figura 8. Análise completa da árvore AVL. Observa-se que a AVL mantém um desempenho estável em todas as métricas mesmo com o aumento dos dados. Os tempos de inserção e busca crescem de forma bastante suave, a altura da árvore permanece baixa e controlada, e o número de comparações e profundidades médias das operações se mantém pequeno. Isso demonstra a efetividade do balanceamento AVL, que evita degradação significativa de performance conforme o volume de elementos aumenta.
+
 ### Comparações Médias na AVL
 ![Média de comparações na AVL](../analysis/graphs/avl_comparacoes_media.png)
+
+Figura 9. Comparações médias na AVL (inserção vs busca). Nota-se que a quantidade média de comparações tanto para inserir quanto para buscar na AVL permanece baixa e cresce lentamente conforme a árvore aumenta. Graças ao rebalanceamento, ambas as operações requerem um número de comparações em torno de O(log n), bem menor que na BST, indicando maior eficiência nas operações de busca e inserção.
 
 ### Altura da AVL
 ![Altura da árvore AVL](../analysis/graphs/avl_altura.png)
 
+Figura 10. Altura da AVL ao longo das inserções. A altura da árvore AVL cresce de forma lenta (próxima a logarítmica) em função do número de nós inseridos. Mesmo com um grande número de elementos, a AVL permanece relativamente rasa; sua altura aumenta gradualmente em vez de abruptamente, comprovando que a árvore se mantém balanceada e evitando o crescimento excessivo observado na BST.
+
 ### Profundidade Média na AVL
 ![Profundidade média na AVL](../analysis/graphs/avl_profundidade_media.png)
+
+Figura 11. Profundidade média na AVL (inserção vs busca). Verifica-se que as profundidades médias das inserções e buscas na AVL se mantêm baixas durante todo o processo. Novos nós são inseridos em níveis pouco profundos e as buscas percorrem poucos níveis em média, graças às rotações de balanceamento. Dessa forma, mesmo com o aumento do número de elementos, a profundidade média das operações cresce de maneira muito lenta, indicando eficiência próxima de O(log n) por operação.
 
 ### Tempo de Busca na AVL
 ![Tempo de busca na AVL](../analysis/graphs/avl_tempo_busca.png)
 
+Figura 12. Tempo de busca na AVL. O tempo de busca na AVL cresce de maneira sutil conforme mais elementos são indexados. Devido ao balanceamento contínuo, as operações de busca mantêm desempenho próximo a O(log n), fazendo com que o aumento no tempo de busca seja quase imperceptível mesmo para grandes volumes de dados – um contraste marcante em relação à BST desbalanceada.
+
 ### Tempo de Inserção na AVL
 ![Tempo de inserção na AVL](../analysis/graphs/avl_tempo_insercao.png)
 
+Figura 13. Tempo de inserção na AVL. O tempo de inserção na AVL permanece eficiente e cresce gradualmente à medida que inserimos mais palavras. Embora a manutenção do balanceamento introduza algum overhead (como rotações), esse custo é compensado por manter a árvore rasa. Em resultado, as inserções mantêm complexidade próxima de O(log n), sem o crescimento explosivo de tempo visto na BST.
+
 ### Total de Nós na AVL
 ![Total de nós na AVL](../analysis/graphs/avl_total_nos.png)
+
+Figura 14. Total de nós na AVL. O total de nós na AVL cresce linearmente com o número de chaves inseridas, assim como nas outras árvores. Cada nova palavra única corresponde a um novo nó, de forma que a contagem total de nós aumenta proporcionalmente à quantidade de inserções distintas realizadas no índice.
 
 ## Gráficos RBT
 
 ### Análise Completa da RBT
 ![Análise completa da árvore RBT](../analysis/graphs/rbt_analise_completa.png)
 
+Figura 15. Análise completa da árvore RBT. Observa-se que a RBT mantém todas as métricas de desempenho em patamares eficientes conforme cresce o conjunto de dados. Os tempos de inserção e busca aumentam muito lentamente, a altura da árvore se mantém baixa e controlada, e as comparações e profundidades médias das operações permanecem reduzidas. Isso confirma que o balanceamento rubro-negro preserva a performance da estrutura, semelhante à AVL, mesmo com um grande número de elementos.
+
 ### Comparações Médias na RBT
 ![Média de comparações na RBT](../analysis/graphs/rbt_comparacoes_media.png)
+
+Figura 16. Comparações médias na RBT (inserção vs busca). Nota-se que o número médio de comparações para operações de inserção e busca na RBT permanece baixo e cresce de forma sub-linear conforme o número de nós aumenta. As operações de balanceamento (rotações e recolorimentos) garantem que as inserções e buscas tenham complexidade em torno de O(log n) em termos de comparações, alcançando eficiência comparável à da AVL e muito superior à da BST.
 
 ### Altura da RBT
 ![Altura da árvore RBT](../analysis/graphs/rbt_altura.png)
 
+Figura 17. Altura da RBT ao longo das inserções. A altura da árvore RBT cresce de forma controlada conforme mais nós são inseridos, seguindo aproximadamente uma curva logarítmica. Embora a RBT permita uma variação ligeiramente maior na altura que a AVL, ela ainda permanece muito mais rasa que a BST não balanceada. O resultado é uma altura que aumenta devagar, ilustrando o sucesso do balanceamento rubro-negro em prevenir crescimento desproporcional.
+
 ### Profundidade Média na RBT
 ![Profundidade média na RBT](../analysis/graphs/rbt_profundidade_media.png)
+
+Figura 18. Profundidade média na RBT (inserção vs busca). Verifica-se que as profundidades médias das operações na RBT permanecem pequenas à medida que a árvore cresce. Mesmo inserindo muitos elementos, os novos nós são posicionados em níveis baixos e as buscas raramente percorrem longos caminhos. Graças ao balanceamento automático, as profundidades médias de inserção e busca aumentam muito lentamente, mantendo-se próximas de O(log n) e garantindo operações eficientes.
 
 ### Tempo de Busca na RBT
 ![Tempo de busca na RBT](../analysis/graphs/rbt_tempo_busca.png)
 
+Figura 19. Tempo de busca na RBT. O tempo de busca na RBT apresenta um crescimento suave conforme o volume de dados aumenta. Devido ao balanceamento da árvore, as buscas continuam executando em tempo próximo de O(log n), resultando em incrementos modestos no tempo de busca mesmo com grandes quantidades de elementos. Assim, o desempenho de busca da RBT permanece similar ao da AVL e substancialmente melhor que o da BST.
+
 ### Tempo de Inserção na RBT
 ![Tempo de inserção na RBT](../analysis/graphs/rbt_tempo_insercao.png)
+
+Figura 20. Tempo de inserção na RBT. O tempo de inserção na RBT mantém-se baixo e cresce de forma contida com o aumento do número de elementos. As inserções envolvem reajustes estruturais (rotações e recolorações), mas ainda operam em O(log n), o que faz com que o custo por inserção aumente muito lentamente em contraste com a BST. A RBT demonstra, portanto, um desempenho de inserção próximo ao da AVL, mesmo ao lidar com grande escala de dados.
 
 ### Total de Nós na RBT
 ![Total de nós na RBT](../analysis/graphs/rbt_total_nos.png)
 
-
+Figura 21. Total de nós na RBT. O total de nós na RBT cresce linearmente conforme novas palavras únicas são inseridas, de maneira idêntica às demais árvores. Em todas as estruturas, cada chave distinta inserida corresponde à criação de um novo nó; portanto, a quantidade total de nós aumenta proporcionalmente ao número de inserções únicas efetuadas.
 
 # 3. Divisão de tarefas
 
