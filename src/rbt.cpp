@@ -4,51 +4,19 @@
 #include <chrono>
 
 #include "rbt.h"
-#include "utils/tree_utils.h"
-#include "utils/bench_utils.h"
+#include "utils/tree_utils.h" // Apenas para os structs de resultado
+#include "utils/value_utils.h" // Apenas para ValueUtils::max se precisar
 
 namespace RBT {
 
-    // Declarações antecipadas das funções internas (forward declarations)
-    void fixInsert(BinaryTree* tree, Node* k, InsertResult& stats);
-    void leftRotate(BinaryTree* tree, Node* x, InsertResult& stats);
-    void rightRotate(BinaryTree* tree, Node* x, InsertResult& stats);
-    void destroyNode(Node* node, Node* NIL);
-
-    // Cria uma nova Árvore Rubro-Negra com nó sentinela NIL
-    BinaryTree* create() {
-        BinaryTree* newtree = new BinaryTree;
-        if (!newtree) return nullptr;
-
-        Node* nil = new Node;
-        if (!nil) {
-            delete newtree;
-            return nullptr;
-        }
-        
-        nil->parent = nil;
-        nil->left = nil;
-        nil->right = nil;
-        nil->isRed = false; // NIL é sempre preto
-        nil->height = 0; // Pode manter por compatibilidade com getTreeStats, mas não é usado para balancear
-
-        newtree->NIL = nil;
-        newtree->root = newtree->NIL;
-        
-        return newtree; 
-    }
-
-    void leftRotate(BinaryTree* tree, Node* x, InsertResult& stats) {
-        stats.numRotations.LL++;
+    // Função auxiliar para rotação à esquerda
+    void leftRotate(BinaryTree* tree, Node* x) {
         Node* y = x->right;
         x->right = y->left;
-        
         if (y->left != tree->NIL) {
             y->left->parent = x;
         }
-
         y->parent = x->parent;
-
         if (x->parent == tree->NIL) {
             tree->root = y;
         } else if (x == x->parent->left) {
@@ -56,92 +24,102 @@ namespace RBT {
         } else {
             x->parent->right = y;
         }
-
         y->left = x;
         x->parent = y;
     }
 
-    void rightRotate(BinaryTree* tree, Node* x, InsertResult& stats) {
-        stats.numRotations.RR++;
-        Node* y = x->left;
-        x->left = y->right;
-
-        if (y->right != tree->NIL) {
-            y->right->parent = x;
+    // Função auxiliar para rotação à direita
+    void rightRotate(BinaryTree* tree, Node* y) {
+        Node* x = y->left;
+        y->left = x->right;
+        if (x->right != tree->NIL) {
+            x->right->parent = y;
         }
-        
-        y->parent = x->parent;
-
-        if (x->parent == tree->NIL) {
-            tree->root = y;
-        } else if (x == x->parent->right) {
-            x->parent->right = y;
+        x->parent = y->parent;
+        if (y->parent == tree->NIL) {
+            tree->root = x;
+        } else if (y == y->parent->right) {
+            y->parent->right = x;
         } else {
-            x->parent->left = y;
+            y->parent->left = x;
         }
-
-        y->right = x;
-        x->parent = y;
+        x->right = y;
+        y->parent = x;
     }
-
-    // Corrige as propriedades da árvore após inserção (implementação padrão)
-    void fixInsert(BinaryTree* tree, Node* k, InsertResult& stats) {
+    
+    // Corrige as propriedades da árvore após a inserção
+    void fixInsert(BinaryTree* tree, Node* k) {
         Node* u; // uncle
         while (k->parent->isRed) {
-            stats.numComparisons++; // Loop condition check
-            if (k->parent == k->parent->parent->left) {
-                u = k->parent->parent->right; // Tio
-                if (u->isRed) { // CASO 1: Tio é vermelho
-                    stats.numRecoloring++;
-                    k->parent->isRed = false;
+            if (k->parent == k->parent->parent->right) { // pai é filho direito
+                u = k->parent->parent->left; // tio é o filho esquerdo
+                if (u->isRed) {
+                    // Caso 1: Tio é vermelho
                     u->isRed = false;
-                    k->parent->parent->isRed = true;
-                    k = k->parent->parent;
-                } else { // CASO 2 e 3: Tio é preto
-                    if (k == k->parent->right) { // CASO 2: Triângulo
-                        k = k->parent;
-                        leftRotate(tree, k, stats);
-                    }
-                    // CASO 3: Linha
-                    stats.numRecoloring++;
                     k->parent->isRed = false;
-                    k->parent->parent->isRed = true;
-                    rightRotate(tree, k->parent->parent, stats);
-                }
-            } else { // Caso simétrico: pai é filho direito
-                u = k->parent->parent->left; // Tio
-                if (u->isRed) { // CASO 1
-                    stats.numRecoloring++;
-                    k->parent->isRed = false;
-                    u->isRed = false;
                     k->parent->parent->isRed = true;
                     k = k->parent->parent;
                 } else {
-                    if (k == k->parent->left) { // CASO 2
+                    if (k == k->parent->left) {
+                        // Caso 2: Tio é preto, k é filho esquerdo (triângulo)
                         k = k->parent;
-                        rightRotate(tree, k, stats);
+                        rightRotate(tree, k);
                     }
-                    // CASO 3
-                    stats.numRecoloring++;
+                    // Caso 3: Tio é preto, k é filho direito (linha)
                     k->parent->isRed = false;
                     k->parent->parent->isRed = true;
-                    leftRotate(tree, k->parent->parent, stats);
+                    leftRotate(tree, k->parent->parent);
                 }
+            } else { // pai é filho esquerdo
+                u = k->parent->parent->right; // tio é o filho direito
+                if (u->isRed) {
+                    // Caso 1: Tio é vermelho
+                    u->isRed = false;
+                    k->parent->isRed = false;
+                    k->parent->parent->isRed = true;
+                    k = k->parent->parent;
+                } else {
+                    if (k == k->parent->right) {
+                        // Caso 2: Tio é preto, k é filho direito (triângulo)
+                        k = k->parent;
+                        leftRotate(tree, k);
+                    }
+                    // Caso 3: Tio é preto, k é filho esquerdo (linha)
+                    k->parent->isRed = false;
+                    k->parent->parent->isRed = true;
+                    rightRotate(tree, k->parent->parent);
+                }
+            }
+            if (k == tree->root) {
+                break;
             }
         }
         tree->root->isRed = false;
     }
 
+    // Cria uma nova Árvore Rubro-Negra com nó sentinela NIL
+    BinaryTree* create() {
+        BinaryTree* tree = new BinaryTree;
+        tree->NIL = new Node;
+        tree->NIL->isRed = false;
+        tree->NIL->word = ""; 
+        tree->NIL->documentIds = {};
+        
+        tree->NIL->left = tree->NIL;
+        tree->NIL->right = tree->NIL;
+        tree->NIL->parent = tree->NIL;
+
+        tree->root = tree->NIL;
+        
+        std::cout << "Arvore criada" << std::endl; // Debug
+        return tree;
+    }
+
     // Insere palavra ou adiciona documentId e balanceia a árvore
     InsertResult insert(BinaryTree* tree, const std::string& word, int documentId) {
         auto startTime = std::chrono::high_resolution_clock::now();
-        InsertResult stats = InsertResult{0, 0.0, {0, 0, 0, 0}, 0, 0, 0};
-
-        if (tree == nullptr || tree->NIL == nullptr) {
-            std::cerr << "Erro: arvore ou NIL nao inicializado." << std::endl;
-            return stats;
-        }
-
+        InsertResult stats = {};
+        
         Node* y = tree->NIL;
         Node* x = tree->root;
         int currentDepth = 0;
@@ -149,17 +127,16 @@ namespace RBT {
         while (x != tree->NIL) {
             y = x;
             stats.numComparisons++;
-            int comparison = word.compare(x->word);
-            
-            if (comparison == 0) {
+            if (word == x->word) {
                 x->documentIds.push_back(documentId);
                 stats.insertDepth = currentDepth;
                 auto endTime = std::chrono::high_resolution_clock::now();
                 stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
-                return stats; // Palavra já existe, não precisa balancear.
+                return stats; // Palavra já existe, apenas adiciona ID.
             }
-            
-            if (comparison < 0) {
+
+            stats.numComparisons++;
+            if (word < x->word) {
                 x = x->left;
             } else {
                 x = x->right;
@@ -168,14 +145,15 @@ namespace RBT {
         }
 
         Node* z = new Node;
+        z->parent = y;
         z->word = word;
         z->documentIds.push_back(documentId);
-        z->parent = y;
         z->left = tree->NIL;
         z->right = tree->NIL;
-        z->isRed = true; // Novos nós são sempre vermelhos
-        stats.insertDepth = currentDepth;
+        z->isRed = true;
 
+        stats.insertDepth = currentDepth;
+        
         if (y == tree->NIL) {
             tree->root = z;
         } else if (z->word < y->word) {
@@ -184,8 +162,14 @@ namespace RBT {
             y->right = z;
         }
 
-        fixInsert(tree, z, stats);
+        if (z->parent == tree->NIL) {
+            z->isRed = false; // Raiz é sempre preta
+        } else if (z->parent->parent != tree->NIL) {
+            fixInsert(tree, z);
+        }
         
+        tree->root->isRed = false; // Garante que a raiz é sempre preta
+
         auto endTime = std::chrono::high_resolution_clock::now();
         stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
         return stats;
@@ -194,31 +178,25 @@ namespace RBT {
     // Busca palavra e retorna documentos associados
     SearchResult search(BinaryTree* tree, const std::string& word) {
         auto startTime = std::chrono::high_resolution_clock::now();
-        SearchResult stats = SearchResult{0, {}, 0.0, 0, 0};
-
-        if (tree == nullptr || tree->NIL == nullptr) {
-            return stats;
-        }
+        SearchResult stats = {};
 
         Node* actualNode = tree->root;
         int actualDepth = 0;
         while (actualNode != tree->NIL) {
             stats.numComparisons++;
-            int comparison = word.compare(actualNode->word);
-
-            if (comparison == 0) {
-                stats.found = 1;
+            if (word == actualNode->word) {
+                stats.found = true;
                 stats.documentIds = actualNode->documentIds;
                 stats.searchDepth = actualDepth;
-                break; // Encontrou
+                break;
             }
-            
-            actualDepth++;
-            if (comparison < 0) {
+            stats.numComparisons++;
+            if (word < actualNode->word) {
                 actualNode = actualNode->left;
             } else {
                 actualNode = actualNode->right;
             }
+            actualDepth++;
         }
         
         if (!stats.found) {
@@ -232,19 +210,16 @@ namespace RBT {
 
     // Função auxiliar para destruir nós recursivamente
     void destroyNode(Node* node, Node* NIL) {
-        if (node == NIL || node == nullptr) return;
+        if (node == NIL) return;
         destroyNode(node->left, NIL);
         destroyNode(node->right, NIL);
         delete node;
     }
 
-    // Libera toda a memória alocada pela árvore
     void destroy(BinaryTree* tree) {
         if (tree == nullptr) return;
         destroyNode(tree->root, tree->NIL);
-        if (tree->NIL != nullptr) {
-            delete tree->NIL;
-        }
+        delete tree->NIL;
         delete tree;
     }
 
