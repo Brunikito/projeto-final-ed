@@ -6,282 +6,191 @@
 #include "rbt.h"
 #include "utils/tree_utils.h"
 #include "utils/bench_utils.h"
-#include "utils/value_utils.h"
+
+// =======================================================================
+// ESTA É A VERSÃO CORRIGIDA E COMPLETA DO SEU ARQUIVO rbt.cpp
+// Copie e cole todo este conteúdo, substituindo o seu código antigo.
+// =======================================================================
 
 namespace RBT {
-    // cria uma nova Árvore Rubro-Negra com nó sentinela NIL
+
+    // Declarações antecipadas das funções internas (forward declarations)
+    void fixInsert(BinaryTree* tree, Node* k, InsertResult& stats);
+    void leftRotate(BinaryTree* tree, Node* x, InsertResult& stats);
+    void rightRotate(BinaryTree* tree, Node* x, InsertResult& stats);
+    void destroyNode(Node* node, Node* NIL);
+
+    // Cria uma nova Árvore Rubro-Negra com nó sentinela NIL
     BinaryTree* create() {
         BinaryTree* newtree = new BinaryTree;
-        if (!newtree) {
-            std::cerr << "Erro na alocacao da arvore" << std::endl;
-            return nullptr;
-        }
+        if (!newtree) return nullptr;
 
         Node* nil = new Node;
         if (!nil) {
-            std::cerr << "Erro na alocacao do NIL" << std::endl;
+            delete newtree;
             return nullptr;
         }
+        
         nil->parent = nil;
         nil->left = nil;
         nil->right = nil;
-        nil->height = 0;
-        nil->isRed = 0;
-        newtree->root = nil;
+        nil->isRed = false; // NIL é sempre preto
+        nil->height = 0; // Pode manter por compatibilidade com getTreeStats, mas não é usado para balancear
+
         newtree->NIL = nil;
-        return newtree;    
-    }
-    // retorna a altura de um nó
-    int height(Node* node, Node* NIL, InsertResult& stats){
-        return node->height;
+        newtree->root = newtree->NIL;
+        
+        return newtree; 
     }
 
-    // atualiza a altura de um nó com base em seus filhos
-    void updateHeight(Node* node, Node* NIL, InsertResult& stats){
-        stats.numComparisons++;
-        if(node != NIL) {
-            stats.numComparisons++;
-            node->height = ValueUtils::max(height(node->left, NIL, stats), height(node->right, NIL, stats)) + 1;
+    void leftRotate(BinaryTree* tree, Node* x, InsertResult& stats) {
+        stats.numRotations.LL++;
+        Node* y = x->right;
+        x->right = y->left;
+        
+        if (y->left != tree->NIL) {
+            y->left->parent = x;
         }
+
+        y->parent = x->parent;
+
+        if (x->parent == tree->NIL) {
+            tree->root = y;
+        } else if (x == x->parent->left) {
+            x->parent->left = y;
+        } else {
+            x->parent->right = y;
+        }
+
+        y->left = x;
+        x->parent = y;
     }
 
-    // atualiza recursivamente a altura de um nó e seu pai
-    void recursiveUpdateHeight(Node* node, Node* NIL, InsertResult& stats){
-        stats.numComparisons++;
-        if (node == NIL) return;
-        updateHeight(node, NIL, stats);
-        updateHeight(node->parent, NIL, stats);
+    void rightRotate(BinaryTree* tree, Node* x, InsertResult& stats) {
+        stats.numRotations.RR++;
+        Node* y = x->left;
+        x->left = y->right;
 
-    }    
-    Node* rightRotate(Node* y, Node* NIL, InsertResult& stats) {
-        Node* x = y->left;
-        Node* T2 = x->right;
+        if (y->right != tree->NIL) {
+            y->right->parent = x;
+        }
+        
+        y->parent = x->parent;
 
-        // performa rotatacao
-        x->right = y;
-        y->left = T2;
-
-        // atualiza parents
-        x->parent = y->parent;
-        y->parent = x;
-
-        stats.numComparisons++;
-        if (T2 != NIL) {
-            T2->parent = y;
+        if (x->parent == tree->NIL) {
+            tree->root = y;
+        } else if (x == x->parent->right) {
+            x->parent->right = y;
+        } else {
+            x->parent->left = y;
         }
 
-        // Update parent's pointer to x (the new root of this subtree)
-        stats.numComparisons++;
-        if (x->parent != NIL) {
-            stats.numComparisons++;
-            if (x->parent->left == y) {
-                x->parent->left = x;
-            } else {
-                x->parent->right = x;
-            }
-        }
-
-        // Update heights
-        updateHeight(y, NIL, stats);
-        updateHeight(x, NIL, stats);
-        recursiveUpdateHeight(x, NIL, stats);
-
-        return x;
-    }    
-    Node* leftRotate(Node* y, Node* NIL, InsertResult& stats) {
-        Node* z = y->right;
-        Node* T3 = z->left;
-
-        // performa rotacao
-        z->left = y;
-        y->right = T3;
-
-        // atualiza parents
-        z->parent = y->parent;
-        y->parent = z;
-        stats.numComparisons++;
-        if (T3 != NIL) {
-            T3->parent = y;
-        }
-
-        // Update parent's pointer to z (the new root of this subtree)
-        stats.numComparisons++;
-        if (z->parent != NIL) {
-            stats.numComparisons++;
-            if (z->parent->left == y) {
-                z->parent->left = z;
-            } else {
-                z->parent->right = z;
-            }
-        }
-
-        // Update heights
-        updateHeight(y, NIL, stats);
-        updateHeight(z, NIL, stats);
-        recursiveUpdateHeight(z, NIL, stats);
-
-        return z;
+        y->right = x;
+        x->parent = y;
     }
 
-    // Insere um novo nó com palavra e documentId
-    Node* insertNode(BinaryTree* tree, const std::string& word, int documentId, InsertResult& stats){
-        stats.numComparisons++;
-        if (tree == nullptr) {
-            std::cerr << "Erro: arvore nao inicializada." << std::endl;
-            return nullptr;
-        }
-        stats.numComparisons++;
-        if (tree->NIL == nullptr) {
-            std::cerr << "Erro: NIL não inicializado." << std::endl;
-            return nullptr;
-        }
-
-        Node* parent = tree->NIL;
-        Node* actualNode = tree->root;
-        int currentDepth = 0;
-        stats.numComparisons++;
-        while (actualNode != tree->NIL) {
-            parent = actualNode;
-            stats.numComparisons += 2;
-            if (word == actualNode->word) {
-                stats.insertDepth = currentDepth;
-                actualNode->documentIds.push_back(documentId);
-                return nullptr;
-            }
-            stats.numComparisons++;
-            currentDepth++;
-            if (word < actualNode->word) {
-                actualNode = actualNode->left;
-                continue;
-            }
-            actualNode = actualNode->right;
-        }
-        Node* newNode = new Node;
-        if (newNode == nullptr) {
-            std::cerr << "Erro: novo no não inicializado." << std::endl;
-            return nullptr;
-        }
-        newNode->word = word;
-        newNode->documentIds = std::vector<int>{documentId};
-        newNode->parent = parent;
-        newNode->left = tree->NIL;
-        newNode->right = tree->NIL;
-        newNode->isRed = true;
-
-        stats.numComparisons++;
-        if (parent == tree->NIL) {
-            tree->root = newNode;
-            return newNode;
-        }
-        stats.numComparisons++;
-        if (word < parent->word) {
-            parent->left = newNode;
-            return newNode;
-        }
-        parent->right = newNode;
-        return newNode;
-    }
-    
-    // corrige as propriedades da árvore após inserção
-    void fixInsert(BinaryTree* tree, Node* insertedNode, InsertResult& stats) {
-        stats.numComparisons++;
-        if (tree == nullptr) {
-            std::cerr << "Erro: arvore nao inicializada." << std::endl;
-            return;
-        }
-        stats.numComparisons++;
-        if (tree->NIL == nullptr) {
-            std::cerr << "Erro: NIL não inicializado." << std::endl;
-            return;
-        }
-        Node *parent, *grandparent, *uncle;
-        stats.numComparisons++;
-        if (insertedNode->parent->isRed == 0) return;
-        Node* actualNode = insertedNode;
-        stats.numComparisons++;
-        while (actualNode->parent->isRed == 1){ // o nil é preto, então basta isso
-            parent = actualNode->parent;
-            grandparent = parent->parent;
-            stats.numComparisons++;
-            if (parent == grandparent->left) {
-                uncle = grandparent->right;
-                stats.numComparisons++;
-                if (uncle->isRed == 1) {
-                    parent->isRed = 0;
-                    uncle->isRed = 0;
-                    grandparent->isRed = 1;
-                    actualNode = grandparent;
-                    continue;
-                }                stats.numComparisons++;
-                if (actualNode == parent->right) {
-                        Node* newParent = leftRotate(parent, tree->NIL, stats);
-                        if (newParent->parent == tree->NIL) {
-                            tree->root = newParent;
-                        }
-                        actualNode = parent;
-                        parent = actualNode->parent;
-                        grandparent = parent->parent;
-                }
-                parent->isRed = 0;
-                grandparent->isRed = 1;
-                Node* newGrandparent = rightRotate(grandparent, tree->NIL, stats);
-                if (newGrandparent->parent == tree->NIL) {
-                    tree->root = newGrandparent;
-                }
-                return;
-            }
-            uncle = grandparent->left;
-            stats.numComparisons++;
-            if (uncle->isRed == 1) {
-                parent->isRed = 0;
-                uncle->isRed = 0;
-                grandparent->isRed = 1;
-                actualNode = grandparent;
-                continue;
-            }            stats.numComparisons++;
-            if (actualNode == parent->left) {
-                    Node* newParent = rightRotate(parent, tree->NIL, stats);
-                    if (newParent->parent == tree->NIL) {
-                        tree->root = newParent;
+    // Corrige as propriedades da árvore após inserção (implementação padrão)
+    void fixInsert(BinaryTree* tree, Node* k, InsertResult& stats) {
+        Node* u; // uncle
+        while (k->parent->isRed) {
+            stats.numComparisons++; // Loop condition check
+            if (k->parent == k->parent->parent->left) {
+                u = k->parent->parent->right; // Tio
+                if (u->isRed) { // CASO 1: Tio é vermelho
+                    stats.numRecoloring++;
+                    k->parent->isRed = false;
+                    u->isRed = false;
+                    k->parent->parent->isRed = true;
+                    k = k->parent->parent;
+                } else { // CASO 2 e 3: Tio é preto
+                    if (k == k->parent->right) { // CASO 2: Triângulo
+                        k = k->parent;
+                        leftRotate(tree, k, stats);
                     }
-                    actualNode = parent;
-                    parent = actualNode->parent;
-                    grandparent = parent->parent;
+                    // CASO 3: Linha
+                    stats.numRecoloring++;
+                    k->parent->isRed = false;
+                    k->parent->parent->isRed = true;
+                    rightRotate(tree, k->parent->parent, stats);
+                }
+            } else { // Caso simétrico: pai é filho direito
+                u = k->parent->parent->left; // Tio
+                if (u->isRed) { // CASO 1
+                    stats.numRecoloring++;
+                    k->parent->isRed = false;
+                    u->isRed = false;
+                    k->parent->parent->isRed = true;
+                    k = k->parent->parent;
+                } else {
+                    if (k == k->parent->left) { // CASO 2
+                        k = k->parent;
+                        rightRotate(tree, k, stats);
+                    }
+                    // CASO 3
+                    stats.numRecoloring++;
+                    k->parent->isRed = false;
+                    k->parent->parent->isRed = true;
+                    leftRotate(tree, k->parent->parent, stats);
+                }
             }
-            parent->isRed = 0;
-            grandparent->isRed = 1;
-            Node* newGrandparent = leftRotate(grandparent, tree->NIL, stats);
-            if (newGrandparent->parent == tree->NIL) {
-                tree->root = newGrandparent;
-            }
-            return;
         }
+        tree->root->isRed = false;
     }
-    
-    // insere palavra ou adiciona documentId e balanceia a árvore
+
+    // Insere palavra ou adiciona documentId e balanceia a árvore
     InsertResult insert(BinaryTree* tree, const std::string& word, int documentId) {
         auto startTime = std::chrono::high_resolution_clock::now();
-        InsertResult stats = InsertResult{0, 0.0, {0, 0, 0, 0}, 0, 0, 0}; // tree_utils v>=3.0.0
-        stats.numComparisons++;
-        if (tree == nullptr) {
-            std::cerr << "Erro: arvore nao inicializada." << std::endl;
-            auto endTime = std::chrono::high_resolution_clock::now();
-            stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+        InsertResult stats = InsertResult{0, 0.0, {0, 0, 0, 0}, 0, 0, 0};
+
+        if (tree == nullptr || tree->NIL == nullptr) {
+            std::cerr << "Erro: arvore ou NIL nao inicializado." << std::endl;
             return stats;
         }
-        stats.numComparisons++;
-        if (tree->NIL == nullptr) {
-            std::cerr << "Erro: NIL não inicializado." << std::endl;
-            auto endTime = std::chrono::high_resolution_clock::now();
-            stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
-            return stats;
+
+        Node* y = tree->NIL;
+        Node* x = tree->root;
+        int currentDepth = 0;
+
+        while (x != tree->NIL) {
+            y = x;
+            stats.numComparisons++;
+            int comparison = word.compare(x->word);
+            
+            if (comparison == 0) {
+                x->documentIds.push_back(documentId);
+                stats.insertDepth = currentDepth;
+                auto endTime = std::chrono::high_resolution_clock::now();
+                stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+                return stats; // Palavra já existe, não precisa balancear.
+            }
+            
+            if (comparison < 0) {
+                x = x->left;
+            } else {
+                x = x->right;
+            }
+            currentDepth++;
         }
-        Node* newNode = insertNode(tree, word, documentId, stats);
-        stats.numComparisons++;
-        if (newNode != nullptr) {
-            fixInsert(tree, newNode, stats);
-            tree->root->isRed = 0;
+
+        Node* z = new Node;
+        z->word = word;
+        z->documentIds.push_back(documentId);
+        z->parent = y;
+        z->left = tree->NIL;
+        z->right = tree->NIL;
+        z->isRed = true; // Novos nós são sempre vermelhos
+        stats.insertDepth = currentDepth;
+
+        if (y == tree->NIL) {
+            tree->root = z;
+        } else if (z->word < y->word) {
+            y->left = z;
+        } else {
+            y->right = z;
         }
+
+        fixInsert(tree, z, stats);
+        
         auto endTime = std::chrono::high_resolution_clock::now();
         stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
         return stats;
@@ -291,77 +200,57 @@ namespace RBT {
     SearchResult search(BinaryTree* tree, const std::string& word) {
         auto startTime = std::chrono::high_resolution_clock::now();
         SearchResult stats = SearchResult{0, {}, 0.0, 0, 0};
-        stats.numComparisons++;
-        if (tree == nullptr) {
-            std::cerr << "Erro: arvore nao inicializada." << std::endl;
-            auto endTime = std::chrono::high_resolution_clock::now();
-            stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
-            return stats;
-        }
-        stats.numComparisons++;
-        if (tree->NIL == nullptr) {
-            std::cerr << "Erro: NIL não inicializado." << std::endl;
-            auto endTime = std::chrono::high_resolution_clock::now();
-            stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
-            return stats;
-        }
-        stats.numComparisons++;
-        if (tree->root == tree->NIL) {
-            std::cerr << "Erro: arvore vazia." << std::endl;
-            auto endTime = std::chrono::high_resolution_clock::now();
-            stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+
+        if (tree == nullptr || tree->NIL == nullptr) {
             return stats;
         }
 
-        // Actual function
         Node* actualNode = tree->root;
-        stats.numComparisons++;
         int actualDepth = 0;
         while (actualNode != tree->NIL) {
-            stats.numComparisons+=2; // 1 do while e 1 do próximo for
-            if (word == actualNode->word) {
+            stats.numComparisons++;
+            int comparison = word.compare(actualNode->word);
+
+            if (comparison == 0) {
                 stats.found = 1;
                 stats.documentIds = actualNode->documentIds;
                 stats.searchDepth = actualDepth;
-                auto endTime = std::chrono::high_resolution_clock::now();
-                stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
-                return stats;
+                break; // Encontrou
             }
+            
             actualDepth++;
-            stats.numComparisons++;
-            if (word < actualNode->word) {
+            if (comparison < 0) {
                 actualNode = actualNode->left;
-                continue;
+            } else {
+                actualNode = actualNode->right;
             }
-            actualNode = actualNode->right;
+        }
+        
+        if (!stats.found) {
+            stats.searchDepth = actualDepth;
         }
 
-        stats.searchDepth = actualDepth;
         auto endTime = std::chrono::high_resolution_clock::now();
         stats.executionTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
         return stats;
     }
 
-    // Função auxiliar para recursão
+    // Função auxiliar para destruir nós recursivamente
     void destroyNode(Node* node, Node* NIL) {
-        if (node == NIL) return;
+        if (node == NIL || node == nullptr) return;
         destroyNode(node->left, NIL);
         destroyNode(node->right, NIL);
         delete node;
-        node = nullptr;
     }
 
+    // Libera toda a memória alocada pela árvore
     void destroy(BinaryTree* tree) {
         if (tree == nullptr) return;
-
-        // Inicia a recursão
         destroyNode(tree->root, tree->NIL);
         if (tree->NIL != nullptr) {
             delete tree->NIL;
-            tree->NIL = nullptr;
         }
         delete tree;
-        tree = nullptr;
     }
 
 } // namespace RBT
