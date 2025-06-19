@@ -1,38 +1,58 @@
-# Refatoração do código das etapas anteriores
+> ⚠️ **Aviso:**  
+> Este espaço está vazio de propósito.  
+> Qualquer informação adicional aqui poderia mais atrapalhar do que ajudar.
+>
+> _Ass.: Brunikito_
 
-## TODO
 
-### cli_utils + main_* (acho que o mais indicado seja o Artur)
-Sei que já estava trabalhando em refatorar o seu código. Aqui eu só deixei um pouco mais focado na etapa de benchmark e relatório. Sinta-se livre.
-
-TL;DR:
-- Leia os novos utils e adapte o código antigo (ou o seu código em desenvolvimento)
-
-### BST, AVL, RBT (acredito que o Bruno seja o mais indicado)
-BST e AVL já estão implementadas. É só uma adaptação para as novas estatísticas (não deve ser um problema). A RBT precisa ser implementada do zero. Qualquer dúvida pode me chamar.
-
-TL;DR:
-- Adaptar BST e AVL;
-- Implementar RBT;
-- Me chamar em caso de dúvidas.
-
-### test_* (acredito que o mais indicado seja o Gustavo e o Kauan)
-Os testes da parte anterior não devem deixar de funcionar, mas devem ser adaptados para incluir os novos atributos das structures.
-Além disso, seria bom adicionar mais alguns testes, e testar as funções auxiliares (em um test_*_utils.h/cpp), para garantir que eu não fiz nada de errado (o que pode ser bem comum até). Se tiver algo de errado, entrem em contato comigo para que eu possa resolver (ou se quiserem se aventurar tentando, o código está o mais legível possível).
-
-TL;DR:
-- Adaptar os testes;
-- Adicionar alguns testes novos;
-- Testar as funções auxiliares e data;
-- Me contatar se algo der errado.
-
-### Documentação (qualquer um consegue contribuir bem)
-Documentar os novos códigos gerados (utils e data). Conforme forem implementando novos códigos (trees, main_*, etc), ir comentando eles também (no .h).
-
-#### IMPORTANTE
-Adicionar todos os comandos de compilação no README.
-
-Mais tarde eu vou criar um makefile, mas por enquanto salve assim (no nosso envio, terá ambas as formas de compilação, pois o makefile não funciona direito no windows, a menos que use o mingw32-make)
-
-### Benchmark e Relatório
-Precisamos que as etapas acima estejam todas concluidas (exceto documentação) para poder começar a fazer os benchmarks e os relatórios. Eu tentei estruturar de uma forma que teríamos o mínimo de trabalho para isso.
+sketch:
+```
+projeto-final/
+│
+├── data/
+│   └── *.txt                 # Documentos .txt para indexação
+│
+├── docs/
+│   └── *.pdf                 # Documentos .txt para indexação
+│
+├── src/
+│   ├── utils/
+│   │   ├── tree_utils.cpp / tree_utils.h       # Structs (Node, etc.) e funções aux.
+│   │   └── bench_utils.cpp/ bench_utils.h      # Structs e funções para benchmarck
+│   ├── main_bst.cpp          # CLI da BST
+│   ├── main_avl.cpp          # CLI da AVL
+│   ├── main_rbt.cpp          # CLI da RBT
+│   ├── bst.cpp / bst.h       # Implementação da BST
+│   ├── avl.cpp / avl.h       # Implementação da AVL
+│   ├── rbt.cpp / rbt.h       # Implementação da RBT
+│   └── data.cpp / data.h     # Leitura de arquivos
+│
+├── test/
+│   ├── treetest.h            # Cabeçalho do framework de testes
+│   ├── treetest.cpp          # Implementação do framework de testes
+│   ├── test_bst.cpp          # Testes da BST
+│   ├── test_avl.cpp          # Testes da AVL
+│   └── test_rbt.cpp          # Testes da RBT
+│
+├── benchmark/ 
+│   ├── results/
+│   │   ├── bst.csv           # Resultados da BST
+│   │   ├── avl.csv           # Resultados da AVL
+│   │   └── rbt.csv           # Resultados da RBT
+│   ├── treebench.cpp / treebench.h                # Implementação do framework de benchmark 
+│   ├── bench_bst.cpp         # Testes da BST
+│   ├── bench_avl.cpp         # Testes da AVL
+│   └── bench_rbt.cpp         # Testes da RBT
+│ 
+├── analysis/
+│   ├── graphs/
+│   │   └── *.png             # Gráficos resultantes
+│   ├── bst.py                # Análise da BST
+│   ├── avl.py                # Análise da AVL
+│   ├── rbt.py                # Análise da RBT
+│   └── all.py                # Comparação entre todas as árvores
+│
+├── .gitignore
+├── Makefile
+└── README.md                 # Este arquivo
+```

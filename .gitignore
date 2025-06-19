@@ -1,0 +1,13 @@
+# Diretórios de build
+build/
+
+# Configurações do VSCode
+.vscode/
+
+# Dependências
+node_modules/
+.env
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
