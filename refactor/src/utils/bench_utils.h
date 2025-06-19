@@ -86,7 +86,6 @@ struct ReadDataStats {
  */
 struct IndexingStats {
     double totalIndexingTime; // tempo total
-    GroupedStats treeInsertionStats; // custo por insercao
     GroupedStats depthStats; // profundidade dos nos
     GroupedStats comparisonStats; // comparações de chave
     GroupedStats recoloringStats; // recolorimentos

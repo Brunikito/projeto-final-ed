@@ -94,7 +94,7 @@ TestCase testMultipleInserts() {
     assertNotNull(test, tree, "Árvore deve ser criada");
     
     if (tree != nullptr) {
-        // Inserir palavras que criem uma estrutura balanceada
+        
         insert(tree, "dog", 1);      // root
         insert(tree, "cat", 2);      // left child
         insert(tree, "elephant", 3); // right child
@@ -117,7 +117,6 @@ TestCase testMultipleInserts() {
             
             if (tree->root->right != nullptr) {
                 assertTrue(test, tree->root->right->word == "elephant", "Filho direito deve ser 'elephant'");
-                // Verificamos se fish foi inserido corretamente (deve ser filho esquerdo de elephant)
                 if (tree->root->right->left != nullptr) {
                     assertTrue(test, tree->root->right->left->word == "fish", "Neto direito-esquerdo deve ser 'fish'");
                 }
@@ -224,13 +223,11 @@ TestCase testSearchInSpecificPosition() {
         insert(tree, "elephant", 3);
         insert(tree, "ant", 4);
         
-        // Buscar elemento que está como folha à esquerda
         SearchResult result = search(tree, "ant");
         
         assertTrue(test, result.found == 1, "Deve encontrar 'ant'");
         assertTrue(test, result.documentIds.size() == 1, "Deve ter um documento");
         assertTrue(test, result.documentIds[0] == 4, "Documento deve ser 4");
-        // Verificamos o número real de comparações (pode variar dependendo da implementação)
         assertTrue(test, result.numComparisons > 0, "Deve ter pelo menos uma comparação para encontrar ant");
         
         destroy(tree);
@@ -249,7 +246,6 @@ TestCase testPerformanceWithManyElements() {
     assertNotNull(test, tree, "Árvore deve ser criada");
     
     if (tree != nullptr) {
-        // Inserir muitos elementos
         std::vector<std::string> words = {
             "word01", "word02", "word03", "word04", "word05",
             "word06", "word07", "word08", "word09", "word10",
@@ -287,13 +283,10 @@ TestCase testDestroyTree() {
     assertNotNull(test, tree, "Árvore deve ser criada");
     
     if (tree != nullptr) {
-        // Adicionar alguns elementos
+
         insert(tree, "test1", 1);
         insert(tree, "test2", 2);
         insert(tree, "test3", 3);
-        
-        // A função destroy deve ser chamada sem causar crash
-        // Não há muito o que testar aqui além de não travar
         destroy(tree);
         assertTrue(test, true, "Destruição da árvore deve ser bem-sucedida");
     }
