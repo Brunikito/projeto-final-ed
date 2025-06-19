@@ -464,6 +464,16 @@ Figura 25. Tempo de busca comparativo. O tempo na BST cresce fortemente (tendend
 
 Figura 26. Tempo de inserção comparativo. A BST sofre a maior penalidade, pois cada nova palavra percorre um caminho longo na árvore degenerada. A RBT obtém o menor tempo médio graças às recolorações baratas e poucas rotações; a AVL, embora um pouco mais lenta devido às rotações duplas ocasionais, mantém desempenho logarítmico e estável.
 
+# Conclusão
+
+Os resultados confirmam as previsões teóricas:
+
+- **BST**: Apesar de simples, tornou-se inviável devido à degeneração causada pela inserção de dados ordenados, resultando em desempenho linear (O(n)). Não é adequada para aplicações reais em escala.
+- **AVL**: Manteve a árvore sempre balanceada e compacta, garantindo buscas rápidas (O(log n)). É ideal para cenários com muitas leituras.
+- **RBT**: Ofereceu inserções mais eficientes que a AVL, graças ao balanceamento flexível e menos rotações. É a melhor escolha para aplicações gerais ou com muitas modificações.
+
+**Resumo:** A escolha da estrutura depende do uso: BST apenas para fins didáticos; AVL para leitura intensiva; RBT como solução padrão para produção, equilibrando desempenho de leitura e escrita.
+
 # 3. Divisão de tarefas
 
 ### Bruno Cavalli  
