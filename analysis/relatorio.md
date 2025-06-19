@@ -168,7 +168,7 @@ Estas são as funções auxiliares que implementam a lógica central da Árvore 
 - **Instrumentação Detalhada**: Assim como a BST, a implementação da AVL coleta estatísticas detalhadas, incluindo o número de rotações de cada tipo (`numRotations`), o que é extremamente útil para análises de desempenho e fins acadêmicos.
 - **Manutenção de Ponteiros de Pai**: A implementação atualiza corretamente os ponteiros `parent` durante as rotações, uma etapa importante que é por vezes omitida em implementações mais simples, mas que é crucial para certas aplicações ou algoritmos iterativos.
 
-**Limitações:**
+**Limitações e Dificuldades:**
 
 - **Complexidade de Implementação**: A lógica da AVL é inerentemente mais complexa que a de uma BST simples, como pode ser visto pelo número de funções auxiliares dedicadas ao balanceamento.
 - **Overhead de Rotações**: Cada inserção pode desencadear até duas rotações (no caso de rotação dupla) para manter o balanceamento. Embora isso garanta um bom desempenho assintótico, o custo constante de inserção na AVL é ligeiramente maior que na BST devido às verificações de balanceamento e possíveis rotações.
@@ -225,7 +225,7 @@ A "magia" da RBT reside em sua lógica interna de inserção e correção, que m
 - **Desempenho de Busca Garantido**: Assim como a AVL, a RBT garante uma altura logarítmica ($O(logn)$), o que se traduz em um desempenho de busca, inserção e remoção no pior caso de $O(logn)$.
 - **Implementação Clássica e Robusta**: O código segue fielmente o algoritmo canônico da RBT, incluindo o uso inteligente do nó sentinela `NIL`, que elimina a necessidade de muitas verificações de ponteiros nulos, tornando o código mais limpo e menos propenso a erros.
 
-**Limitações e Complexidade:**
+**Limitações e Dificuldades:**
 
 - **Algoritmo Mais Complexo**: As regras de balanceamento da RBT (análise de casos do tio, re-colorações e rotações) são consideradas menos intuitivas do que o fator de balanceamento numérico da AVL, o que pode tornar o código mais difícil de entender e depurar.
 - **Balanceamento Menos Rígido**: Uma RBT não é tão estritamente balanceada quanto uma AVL. O caminho mais longo do topo à base pode ser até duas vezes o comprimento do caminho mais curto. Isso pode, em teoria, levar a tempos de busca ligeiramente mais lentos em média, embora a complexidade assintótica permaneça a mesma.
@@ -234,7 +234,48 @@ A "magia" da RBT reside em sua lógica interna de inserção e correção, que m
 
 A implementação da RBT é uma solução de alto desempenho e industrialmente comprovada para o problema de manter uma árvore de busca balanceada. Ela oferece garantias de desempenho logarítmico semelhantes à AVL, mas com um custo potencialmente menor para operações de escrita (inserções). A escolha entre RBT e AVL muitas vezes se resume a uma troca entre a complexidade do algoritmo e as otimizações para operações de leitura (AVL) versus escrita (RBT).
 
-# 2. Divisão de tarefas
+
+
+---
+
+## **Elaboração sobre as Dificuldades Gerais do Projeto**
+
+#### 1. Dificuldades na Implementação das Árvores (BST, AVL, RBT)
+
+A implementação das estruturas de árvore, do modelo mais simples ao mais complexo, apresentou uma curva de dificuldade acentuada, com desafios específicos em cada etapa.
+
+* **BST (Árvore de Busca Binária):**
+    * **Gerenciamento de Ponteiros**: Embora conceitualmente simples, a implementação exigiu um gerenciamento cuidadoso dos ponteiros `left`, `right` e `parent`. Um único erro na atribuição desses ponteiros durante a inserção poderia corromper toda a estrutura da árvore.
+    * **Lógica de Destruição**: A implementação de uma função `destroy` que evita vazamentos de memória não é trivial. Foi necessário utilizar um percurso em pós-ordem (`destroyNode`) para garantir que os nós filhos fossem deletados antes de seus respectivos pais, uma lógica recursiva que exige atenção aos detalhes para ser correta.
+    * **Atualização de Altura**: Uma complexidade específica desta implementação foi a decisão de atualizar a altura dos nós mesmo na BST, onde ela não é usada para balanceamento. Isso exigiu um laço adicional que percorre o caminho do nó inserido de volta à raiz, adicionando sobrecarga e complexidade à operação de inserção.
+
+* **AVL:**
+    * **Lógica de Rotação**: A principal dificuldade foi a implementação correta das funções `leftRotate` e `rightRotate`. Essas operações são o coração do balanceamento e envolvem a manipulação precisa de múltiplos ponteiros entre o nó, seu filho e seu neto. Um erro em qualquer uma das reatribuições de ponteiros (`parent`, `left`, `right`) resultaria em uma árvore inconsistente. Os diagramas ASCII nos comentários do código são uma evidência dessa complexidade, servindo como um auxílio visual para o desenvolvedor.
+    * **Diagnóstico de Desbalanceamento**: A função `rebalance` precisou diagnosticar corretamente os quatro casos de desbalanceamento (Esquerda-Esquerda, Direita-Direita, e os casos duplos Esquerda-Direita e Direita-Esquerda). Isso envolve uma lógica condicional aninhada que verifica o fator de balanceamento de um nó e também o de seu filho para decidir se uma rotação simples ou dupla é necessária.
+    * **Manutenção da Recursão**: A natureza recursiva da função `insertNode` significou que o rebalanceamento ocorre na "subida" da pilha de chamadas. Garantir que o nó correto seja retornado e reatribuído em cada nível da recursão após uma possível rotação foi um desafio significativo.
+
+* **RBT (Árvore Rubro-Negra):**
+    * **Abstração do Nó Sentinela `NIL`**: A RBT introduziu um conceito novo: o nó sentinela `NIL`. A implementação precisou ser adaptada para usar este nó preto para representar todas as folhas, em vez de `nullptr`. Isso impactou a lógica de criação (`create` precisa criar o `NIL`), destruição (`destroy` precisa deletar o `NIL`) e todas as travessias, que agora usam `tree->NIL` como condição de parada.
+    * **Complexidade do `fixInsert`**: O algoritmo `fixInsert` é notoriamente complexo. A dificuldade residiu em implementar corretamente a análise de casos baseada na cor do "tio" do nó inserido. O laço `while` que corrige as violações da propriedade do vermelho exigiu uma lógica intrincada para tratar o caso do "tio vermelho" (que envolve apenas recolorações e move o problema para cima na árvore) e o caso do "tio preto" (que exige rotações e resolve o problema).
+    * **Gerenciamento de Cores e Ponteiros**: Durante o `fixInsert`, a manipulação simultânea das cores dos nós (`isRed`) e a reestruturação da árvore através de rotações é extremamente propensa a erros. Garantir que as cinco propriedades da RBT fossem mantidas após todas essas operações foi o maior desafio desta implementação.
+
+#### 2. Dificuldades na Implementação dos Benchmarks
+
+A criação de um sistema de benchmark significativo e robusto apresentou seus próprios desafios, indo muito além de simplesmente medir o tempo.
+
+
+* **Implementação da Coleta Estatística**: O uso de `GroupedStats` em vez de variáveis simples para as métricas representou um desafio de implementação. Foi necessário criar uma estrutura que acumulasse não apenas a soma, mas também a contagem, a soma dos quadrados, o mínimo e o máximo, e que implementasse corretamente as fórmulas para média e desvio-padrão.
+* **Gerenciamento de Memória e Dados**: A estratégia de benchmark incremental em `bench_bst.cpp` envolve o gerenciamento complexo de múltiplos vetores de ponteiros para as estatísticas (`allIndexing`, `allTree`, etc.), exigindo alocação dinâmica (`new`) a cada passo do laço. Gerenciar essa memória corretamente para evitar vazamentos em um laço longo e complexo é uma tarefa difícil.
+
+#### 3. Dificuldades na Leitura e Processamento dos Arquivos
+
+A etapa inicial de carregar os dados dos arquivos para a memória também teve suas complexidades.
+
+* **Manipulação do Sistema de Arquivos**: O uso da biblioteca `<filesystem>` para listar arquivos de um diretório, embora poderoso, requer o tratamento correto de caminhos (paths) e a filtragem de arquivos com base em seus nomes, que precisavam ser convertidos para inteiros (`std::stoi`) para comparação.
+* **Implementação de Ordenação Customizada**: Uma versão do `data.cpp` implementa o algoritmo Heap Sort do zero para ordenar tanto os arquivos quanto as palavras (`heapifyFiles`, `sortWords`). Implementar um algoritmo de ordenação eficiente e sem bugs é um desafio clássico da ciência da computação. A outra versão utiliza uma biblioteca, mas ainda requer a criação de functores de comparação corretos.
+* **Eficiência e Uso de Memória**: O processo de ler múltiplos arquivos de texto e armazenar todas as palavras em um `std::vector<std::vector<std::string>>` pode consumir uma quantidade significativa de memória RAM. O desafio foi fazer isso de forma eficiente para que a etapa de pré-processamento não se tornasse um gargalo de desempenho maior que a própria indexação nas árvores.
+
+# 3. Divisão de tarefas
 
 ### Bruno Cavalli  
 *Papel:* Benchmark & AVL Developer
