@@ -278,7 +278,7 @@ A etapa inicial de carregar os dados dos arquivos para a memória também teve s
 # 3. Divisão de tarefas
 
 ### Bruno Cavalli  
-*Papel:* Benchmark & AVL Developer
+*Papel:* Responsável por Benchmarks e Implementação da AVL
 
 - Organizou a estrutura inicial do repositório (src/, data/, docs/) e realocou arquivos nas pastas corretas.  
 - Implementou *AVL*: inserção, rotações, balanceamento e testes de getBalance/height; ajustou a lógica até compatibilizar com o framework.  
@@ -289,8 +289,8 @@ A etapa inicial de carregar os dados dos arquivos para a memória também teve s
 
 ---
 
-### Bruno “Brunikito”  
-*Papel:* Core Developer & Benchmarking Lead
+### Bruno Luis Zerbinato Rosa
+*Papel:* Desenvolvedor Principal de Algoritmos e Benchmarks
 
 - Implementou a *BST* completa (v 1.0 → 2.0) e entregou a *RBT* estável (v 1.2.5); corrigiu pontos críticos da AVL.  
 - Criou o módulo **bench_utils**, programas bench_*, test_framework (v 0.1 → 1.2) e Makefiles dedicados.  
@@ -300,8 +300,8 @@ A etapa inicial de carregar os dados dos arquivos para a memória também teve s
 
 ---
 
-### Kauan Kevem (Bruno Rosa)  
-*Papel:* Documentation & Integration Lead
+### Kauan Kevem Sousa Farias 
+*Papel:* Documentação e Integração
 
 - Padronizou *todos os cabeçalhos* (*.h) com Doxygen, exemplos e pré/pós-condições.  
 - Atualizou o *README* com instruções de build (make) e uso da CLI (search, stats).  
@@ -311,8 +311,8 @@ A etapa inicial de carregar os dados dos arquivos para a memória também teve s
 
 ---
 
-### Gustavo (“GuOliv2306”)  
-*Papel:* Testing & Bug-Fix Lead
+### Gustavo Oliveira 
+*Papel:* Testes e Correções
 
 - Criou **test_bst.cpp**, **test_avl.cpp**, **test_rbt.cpp** cobrindo inserção, busca, rotações e destruição; ampliou a AVL para *17 cenários*.  
 - Refinou o framework de testes, Makefile dedicado e README da suíte.  
@@ -323,7 +323,7 @@ A etapa inicial de carregar os dados dos arquivos para a memória também teve s
 ---
 
 ### Artur Vidal Krause  
-*Papel:* CLI & Repository Setup
+*Papel:* Responsável pela CLI e Estrutura do Repositório
 
 - Definiu a *estrutura de pastas* e adicionou o *corpus de 10 000 documentos*.  
 - Desenvolveu a *CLI completa* (search, stats) com parsing robusto; criou funções genéricas searchTree e runStats.  
