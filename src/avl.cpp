@@ -150,6 +150,7 @@ namespace AVL{
     Node* insertNode(Node* node, const std::string& word, int documentId, InsertResult& stats) {
         Node* parent = node != nullptr? node->parent : nullptr;
         stats.numComparisons++;
+        stats.insertDepth++;
         if (node == nullptr) {
             Node* newNode = new Node;
             stats.numComparisons++;
