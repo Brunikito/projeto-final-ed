@@ -436,6 +436,33 @@ Figura 20. Tempo de inserção na RBT. O tempo de inserção na RBT mantém-se b
 
 Figura 21. Total de nós na RBT. O total de nós na RBT cresce linearmente conforme novas palavras únicas são inseridas, de maneira idêntica às demais árvores. Em todas as estruturas, cada chave distinta inserida corresponde à criação de um novo nó; portanto, a quantidade total de nós aumenta proporcionalmente ao número de inserções únicas efetuadas.
 
+## Gráficos de Comparação Geral
+
+### Comparativo da Altura
+![Comparativo da Altura](../analysis/graphs/comparativo_altura.png)
+
+Figura 22.
+
+### Comparativo das Comparações de Busca
+![Comparativo das Comparações de Busca](../analysis/graphs/comparativo_comparacoes_busca.png)
+
+Figura 23.
+
+### Comparativo das Comparações de Inserção
+![Comparativo das Comparações de Inserção](../analysis/graphs/comparativo_comparacoes_insercao.png)
+
+Figura 24.
+
+### Comparativo do Tempo de Busca
+![Comparativo do Tempo de Busca](../analysis/graphs/comparativo_tempo_busca.png)
+
+Figura 25.
+
+### Comparação do Tempo de Inserção
+![Comparação do Tempo de Inserção](../analysis/graphs/comparativo_tempo_insercao.png)
+
+Figura 26.
+
 # 3. Divisão de tarefas
 
 ### Bruno Cavalli  
