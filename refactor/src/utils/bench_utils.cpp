@@ -5,6 +5,7 @@
 #include "value_utils.h"
 #include "bench_utils.h"
 
+// Adiciona uma amostra para cálculo de estatísticas
 void GroupedStats::add(double stat) {
     count++;
     sum += stat;
@@ -13,15 +14,18 @@ void GroupedStats::add(double stat) {
     if (stat > max) max = stat;
 }
 
+// média aritmética
 double GroupedStats::mean() const {
     return (count == 0) ? 0.0 : sum / count;
 }
 
+// desvio‑padrão amostral
 double GroupedStats::stddev() const {
     if (count < 2) return 0.0;
     return ValueUtils::sqrt((sum_sq - ((sum * sum) / (count - 1))) / (count - 1));
 }
 
+// faz merge de estatísticas desta instância com as de outra
 void GroupedStats::merge(GroupedStats stats) {
     count += stats.count;  
     sum += stats.sum;      

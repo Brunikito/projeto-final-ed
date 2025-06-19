@@ -4,30 +4,33 @@
 
 #include "tree_utils.h"
 
+// Impressão do índice (palavra -> ids de documento) em ordem.
 void recursivePrintIndex(Node* node, int& counter){
     if (node == nullptr) return;
 
-    recursivePrintIndex(node->left, counter);
+    recursivePrintIndex(node->left, counter); // esquerda
     std::cout << ++counter << ". " << node->word << ": ";
 
+    // Construir lista de ids únicos + contagem de repetição
 	std::vector<int> uniqueIds;
     std::vector<int> counts;
 
     for (int id : node->documentIds) {
         bool found = false;
         for (size_t i = 0; i < uniqueIds.size(); ++i) {
-            if (uniqueIds[i] == id) {
+            if (uniqueIds[i] == id) {           // id já visto → incrementa
                 counts[i]++;
                 found = true;
                 break;
             }
         }
-        if (!found) {
+        if (!found) {           // id novo
             uniqueIds.push_back(id);
             counts.push_back(1);
         }
     }
 
+    // Exibe ids, marcando multiplicidade quando > 1
     for (size_t i = 0; i < uniqueIds.size(); ++i) {
         std::cout << uniqueIds[i];
         if (counts[i] > 1) {
@@ -39,9 +42,10 @@ void recursivePrintIndex(Node* node, int& counter){
     }
 
     std::cout << std::endl;
-    recursivePrintIndex(node->right, counter);
+    recursivePrintIndex(node->right, counter);  // direita
 }
 
+// Desenho ASCII da árvore.
 void recursivePrintTree(Node* node, const std::string& prefix, bool isLeft){
     if (node == nullptr) return;
     std::cout << prefix;
@@ -58,6 +62,7 @@ void recursivePrintTree(Node* node, const std::string& prefix, bool isLeft){
     }
 }
 
+// Wrappers públicos de impressão
 void printIndex(BinaryTree* tree){
     int counter = 0;
     if (tree && tree->root)
@@ -73,6 +78,7 @@ void printTree(BinaryTree* tree){
     }
 }
 
+// Métricas simples: altura, nós, largura, folhas, memória.
 int calculateTreeHeight(BinaryTree* tree) {
     if (tree == nullptr) return -1;
     if (tree->root == tree->NIL) return 0;
@@ -122,6 +128,7 @@ GroupedStats calculateLeavesDepth(Node* node, Node* NIL, int currentDepth){
     return stats;
 }
 MemoryUsage calculateMemoryUsage(BinaryTree* tree) {
+    // Aproximação: soma tamanhos dos nós + cabeçalho da árvore.
     MemoryUsage memUsage;
     memUsage.numBytes = sizeof(BinaryTree);
     if (tree == nullptr) {
@@ -148,7 +155,7 @@ MemoryUsage calculateMemoryUsage(BinaryTree* tree) {
             if (node->right != tree->NIL) nodesToVisit.push_back(node->right);
         }
     }
-
+    // Calcula escala (KB / MB / GB) se necessário.
     memUsage.scale = "B";
     memUsage.scaleMultiplier = memUsage.numBytes;
     if (memUsage.numBytes > 1024) {
@@ -167,12 +174,14 @@ MemoryUsage calculateMemoryUsage(BinaryTree* tree) {
     return memUsage;
 }
 
+// Funções de verificação estrutural
 bool isBalanced(Node* node, Node* NIL) {
     if (node == NIL) return true;
     if (ValueUtils::abs(node->left->height - node->right->height) > 1) return false;
     return isBalanced(node->left, NIL) && isBalanced(node->right, NIL);
 }
 bool isPerfect(Node* node, Node* NIL, int depth, int level) {
+    // folha -> confere profundidade desejada
     if (node == nullptr) return true;
     if (node->left == nullptr && node->right == nullptr)
         return (depth == level + 1);
@@ -184,13 +193,13 @@ bool isPerfect(Node* node, Node* NIL, int depth, int level) {
 bool isFull(Node* node, Node* NIL) {
     if (node == NIL) return true;
     if ((node->left == NIL && node->right != NIL) || (node->left != NIL && node->right == NIL)) {
-        return false;
+        return false; // 1 filho
     }
     return isFull(node->left, NIL) && isFull(node->right, NIL);
 }
 bool isComplete(Node* node, Node* NIL, int index, int totalNodes) {
     if (node == NIL) return true;
-    if (index >= totalNodes) return false;
+    if (index >= totalNodes) return false;  // buraco na representação
     return isComplete(node->left, NIL, 2 * index + 1, totalNodes) && isComplete(node->right, NIL, 2 * index + 2, totalNodes);
 }
 

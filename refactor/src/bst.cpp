@@ -9,6 +9,7 @@
 
 namespace BST {
 
+// aloca estrutura da BST vazia
 BinaryTree* create() {
     BinaryTree* newTree = new BinaryTree;
     if (newTree == nullptr) {
@@ -20,6 +21,7 @@ BinaryTree* create() {
     return newTree;
 }
 
+// insere palavra ou incrementa lista de docs
 InsertResult insert(BinaryTree* tree, const std::string& word, int documentId){
     auto startTime = std::chrono::high_resolution_clock::now();
     InsertResult stats = InsertResult{0, 0.0, {0, 0, 0, 0}, 0, 0, 0}; // tree_utils v>=3.0.0
@@ -51,11 +53,12 @@ InsertResult insert(BinaryTree* tree, const std::string& word, int documentId){
         return stats;
     }
 
-    // Actual function
+    // percorre a árvore para inserção
     Node* actualNode = tree->root;
     Node* parent = nullptr;
     int currentDepth = 0; // tree_utils v>=3.0.0
 
+    // atualiza altura dos nós ancestrais
     while (actualNode != nullptr) {
         stats.numComparisons++;
         if (word == actualNode->word) {
@@ -99,7 +102,7 @@ InsertResult insert(BinaryTree* tree, const std::string& word, int documentId){
     else parent->right = newNode;
 
     stats.insertDepth = currentDepth; // tree_utils v>=3.0.0
-
+    // Atualiza altura dos ancestrais
     while (parent != nullptr) {
         if (parent->left == nullptr || parent->right == nullptr) {
             parent->height++;
@@ -134,7 +137,7 @@ SearchResult search(BinaryTree* tree, const std::string& word){
         return result;
     }
 
-    // Actual function
+    // Percorre a árvore para busca
     Node* actualNode = tree->root;
     int currentDepth = 0; // tree_utils v>=3.0.0
     while (actualNode != nullptr) {
@@ -163,7 +166,7 @@ SearchResult search(BinaryTree* tree, const std::string& word){
     return result;
 }
 
-// Função auxiliar para recursão
+// Libera nó e filhos recursivamente
 void destroyNode(Node* node) {
     if (node == nullptr) return;
     destroyNode(node->left);
@@ -172,6 +175,7 @@ void destroyNode(Node* node) {
     node = nullptr;
 }
 
+// Libera BST
 void destroy(BinaryTree* tree) {
     if (tree == nullptr) return;
     if (tree->NIL != nullptr) {

@@ -9,7 +9,7 @@
 #include "utils/value_utils.h"
 
 namespace RBT {
-
+    // cria uma nova Árvore Rubro-Negra com nó sentinela NIL
     BinaryTree* create() {
         BinaryTree* newtree = new BinaryTree;
         if (!newtree) {
@@ -31,11 +31,12 @@ namespace RBT {
         newtree->NIL = nil;
         return newtree;    
     }
-
+    // retorna a altura de um nó
     int height(Node* node, Node* NIL, InsertResult& stats){
         return node->height;
     }
 
+    // atualiza a altura de um nó com base em seus filhos
     void updateHeight(Node* node, Node* NIL, InsertResult& stats){
         stats.numComparisons++;
         if(node != NIL) {
@@ -44,23 +45,23 @@ namespace RBT {
         }
     }
 
+    // atualiza recursivamente a altura de um nó e seu pai
     void recursiveUpdateHeight(Node* node, Node* NIL, InsertResult& stats){
         stats.numComparisons++;
         if (node == NIL) return;
         updateHeight(node, NIL, stats);
         updateHeight(node->parent, NIL, stats);
 
-    }
-
+    }    
     Node* rightRotate(Node* y, Node* NIL, InsertResult& stats) {
         Node* x = y->left;
         Node* T2 = x->right;
 
-        // Perform rotation
+        // performa rotatacao
         x->right = y;
         y->left = T2;
 
-        // Update parents
+        // atualiza parents
         x->parent = y->parent;
         y->parent = x;
 
@@ -69,28 +70,49 @@ namespace RBT {
             T2->parent = y;
         }
 
+        // Update parent's pointer to x (the new root of this subtree)
+        stats.numComparisons++;
+        if (x->parent != NIL) {
+            stats.numComparisons++;
+            if (x->parent->left == y) {
+                x->parent->left = x;
+            } else {
+                x->parent->right = x;
+            }
+        }
+
         // Update heights
         updateHeight(y, NIL, stats);
         updateHeight(x, NIL, stats);
         recursiveUpdateHeight(x, NIL, stats);
 
         return x;
-    }
-
+    }    
     Node* leftRotate(Node* y, Node* NIL, InsertResult& stats) {
         Node* z = y->right;
         Node* T3 = z->left;
 
-        // Perform rotation
+        // performa rotacao
         z->left = y;
         y->right = T3;
 
-        // Update parents
+        // atualiza parents
         z->parent = y->parent;
         y->parent = z;
         stats.numComparisons++;
         if (T3 != NIL) {
             T3->parent = y;
+        }
+
+        // Update parent's pointer to z (the new root of this subtree)
+        stats.numComparisons++;
+        if (z->parent != NIL) {
+            stats.numComparisons++;
+            if (z->parent->left == y) {
+                z->parent->left = z;
+            } else {
+                z->parent->right = z;
+            }
         }
 
         // Update heights
@@ -101,6 +123,7 @@ namespace RBT {
         return z;
     }
 
+    // Insere um novo nó com palavra e documentId
     Node* insertNode(BinaryTree* tree, const std::string& word, int documentId, InsertResult& stats){
         stats.numComparisons++;
         if (tree == nullptr) {
@@ -159,6 +182,7 @@ namespace RBT {
         return newNode;
     }
     
+    // corrige as propriedades da árvore após inserção
     void fixInsert(BinaryTree* tree, Node* insertedNode, InsertResult& stats) {
         stats.numComparisons++;
         if (tree == nullptr) {
@@ -188,17 +212,22 @@ namespace RBT {
                     grandparent->isRed = 1;
                     actualNode = grandparent;
                     continue;
-                } 
-                stats.numComparisons++;
+                }                stats.numComparisons++;
                 if (actualNode == parent->right) {
-                        leftRotate(parent, tree->NIL, stats);
+                        Node* newParent = leftRotate(parent, tree->NIL, stats);
+                        if (newParent->parent == tree->NIL) {
+                            tree->root = newParent;
+                        }
                         actualNode = parent;
                         parent = actualNode->parent;
                         grandparent = parent->parent;
                 }
                 parent->isRed = 0;
                 grandparent->isRed = 1;
-                rightRotate(grandparent, tree->NIL, stats);
+                Node* newGrandparent = rightRotate(grandparent, tree->NIL, stats);
+                if (newGrandparent->parent == tree->NIL) {
+                    tree->root = newGrandparent;
+                }
                 return;
             }
             Node* uncle = grandparent->left;
@@ -209,21 +238,27 @@ namespace RBT {
                 grandparent->isRed = 1;
                 actualNode = grandparent;
                 continue;
-            } 
-            stats.numComparisons++;
+            }            stats.numComparisons++;
             if (actualNode == parent->left) {
-                    rightRotate(actualNode, tree->NIL, stats);
+                    Node* newParent = rightRotate(parent, tree->NIL, stats);
+                    if (newParent->parent == tree->NIL) {
+                        tree->root = newParent;
+                    }
                     actualNode = parent;
                     parent = actualNode->parent;
                     grandparent = parent->parent;
             }
             parent->isRed = 0;
             grandparent->isRed = 1;
-            leftRotate(grandparent, tree->NIL, stats);
+            Node* newGrandparent = leftRotate(grandparent, tree->NIL, stats);
+            if (newGrandparent->parent == tree->NIL) {
+                tree->root = newGrandparent;
+            }
             return;
         }
     }
     
+    // insere palavra ou adiciona documentId e balanceia a árvore
     InsertResult insert(BinaryTree* tree, const std::string& word, int documentId) {
         auto startTime = std::chrono::high_resolution_clock::now();
         InsertResult stats = InsertResult{0, 0.0, {0, 0, 0, 0}, 0, 0, 0}; // tree_utils v>=3.0.0
@@ -252,6 +287,7 @@ namespace RBT {
         return stats;
     }
 
+    // Busca palavra e retorna documentos associados
     SearchResult search(BinaryTree* tree, const std::string& word) {
         auto startTime = std::chrono::high_resolution_clock::now();
         SearchResult stats = SearchResult{0, {}, 0.0, 0, 0};

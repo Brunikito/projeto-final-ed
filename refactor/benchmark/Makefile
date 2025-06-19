@@ -14,7 +14,7 @@ INCLUDES = -I$(SRC_DIR) -I$(UTILS_DIR)
 
 # Compilador e flags
 CXX = g++
-CXXFLAGS = -std=c++17 -O2 $(INCLUDES)
+CXXFLAGS = -std=c++17 $(INCLUDES)
 
 # Alvo final
 TARGET = $(BUILD_DIR)/bench_bst
