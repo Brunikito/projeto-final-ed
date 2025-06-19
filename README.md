@@ -49,6 +49,11 @@ O projeto utiliza um sistema de compilação baseado em Makefile que compila aut
 ```bash
 make
 ```
+Ou
+
+```bash
+mingw32-make
+```
 
 Este comando:
 - Cria o diretório `build/` automaticamente
