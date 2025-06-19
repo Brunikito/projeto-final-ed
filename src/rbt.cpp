@@ -29,6 +29,7 @@ namespace RBT {
         tree->NIL->left = tree->NIL;
         tree->NIL->right = tree->NIL;
         tree->NIL->parent = tree->NIL;
+		tree->NIL->height = 0;
 
         // A raiz inicialmente aponta para o sentinela.
         tree->root = tree->NIL;
@@ -38,6 +39,7 @@ namespace RBT {
     }
     // retorna a altura de um nó
     int height(Node* node, Node* NIL, InsertResult& stats){
+		if (node == NIL) return 0;
         return node->height;
     }
 
@@ -285,6 +287,7 @@ namespace RBT {
         stats.numComparisons++;
         if (newNode != nullptr) {
             fixInsert(tree, newNode, stats);
+			recursiveUpdateHeight(newNode, tree->NIL, stats);
             tree->root->isRed = 0;
         }
         auto endTime = std::chrono::high_resolution_clock::now();

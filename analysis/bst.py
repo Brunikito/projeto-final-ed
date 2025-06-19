@@ -37,7 +37,7 @@ def plot_all_metrics_separately(df, tree_name, output_dir):
     plt.savefig(f"{output_dir}/{tree_name}_altura.png")
     plt.close()
     
-    # Total de Nós na Árvore (O que faltava)
+    # Total de Nós na Árvore
     plt.figure(figsize=(10, 6))
     plt.plot(df[x_axis], df["total_nos_arvore"], color='purple', marker='.')
     plt.title(f'Total de Nós na Árvore - {tree_name.upper()}')
