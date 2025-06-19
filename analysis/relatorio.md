@@ -323,13 +323,55 @@ A escolha entre BST, AVL e RBT depende inteiramente dos requisitos da aplicaçã
 - **Escolha a AVL** quando seu sistema realizar um volume muito maior de buscas do que de inserções. O custo extra para manter a árvore perfeitamente compacta se paga com buscas mais rápidas.
 - **Opte pela RBT** como a escolha padrão para a maioria das aplicações. Ela oferece um excelente equilíbrio entre o desempenho de leitura e escrita, sendo particularmente forte em cenários com modificações frequentes na estrutura de dados.
 
-![Texto alternativo da imagem](graphs/all.png)
-![Texto alternativo da imagem](graphs/avl.png)
-![Texto alternativo da imagem](graphs/bst.png)
-![Texto alternativo da imagem](graphs/avl_altura.png)
-![Texto alternativo da imagem](graphs/bst_altura.png)
-![Texto alternativo da imagem](graphs/bst_tempo_insercao.png)
-![Texto alternativo da imagem](graphs/bst_analise_comparativa.png)
+# Análise Gráfica: BST vs AVL
+
+## Gráficos AVL
+
+### Análise Completa da AVL
+![Análise completa da árvore AVL](graphs/avl_analise_completa.png)
+
+### Comparações Médias na AVL
+![Média de comparações na AVL](graphs/avl_comparacoes_media.png)
+
+### Altura da AVL
+![Altura da árvore AVL](graphs/avl_altura.png)
+
+### Profundidade Média na AVL
+![Profundidade média na AVL](graphs/avl_profundidade_media.png)
+
+### Tempo de Busca na AVL
+![Tempo de busca na AVL](graphs/avl_tempo_busca.png)
+
+### Tempo de Inserção na AVL
+![Tempo de inserção na AVL](graphs/avl_tempo_insercao.png)
+
+### Total de Nós na AVL
+![Total de nós na AVL](graphs/avl_total_nos.png)
+
+## Gráficos BST
+
+### Análise Completa da BST
+![Análise completa da árvore BST](graphs/bst_analise_completa.png)
+
+### Comparações Médias na BST
+![Média de comparações na BST](graphs/bst_comparacoes_media.png)
+
+### Altura da BST
+![Altura da árvore BST](graphs/bst_altura.png)
+
+### Profundidade Média na BST
+![Profundidade média na BST](graphs/bst_profundidade_media.png)
+
+### Tempo de Busca na BST
+![Tempo de busca na BST](graphs/bst_tempo_busca.png)
+
+### Tempo de Inserção na BST
+![Tempo de inserção na BST](graphs/bst_tempo_insercao.png)
+
+### Total de Nós na BST
+![Total de nós na BST](graphs/bst_total_nos.png)
+
+
 
 
 
