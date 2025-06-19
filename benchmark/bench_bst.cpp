@@ -11,6 +11,7 @@
 #include "../src/data.h"
 
 int main() {
+    std::cout << "funcionou" << std::endl;
     return 0;
 }
 /*

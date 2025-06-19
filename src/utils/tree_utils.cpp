@@ -158,16 +158,16 @@ MemoryUsage calculateMemoryUsage(BinaryTree* tree) {
     // Calcula escala (KB / MB / GB) se necessário.
     memUsage.scale = "B";
     memUsage.scaleMultiplier = memUsage.numBytes;
-    if (memUsage.numBytes > 1024) {
-        memUsage.scale = "KB";
+    if (memUsage.numBytes > 1024*1024*1024) {
+        memUsage.scale = "GB";
         memUsage.scaleMultiplier /= 1024;
     }
-    if (memUsage.numBytes > 1024) {
+    else if (memUsage.numBytes > 1024*1024) {
         memUsage.scale = "MB";
         memUsage.scaleMultiplier /= 1024;
     }
-    if (memUsage.numBytes > 1024) {
-        memUsage.scale = "GB";
+    else if (memUsage.numBytes > 1024) {
+        memUsage.scale = "KB";
         memUsage.scaleMultiplier /= 1024;
     }
     
@@ -177,7 +177,15 @@ MemoryUsage calculateMemoryUsage(BinaryTree* tree) {
 // Funções de verificação estrutural
 bool isBalanced(Node* node, Node* NIL) {
     if (node == NIL) return true;
-    if (ValueUtils::abs(node->left->height - node->right->height) > 1) return false;
+
+    int leftHeight = (node->left != NIL) ? node->left->height : -1;
+    int rightHeight = (node->right != NIL) ? node->right->height : -1;
+
+    if (ValueUtils::abs(leftHeight - rightHeight) > 1) {
+        return false;
+    }
+
+    // Verifica recursivamente se as sub-árvores também são balanceadas
     return isBalanced(node->left, NIL) && isBalanced(node->right, NIL);
 }
 bool isPerfect(Node* node, Node* NIL, int depth, int level) {
