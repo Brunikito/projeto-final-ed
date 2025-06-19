@@ -191,6 +191,17 @@ Cada estrutura de dados possui testes abrangentes incluindo:
 ./build/bench_rbt    # Benchmark Red-Black Tree
 ```
 
+### Execução dos Graficos
+
+```bash
+# Navegue para a pasta de análise: cd analysis
+
+py all.py      # Gera todos os gráficos COMPARATIVOS entre as árvores
+py bst.py      # Gera os gráficos individuais e o painel para a BST
+py avl.py      # Gera os gráficos individuais e o painel para a AVL
+py rbt.py      # Gera os gráficos individuais e o painel para a RBT
+```
+
 ### Métricas Coletadas
 
 Os benchmarks medem:
