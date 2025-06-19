@@ -73,7 +73,7 @@ int main() {
 
     // 5. Loop de benchmark incremental
     std::cout << "Iniciando benchmark incremental..." << std::endl;
-    for (int doc_id = 0; doc_id < (int)documents_words.size(); ++doc_id) {
+    for (int doc_id = 0; doc_id < (int)documents_words.size(); doc_id+=10) {
         // Imprime o progresso na mesma linha
         std::cout << "Processando documento " << (doc_id + 1) << "/" << documents_words.size() << "...\r" << std::flush;
         
