@@ -43,7 +43,7 @@ int main() {
     const std::string data_path = "data";
     const std::string output_csv = "benchmark/results/avl.csv";
     // Define o número máximo de documentos a processar.
-    const int total_docs_to_process = 3000; 
+    const int total_docs_to_process = 9999; 
 
     // 2. Leitura de todos os arquivos de uma vez para evitar I/O no loop
     std::cout << "Lendo arquivos de dados..." << std::endl;
