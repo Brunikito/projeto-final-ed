@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX := g++
-CXXFLAGS := -Wall -Wextra -std=c++17 -I./src -I./src/utils
+CXXFLAGS := -Wall -Wextra -std=c++17 -I./src -I./src/utils -O3
 LDFLAGS :=
 
 # Source directories
