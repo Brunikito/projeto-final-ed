@@ -441,27 +441,28 @@ Figura 21. Total de nós na RBT. O total de nós na RBT cresce linearmente confo
 ### Comparativo da Altura
 ![Comparativo da Altura](../analysis/graphs/comparativo_altura.png)
 
-Figura 22.
+Figura 22. Altura comparativa das três árvores. A curva da BST cresce quase linearmente — evidência da degeneração sem balanceamento. Já AVL e RBT exibem crescimento logarítmico: a AVL mantém-se ligeiramente mais baixa, enquanto a RBT fica um pouco acima, confirmando que ambas controlam a altura e evitam explosões de profundidade.
+
 
 ### Comparativo das Comparações de Busca
 ![Comparativo das Comparações de Busca](../analysis/graphs/comparativo_comparacoes_busca.png)
 
-Figura 23.
+Figura 23. Número médio de comparações na busca. A BST dispara rapidamente, exigindo cada vez mais comparações; em contraste, AVL e RBT mantêm-se quase planas (O(log n)). Entre as balanceadas, a AVL faz menos comparações em média graças à sua estrutura levemente mais compacta.
 
 ### Comparativo das Comparações de Inserção
 ![Comparativo das Comparações de Inserção](../analysis/graphs/comparativo_comparacoes_insercao.png)
 
-Figura 24.
+Figura 24. Número médio de comparações na inserção. A BST apresenta a maior contagem de comparações por inserção, pois se alonga como lista ligada. A RBT destaca-se como a mais eficiente — predominam recolorações de custo O(1) e, no máximo, duas rotações simples; a AVL fica no meio-termo, pagando o preço de verificar fatores de balanceamento e, ocasionalmente, executar rotações duplas.
 
 ### Comparativo do Tempo de Busca
 ![Comparativo do Tempo de Busca](../analysis/graphs/comparativo_tempo_busca.png)
 
-Figura 25.
+Figura 25. Tempo de busca comparativo. O tempo na BST cresce fortemente (tendendo a O(n)). Já AVL e RBT mantêm tempos quase constantes em escala logarítmica; a AVL é ligeiramente mais rápida, reforçando sua vantagem em cenários dominados por consultas.
 
 ### Comparação do Tempo de Inserção
 ![Comparação do Tempo de Inserção](../analysis/graphs/comparativo_tempo_insercao.png)
 
-Figura 26.
+Figura 26. Tempo de inserção comparativo. A BST sofre a maior penalidade, pois cada nova palavra percorre um caminho longo na árvore degenerada. A RBT obtém o menor tempo médio graças às recolorações baratas e poucas rotações; a AVL, embora um pouco mais lenta devido às rotações duplas ocasionais, mantém desempenho logarítmico e estável.
 
 # 3. Divisão de tarefas
 
