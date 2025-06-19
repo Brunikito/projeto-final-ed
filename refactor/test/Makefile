@@ -13,6 +13,10 @@ test_bst: test_bst.cpp treetest.cpp $(SRC_DIR)/bst.cpp $(UTILS_SOURCES)
 test_avl: test_avl.cpp treetest.cpp $(SRC_DIR)/avl.cpp $(UTILS_SOURCES)
 	$(CXX) $(CXXFLAGS) -o test_avl.exe test_avl.cpp treetest.cpp $(SRC_DIR)/avl.cpp $(UTILS_SOURCES)
 
+# RBT Test
+test_rbt: test_rbt.cpp treetest.cpp $(SRC_DIR)/rbt.cpp $(UTILS_SOURCES)
+	$(CXX) $(CXXFLAGS) -o test_rbt.exe test_rbt.cpp treetest.cpp $(SRC_DIR)/rbt.cpp $(UTILS_SOURCES)
+
 # Run BST Tests
 run_bst: test_bst
 	./test_bst.exe
@@ -21,8 +25,12 @@ run_bst: test_bst
 run_avl: test_avl
 	./test_avl.exe
 
+# Run RBT Tests
+run_rbt: test_rbt
+	./test_rbt.exe
+
 # Clean
 clean:
 	rm -f *.exe
 
-.PHONY: run_bst run_avl clean
+.PHONY: run_bst run_avl run_rbt clean

@@ -27,7 +27,7 @@ TestCase testRotationLeft() {
     BinaryTree* tree = create();
     insert(tree, "a", 1);
     insert(tree, "b", 2);
-    insert(tree, "c", 3); // Deve causar rotação à esquerda
+    insert(tree, "c", 3); 
 
     bool isBalanced = true;
     checkAVL(tree->root, isBalanced);
@@ -53,7 +53,7 @@ TestCase testRotationRight() {
     BinaryTree* tree = create();
     insert(tree, "c", 1);
     insert(tree, "b", 2);
-    insert(tree, "a", 3); // Deve causar rotação à direita
+    insert(tree, "a", 3); 
 
     bool isBalanced = true;
     checkAVL(tree->root, isBalanced);
@@ -79,7 +79,7 @@ TestCase testDoubleRotationLeftRight() {
     BinaryTree* tree = create();
     insert(tree, "c", 1);
     insert(tree, "a", 2);
-    insert(tree, "b", 3); // Deve causar rotação dupla esquerda-direita
+    insert(tree, "b", 3); 
 
     bool isBalanced = true;
     checkAVL(tree->root, isBalanced);
@@ -103,7 +103,7 @@ TestCase testDoubleRotationRightLeft() {
     BinaryTree* tree = create();
     insert(tree, "a", 1);
     insert(tree, "c", 2);
-    insert(tree, "b", 3); // Deve causar rotação dupla direita-esquerda
+    insert(tree, "b", 3); 
 
     bool isBalanced = true;
     checkAVL(tree->root, isBalanced);
@@ -205,7 +205,6 @@ TestCase testMultipleInsertsBalanced() {
     assertNotNull(test, tree, "Árvore deve ser criada");
     
     if (tree != nullptr) {
-        // Inserir palavras que forcem rotações
         insert(tree, "dog", 1);
         insert(tree, "cat", 2);
         insert(tree, "elephant", 3);
@@ -213,8 +212,6 @@ TestCase testMultipleInsertsBalanced() {
         insert(tree, "fish", 5);
         
         assertNotNull(test, tree->root, "Root não deve ser NULL");
-        
-        // Verificar se a árvore está balanceada
         bool isBalanced = true;
         checkAVL(tree->root, isBalanced);
         assertTrue(test, isBalanced, "Árvore deve estar balanceada após múltiplas inserções");
@@ -314,7 +311,6 @@ TestCase testPerformanceWithManyElements() {
     assertNotNull(test, tree, "Árvore deve ser criada");
     
     if (tree != nullptr) {
-        // Inserir muitos elementos
         std::vector<std::string> words = {
             "word01", "word02", "word03", "word04", "word05",
             "word06", "word07", "word08", "word09", "word10",
@@ -325,13 +321,11 @@ TestCase testPerformanceWithManyElements() {
             InsertResult result = insert(tree, words[i], i + 1);
             assertTrue(test, result.executionTime >= 0, "Tempo de inserção deve ser não negativo");
         }
-        
-        // Verificar se a árvore está balanceada
+
         bool isBalanced = true;
         checkAVL(tree->root, isBalanced);
         assertTrue(test, isBalanced, "Árvore deve estar balanceada após muitas inserções");
-        
-        // Buscar alguns elementos
+
         SearchResult result1 = search(tree, "word01");
         assertTrue(test, result1.found == 1, "Deve encontrar word01");
         
@@ -357,13 +351,9 @@ TestCase testDestroyTree() {
     assertNotNull(test, tree, "Árvore deve ser criada");
     
     if (tree != nullptr) {
-        // Adicionar alguns elementos
         insert(tree, "test1", 1);
         insert(tree, "test2", 2);
         insert(tree, "test3", 3);
-        
-        // A função destroy deve ser chamada sem causar crash
-        // Não há muito o que testar aqui além de não travar
         destroy(tree);
         assertTrue(test, true, "Destruição da árvore deve ser bem-sucedida");
     }
