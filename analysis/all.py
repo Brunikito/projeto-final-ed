@@ -60,7 +60,8 @@ if __name__ == "__main__":
     data_paths = {
         "bst": "../benchmark/results/bst.csv",
         "avl": "../benchmark/results/avl.csv",
-        "rbt": "../benchmark/results/rbt.csv",
+        # comentado pois faltam os dados do rbt
+        # "rbt": "../benchmark/results/rbt.csv",
     }
     
     all_data = {name: pd.read_csv(path) for name, path in data_paths.items()}
