@@ -1,187 +1,147 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <chrono>
-#include <fstream>
+
 #include "../src/bst.h"
-#include "../src/utils/bench_utils.h"
-#include "../src/utils/value_utils.h"
-#include "../src/utils/tree_utils.h"
-#include "../src/utils/less_than.h"
 #include "../src/data.h"
+#include "../src/utils/bench_utils.h"
+#include "../src/utils/tree_utils.h"
+#include "../src/utils/value_utils.h"
 
-int main() {
-    std::cout << "funcionou" << std::endl;
-    return 0;
-}
-/*
-std::vector<std::string> uniqueWords(BinaryTree* treeAllWords){
-    if (treeAllWords == nullptr) return {};
-    if (treeAllWords->root = treeAllWords->NIL) return {};
-    std::vector<std::string> uniqueWords;
-    Node* actualNode;
-    std::vector<Node*> nodesToSearch = {treeAllWords->root};
-    while (!nodesToSearch.empty()) {
-        actualNode = nodesToSearch.back();
-        nodesToSearch.pop_back();
-        uniqueWords.push_back(actualNode->word);
-        if (actualNode->left != treeAllWords->NIL) nodesToSearch.push_back(actualNode->left);
-        if (actualNode->right != treeAllWords->NIL) nodesToSearch.push_back(actualNode->right);
-    }
-    ValueUtils::heapSort(uniqueWords, LessThan::str, true);
-    return uniqueWords;
-}
-
-int main() {
-    ReadDataStats stats;
-    auto readData = DATA::readFiles("../data", 10'000, stats, false);
-    IndexingStats indexAllWordsStats;
-    auto start = std::chrono::high_resolution_clock::now();
-    BinaryTree* treeAllWords = BST::create();
-    for (int documentId = 0; documentId < readData.size(); documentId++) {
-        for (std::string word : readData[documentId]) {
-            InsertResult result = BST::insert(treeAllWords, word, documentId);
-            indexAllWordsStats.comparisonStats.add(result.numComparisons);
-            indexAllWordsStats.depthStats.add(result.insertDepth);
-            indexAllWordsStats.recoloringStats.add(result.numRecoloring);
-            indexAllWordsStats.rotationStats.add(result.numRotations);
-            indexAllWordsStats.totalWordsProcessed++;
-        }
-    }
-    auto end = std::chrono::high_resolution_clock::now();
-    indexAllWordsStats.totalIndexingTime = std::chrono::duration<double, std::micro>(end - start).count();
-    std::vector<std::string> allWords = uniqueWords(treeAllWords);
-    BST::destroy(treeAllWords);
-
-    // Testando agora para todos os diferentes tamanhos
-    std::vector<IndexingStats*> allIndexing;
-    std::vector<TreeStats*> allTree;
-    std::vector<GroupedStats*> allExecutionTime;
-    std::vector<GroupedStats*> allComparisons;
-    std::vector<GroupedStats*> allSearchDepth;
-    IndexingStats actualIndexing;
-    actualIndexing.totalIndexingTime = 0;
-    GroupedStats actualExecutionTime;
-    GroupedStats actualComparisons;
-    GroupedStats actualSearchDepth;
-    BinaryTree* actualTree = BST::create();
-    for (int documentId = 0; documentId < readData.size(); documentId++) {
-        auto start = std::chrono::high_resolution_clock::now();
-        for (std::string word : readData[documentId]) {
-            InsertResult result = BST::insert(treeAllWords, word, documentId);
-            actualIndexing.comparisonStats.add(result.numComparisons);
-            actualIndexing.depthStats.add(result.insertDepth);
-            actualIndexing.recoloringStats.add(result.numRecoloring);
-            actualIndexing.rotationStats.add(result.numRotations);
-            actualIndexing.totalWordsProcessed++;
-        }
-        auto end = std::chrono::high_resolution_clock::now();
-        actualIndexing.totalIndexingTime += std::chrono::duration<double, std::micro>(end - start).count();
-        IndexingStats* tempIndex = new IndexingStats;
-        if (tempIndex == nullptr) return 0;
-        tempIndex->comparisonStats = actualIndexing.comparisonStats;
-        tempIndex->depthStats = actualIndexing.depthStats;
-        tempIndex->recoloringStats = actualIndexing.recoloringStats;
-        tempIndex->rotationStats.LL = actualIndexing.rotationStats.LL;
-        tempIndex->rotationStats.RL = actualIndexing.rotationStats.RL;
-        tempIndex->rotationStats.RR = actualIndexing.rotationStats.RR;
-        tempIndex->rotationStats.LR = actualIndexing.rotationStats.LR;
-        tempIndex->totalIndexingTime = actualIndexing.totalIndexingTime;
-        tempIndex->totalWordsProcessed = actualIndexing.totalWordsProcessed;
-        allIndexing.push_back(tempIndex);
-        TreeStats* tempTree = new TreeStats;
-        if (tempTree == nullptr) return 0;
-        *tempTree = getTreeStats(actualTree);
-        tempTree->type = BSTTree;
-        allTree.push_back(tempTree);
-        for (std::string word : allWords){
-            SearchResult tempSR = BST::search(actualTree, word);
-            actualExecutionTime.add(tempSR.executionTime);
-            actualComparisons.add(tempSR.numComparisons);
-            actualSearchDepth.add(tempSR.searchDepth);
-        }
-        GroupedStats* tempExecutionTime = new GroupedStats(actualExecutionTime);
-        if (tempExecutionTime == nullptr) return 0;
-        GroupedStats* tempComparisons = new GroupedStats(actualComparisons);
-        if (tempComparisons == nullptr) return 0;
-        GroupedStats* tempSearchDepth = new GroupedStats(actualSearchDepth);
-        if (tempSearchDepth == nullptr) return 0;
-        allExecutionTime.push_back(tempExecutionTime);
-        allComparisons.push_back(tempComparisons);
-        allSearchDepth.push_back(tempSearchDepth);
+/**
+ * @brief Percorre a árvore para extrair todas as palavras únicas.
+ * @param tree A árvore BST a ser percorrida.
+ * @return Um vetor de strings contendo as palavras únicas.
+ */
+std::vector<std::string> get_unique_words(BinaryTree* tree) {
+    if (!tree || !tree->root) {
+        return {};
     }
     
-    BST::destroy(actualTree);
-    return 0;
-}
-*/
-/*
-// Função para gerar palavras de teste
-std::vector<std::string> generateWords(int n) {
     std::vector<std::string> words;
-    for (int i = 0; i < n; ++i) {
-        words.push_back("word" + std::to_string(i));
+    std::vector<Node*> stack;
+    Node* current = tree->root;
+
+    // Travessia in-order para obter as palavras
+    while (current != nullptr || !stack.empty()) {
+        while (current != nullptr) {
+            stack.push_back(current);
+            current = current->left;
+        }
+        current = stack.back();
+        stack.pop_back();
+        words.push_back(current->word);
+        current = current->right;
     }
     return words;
 }
 
-// Salva os resultados no CSV
-void saveResultsToCSV(const std::vector<std::tuple<std::string, int, int, double>>& results, const std::string& filename) {
-    std::ofstream file(filename);
+int main() {
+    // 1. Definições do Benchmark
+    const std::string data_path = "data";
+    const std::string output_csv = "benchmark/results/bst.csv";
+    // Define o número máximo de documentos a processar.
+    const int total_docs_to_process = 10000; 
 
-    // Cabeçalho
-    file << "Benchmark,Run,NumWords,Duration_ms\n";
+    // 2. Leitura de todos os arquivos de uma vez para evitar I/O no loop
+    std::cout << "Lendo arquivos de dados..." << std::endl;
+    ReadDataStats read_stats;
+    auto documents_words = DATA::readFiles(data_path, total_docs_to_process, read_stats, true);
+    std::cout << read_stats.numDocs << " arquivos lidos com sucesso." << std::endl;
 
-    for (const auto& row : results) {
-        file << std::get<0>(row) << "," << std::get<1>(row) << "," << std::get<2>(row) << "," << std::get<3>(row) << "\n";
+    // 3. Abrir arquivo CSV para escrita e inserir cabeçalho
+    std::ofstream file(output_csv);
+    if (!file.is_open()) {
+        std::cerr << "ERRO: Nao foi possivel abrir o arquivo para escrita: " << output_csv << std::endl;
+        return 1;
     }
 
+    file << "num_docs_processados,palavras_no_documento,"
+         << "tempo_insercao_doc_ms,"
+         << "comp_insercao_media,comp_insercao_desvpad,"
+         << "prof_insercao_media,prof_insercao_desvpad,"
+         << "altura_arvore,total_nos_arvore,"
+         << "total_palavras_unicas_arvore,"
+         << "tempo_busca_total_ms,"
+         << "comp_busca_media,comp_busca_desvpad,"
+         << "prof_busca_media,prof_busca_desvpad\n";
+
+    // 4. Inicialização da árvore
+    BinaryTree* tree = BST::create();
+
+    // 5. Loop de benchmark incremental
+    std::cout << "Iniciando benchmark incremental..." << std::endl;
+    for (int doc_id = 0; doc_id < (int)documents_words.size(); doc_id+=10) {
+        // Imprime o progresso na mesma linha
+        std::cout << "Processando documento " << (doc_id + 1) << "/" << documents_words.size() << "...\r" << std::flush;
+        
+        const auto& current_doc_words = documents_words[doc_id];
+
+        // Se o documento estiver vazio, pula para o próximo
+        if (current_doc_words.empty()) {
+            continue;
+        }
+
+        // --- A. Fase de Inserção (para o documento atual) ---
+        GroupedStats insert_comps_step = {};
+        GroupedStats insert_depth_step = {};
+        double insert_time_step_us = 0.0;
+
+        for (const auto& word : current_doc_words) {
+            if (!word.empty()) {
+                InsertResult i_res = BST::insert(tree, word, doc_id);
+                insert_comps_step.add(i_res.numComparisons);
+                insert_depth_step.add(i_res.insertDepth);
+                insert_time_step_us += i_res.executionTime;
+            }
+        }
+
+        // --- B. Fase de Busca (para a árvore inteira) ---
+        auto words_to_search = get_unique_words(tree);
+        
+        GroupedStats search_comps_stats = {};
+        GroupedStats search_depth_stats = {};
+        double search_total_time_us = 0.0;
+
+        if (!words_to_search.empty()) {
+             for (const auto& word : words_to_search) {
+                SearchResult s_res = BST::search(tree, word);
+                search_total_time_us += s_res.executionTime;
+                search_comps_stats.add(s_res.numComparisons);
+                search_depth_stats.add(s_res.searchDepth);
+            }
+        }
+       
+        // --- C. Estatísticas gerais da árvore ---
+        TreeStats tree_stats = getTreeStats(tree);
+
+        // --- D. Escrever a linha de estatísticas no CSV ---
+        std::string row_str = "";
+        row_str += std::to_string(doc_id + 1) + ",";
+        row_str += std::to_string(current_doc_words.size()) + ",";
+        row_str += std::to_string(insert_time_step_us / 1000.0) + ",";
+        row_str += std::to_string(insert_comps_step.mean()) + ",";
+        row_str += std::to_string(insert_comps_step.stddev()) + ",";
+        row_str += std::to_string(insert_depth_step.mean()) + ",";
+        row_str += std::to_string(insert_depth_step.stddev()) + ",";
+        row_str += std::to_string(tree_stats.height) + ",";
+        row_str += std::to_string(tree_stats.totalNodes) + ",";
+        row_str += std::to_string(words_to_search.size()) + ",";
+        row_str += std::to_string(search_total_time_us / 1000.0) + ",";
+        row_str += std::to_string(search_comps_stats.mean()) + ",";
+        row_str += std::to_string(search_comps_stats.stddev()) + ",";
+        row_str += std::to_string(search_depth_stats.mean()) + ",";
+        row_str += std::to_string(search_depth_stats.stddev());
+
+        file << row_str << "\n";
+    }
+
+    // 6. Finalização e Limpeza
     file.close();
+    BST::destroy(tree);
+    std::cout << "\nBenchmark incremental concluido. Resultados salvos em " << output_csv << std::endl;
+
+    return 0;
 }
-
-// Benchmark: Inserção
-void benchmarkBSTInsert(int numWords, int numRuns, std::vector<std::tuple<std::string, int, int, double>>& results) {
-    auto words = generateWords(numWords);
-
-    for (int run = 1; run <= numRuns; ++run) {
-        BinaryTree* tree = BST::create();
-        auto start = std::chrono::high_resolution_clock::now();
-
-        for (int i = 0; i < numWords; ++i) {
-            BST::insert(tree, words[i], i);
-        }
-
-        auto end = std::chrono::high_resolution_clock::now();
-        double duration = std::chrono::duration<double, std::milli>(end - start).count();
-
-        results.emplace_back("insert", run, numWords, duration);
-
-        BST::destroy(tree);
-    }
-}
-
-// Benchmark: Busca
-void benchmarkBSTSearch(int numWords, int numRuns, std::vector<std::tuple<std::string, int, int, double>>& results) {
-    auto words = generateWords(numWords);
-
-    for (int run = 1; run <= numRuns; ++run) {
-        BinaryTree* tree = BST::create();
-        for (int i = 0; i < numWords; ++i) {
-            BST::insert(tree, words[i], i);
-        }
-
-        auto start = std::chrono::high_resolution_clock::now();
-
-        for (int i = 0; i < numWords; ++i) {
-            BST::search(tree, words[i]);
-        }
-
-        auto end = std::chrono::high_resolution_clock::now();
-        double duration = std::chrono::duration<double, std::milli>(end - start).count();
-
-        results.emplace_back("search", run, numWords, duration);
-
-        BST::destroy(tree);
-    }
-}
-*/
