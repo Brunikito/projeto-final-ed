@@ -84,7 +84,7 @@ void searchTree(BinaryTree* tree, const TreeOperations& ops, const std::string& 
     std::cout << "Iniciando indexacao das palavras na arvore " << arvore << "..." << std::endl;
     double total_insertion_time_ms = 0;
     
-    for (int doc_id = 0; doc_id < documents_words.size(); ++doc_id) {
+    for (int doc_id = 0; doc_id < (int)documents_words.size(); ++doc_id) {
         for (const std::string& word : documents_words[doc_id]) {
             if (!word.empty()) {
                 InsertResult i_res = ops.insert(tree, word, doc_id + 1); // doc_id + 1 para começar do doc 1
@@ -201,7 +201,7 @@ void runStats(BinaryTree* tree, const TreeOperations& ops, const std::string& ar
                 // Reinicia as estatísticas de indexação
                 indexStats.indexingStats = IndexingStats{};
 
-                for (int doc_id = 0; doc_id < documents_words.size(); ++doc_id) {
+                for (int doc_id = 0; doc_id < (int)documents_words.size(); ++doc_id) {
                     for (const std::string& word : documents_words[doc_id]) {
                         if (!word.empty()) {
                             InsertResult i_res = ops.insert(tree, word, doc_id + 1);

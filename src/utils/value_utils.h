@@ -8,7 +8,6 @@
 // #include <filesystem> // Compatibilidade GCC 6.3.0
 
 /**
-/**
  * @namespace ValueUtils
  * @brief Funções utilitárias para manipulação de valores, estatísticas e ordenação.
  *
@@ -122,7 +121,7 @@ namespace ValueUtils {
     template<typename T>
     double mean(const std::vector<T>& arr) {
         double total = 0;
-        size_t num_elements = arr.size();
+        int num_elements = arr.size();
         if (num_elements == 0) return 0;
         
         for (const T& element : arr) {
@@ -135,7 +134,7 @@ namespace ValueUtils {
     template<typename Iterator>
     double mean(Iterator begin, Iterator end) {
         double total = 0;
-        size_t num_elements = std::distance(begin, end);
+        int num_elements = std::distance(begin, end);
         if (num_elements == 0) return 0;
         
         for (Iterator iter = begin; iter != end; ++iter) {
@@ -147,7 +146,7 @@ namespace ValueUtils {
 
     template<typename T>
     double var(const std::vector<T>& arr){
-        size_t num_elements = arr.size();
+        int num_elements = arr.size();
         if (num_elements == 0) return 0;
         double mean_value = mean(arr);
         double sum_squares = 0;
@@ -159,7 +158,7 @@ namespace ValueUtils {
 
     template<typename Iterator>
     double var(Iterator begin, Iterator end) {
-        size_t num_elements = std::distance(begin, end);
+        int num_elements = std::distance(begin, end);
         if (num_elements == 0) return 0;
         double mean_value = mean(begin, end);
         double sum_squares = 0;
@@ -176,7 +175,7 @@ namespace ValueUtils {
     double stddev(Iterator begin, Iterator end) { return sqrt(var(begin, end)); }
 
     template<typename T, typename compareLT>
-    void heapify(std::vector<T>& arr, size_t n, size_t i, compareLT lt, bool ascending){
+    void heapify(std::vector<T>& arr, int n, int i, compareLT lt, bool ascending){
         int largest = i;
         int left = 2 * i + 1;
         int right = 2 * i + 2;
@@ -204,7 +203,7 @@ namespace ValueUtils {
     }
 
     template<typename Iterator, typename compareLT>
-    void heapify(Iterator begin, Iterator end, size_t n, size_t i, compareLT lt, bool ascending){
+    void heapify(Iterator begin, Iterator end, int n, int i, compareLT lt, bool ascending){
         Iterator left = begin + 2 * i + 1;
         Iterator right = begin + 2 * i + 2;
         Iterator largest = begin + i;
@@ -233,7 +232,7 @@ namespace ValueUtils {
 
     template<typename T, typename compareLT>
     void heapSort(std::vector<T>& arr, compareLT lt, bool ascending = true){
-        size_t num_elements = arr.size();
+        int num_elements = arr.size();
         for (int i = num_elements / 2 - 1; i >= 0; i--) {
             heapify(arr, num_elements, i, lt, ascending);
         }
@@ -245,7 +244,7 @@ namespace ValueUtils {
 
     template<typename Iterator, typename compareLT>
     void heapSort(Iterator begin, Iterator end, compareLT lt, bool ascending = true) {
-        size_t num_elements = std::distance(begin, end);
+        int num_elements = std::distance(begin, end);
         for (int i = num_elements / 2 - 1; i >= 0; i--) {
             heapify(begin, end, num_elements, i, lt, ascending);
         }

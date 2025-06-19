@@ -204,7 +204,7 @@ namespace RBT {
             grandparent = parent->parent;
             stats.numComparisons++;
             if (parent == grandparent->left) {
-                Node* uncle = grandparent->right;
+                uncle = grandparent->right;
                 stats.numComparisons++;
                 if (uncle->isRed == 1) {
                     parent->isRed = 0;
@@ -230,7 +230,7 @@ namespace RBT {
                 }
                 return;
             }
-            Node* uncle = grandparent->left;
+            uncle = grandparent->left;
             stats.numComparisons++;
             if (uncle->isRed == 1) {
                 parent->isRed = 0;

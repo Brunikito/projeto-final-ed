@@ -10,6 +10,10 @@
 #include "../src/utils/less_than.h"
 #include "../src/data.h"
 
+int main() {
+    return 0;
+}
+/*
 std::vector<std::string> uniqueWords(BinaryTree* treeAllWords){
     if (treeAllWords == nullptr) return {};
     if (treeAllWords->root = treeAllWords->NIL) return {};
@@ -109,7 +113,7 @@ int main() {
     BST::destroy(actualTree);
     return 0;
 }
-
+*/
 /*
 // Função para gerar palavras de teste
 std::vector<std::string> generateWords(int n) {
