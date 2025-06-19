@@ -25,8 +25,8 @@ std::vector<std::string> get_unique_words(BinaryTree* tree) {
     Node* current = tree->root;
 
     // Travessia in-order para obter as palavras
-    while (current != nullptr || !stack.empty()) {
-        while (current != nullptr) {
+    while (current != tree->NIL || !stack.empty()) {
+        while (current != tree->NIL) {
             stack.push_back(current);
             current = current->left;
         }
@@ -43,7 +43,7 @@ int main() {
     const std::string data_path = "data";
     const std::string output_csv = "benchmark/results/avl.csv";
     // Define o número máximo de documentos a processar.
-    const int total_docs_to_process = 10000; 
+    const int total_docs_to_process = 3000; 
 
     // 2. Leitura de todos os arquivos de uma vez para evitar I/O no loop
     std::cout << "Lendo arquivos de dados..." << std::endl;

@@ -1,81 +1,81 @@
-#!/usr/bin/env python3
-"""
-avl.py — análise de benchmarks da AVL
-
-Gera e salva gráficos a partir do CSV de resultados produzido por `bench_avl.cpp`.
-
-Estrutura de diretórios esperada (raiz do projeto):
-
-benchmark/results/avl.csv
-analysis/graphs/           (onde os PNGs serão salvos)
-
-Uso:
-    python analysis/avl.py                # caminhos padrão
-    python analysis/avl.py --csv outra.csv --outdir figs/
-"""
-
-import argparse
-from pathlib import Path
-
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
+def plot_all_metrics_separately(df, tree_name, output_dir):
+    """Gera 6 gráficos de desempenho, um para cada métrica principal, em arquivos separados."""
+    os.makedirs(output_dir, exist_ok=True)
+    x_axis = "num_docs_processados"
 
-def plot_metric(df, x_col, y_col, ylabel, title, out_path):
-    """Gera um gráfico simples linha-por-pontos e salva em *out_path*"""
-    plt.figure()
-    plt.plot(df[x_col], df[y_col], marker="o", linewidth=2)
-    plt.xlabel("Número de documentos processados")
-    plt.ylabel(ylabel)
-    plt.title(title)
+    # Tempo de Inserção
+    plt.figure(figsize=(10, 6))
+    plt.plot(df[x_axis], df["tempo_insercao_doc_ms"], marker='.')
+    plt.title(f'Tempo de Inserção - {tree_name.upper()}')
+    plt.xlabel("Documentos Processados")
+    plt.ylabel("Tempo (ms)")
     plt.grid(True)
-    plt.tight_layout()
-    plt.savefig(out_path, dpi=300)
+    plt.savefig(f"{output_dir}/{tree_name}_tempo_insercao.png")
     plt.close()
 
+    # Tempo de Busca
+    plt.figure(figsize=(10, 6))
+    plt.plot(df[x_axis], df["tempo_busca_total_ms"], marker='.', color='orange')
+    plt.title(f'Tempo de Busca - {tree_name.upper()}')
+    plt.xlabel("Documentos Processados")
+    plt.ylabel("Tempo (ms)")
+    plt.grid(True)
+    plt.savefig(f"{output_dir}/{tree_name}_tempo_busca.png")
+    plt.close()
 
-def main():
-    parser = argparse.ArgumentParser(description="Gera gráficos de benchmark da AVL")
-    parser.add_argument(
-        "--csv",
-        default=str(
-            Path(__file__).resolve().parents[1]
-            / "benchmark"
-            / "results"
-            / "avl.csv"
-        ),
-        help="Caminho para o CSV de resultados (padrão: benchmark/results/avl.csv)",
-    )
-    parser.add_argument(
-        "--outdir",
-        default=str(Path(__file__).resolve().parents[0] / "graphs"),
-        help="Diretório onde os PNGs serão salvos (padrão: analysis/graphs)",
-    )
+    # Altura da Árvore
+    plt.figure(figsize=(10, 6))
+    plt.plot(df[x_axis], df["altura_arvore"], color='green', marker='.')
+    plt.title(f'Altura da Árvore - {tree_name.upper()}')
+    plt.xlabel("Documentos Processados")
+    plt.ylabel("Altura")
+    plt.grid(True)
+    plt.savefig(f"{output_dir}/{tree_name}_altura.png")
+    plt.close()
+    
+    # Total de Nós na Árvore (O que faltava)
+    plt.figure(figsize=(10, 6))
+    plt.plot(df[x_axis], df["total_nos_arvore"], color='purple', marker='.')
+    plt.title(f'Total de Nós na Árvore - {tree_name.upper()}')
+    plt.xlabel("Documentos Processados")
+    plt.ylabel("Total de Nós")
+    plt.grid(True)
+    plt.savefig(f"{output_dir}/{tree_name}_total_nos.png")
+    plt.close()
 
-    args = parser.parse_args()
-    csv_path = Path(args.csv)
-    outdir = Path(args.outdir)
-    outdir.mkdir(parents=True, exist_ok=True)
+    # Comparações Médias (Inserção vs Busca)
+    plt.figure(figsize=(10, 6))
+    plt.plot(df[x_axis], df["comp_insercao_media"], label="Inserção", marker='.')
+    plt.plot(df[x_axis], df["comp_busca_media"], label="Busca", marker='.')
+    plt.title(f'Comparações Médias (Inserção vs. Busca) - {tree_name.upper()}')
+    plt.xlabel("Documentos Processados")
+    plt.ylabel("Nº de Comparações")
+    plt.legend()
+    plt.grid(True)
+    plt.savefig(f"{output_dir}/{tree_name}_comparacoes_media.png")
+    plt.close()
 
-    if not csv_path.exists():
-        raise FileNotFoundError(f"CSV não encontrado: {csv_path}")
+    # Profundidade Média (Inserção vs Busca)
+    plt.figure(figsize=(10, 6))
+    plt.plot(df[x_axis], df["prof_insercao_media"], label="Inserção", marker='.')
+    plt.plot(df[x_axis], df["prof_busca_media"], label="Busca", marker='.')
+    plt.title(f'Profundidade Média (Inserção vs. Busca) - {tree_name.upper()}')
+    plt.xlabel("Documentos Processados")
+    plt.ylabel("Profundidade")
+    plt.legend()
+    plt.grid(True)
+    plt.savefig(f"{output_dir}/{tree_name}_profundidade_media.png")
+    plt.close()
 
-    df = pd.read_csv(csv_path)
-
-    metrics = [
-        ("tempo_insercao_doc_ms", "Tempo de inserção (ms/doc)", "avl_insert_time.png"),
-        ("tempo_busca_total_ms", "Tempo total de busca (ms)", "avl_search_time.png"),
-        ("altura_arvore", "Altura da árvore", "avl_height.png"),
-        ("comp_insercao_media", "Comparações médias de inserção", "avl_comp_insert.png"),
-        ("comp_busca_media", "Comparações médias de busca", "avl_comp_search.png"),
-    ]
-
-    for col, ylabel, filename in metrics:
-        out_path = outdir / filename
-        title = f"{ylabel} vs. Nº de documentos"
-        plot_metric(df, "num_docs_processados", col, ylabel, title, out_path)
-        print(f"Gerado: {out_path}")
-
+    print(f"6 gráficos de análise para {tree_name.upper()} salvos em '{output_dir}'.")
 
 if __name__ == "__main__":
-    main()
+    plot_all_metrics_separately(
+        df=pd.read_csv("../benchmark/results/avl.csv"),
+        tree_name="avl",
+        output_dir="graphs"
+    )

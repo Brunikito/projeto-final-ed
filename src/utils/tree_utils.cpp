@@ -81,7 +81,6 @@ void printTree(BinaryTree* tree){
 // Métricas simples: altura, nós, largura, folhas, memória.
 int calculateTreeHeight(BinaryTree* tree) {
     if (tree == nullptr) return -1;
-    if (tree->root == tree->NIL) return 0;
     return tree->root->height;
 }
 int calculateTotalNodes(Node* node, Node* NIL){
@@ -190,10 +189,10 @@ bool isBalanced(Node* node, Node* NIL) {
 }
 bool isPerfect(Node* node, Node* NIL, int depth, int level) {
     // folha -> confere profundidade desejada
-    if (node == nullptr) return true;
-    if (node->left == nullptr && node->right == nullptr)
+    if (node == NIL) return true;
+    if (node->left == NIL && node->right == NIL)
         return (depth == level + 1);
-    if (node->left == nullptr || node->right == nullptr) {
+    if (node->left == NIL || node->right == NIL) {
         return false;
     }
     return isPerfect(node->left, NIL, depth, level + 1) && isPerfect(node->right, NIL, depth, level + 1);
@@ -223,7 +222,7 @@ TreeFlags calculateTreeFlags(BinaryTree* tree) {
     flags.isPerfect = isPerfect(tree->root, tree->NIL, height);
     flags.isFull = isFull(tree->root, tree->NIL);
     flags.isComplete = isComplete(tree->root, tree->NIL, 0, totalNodes);
-
+    
     return flags;
 }
 WordsStats getWordsStats(BinaryTree* tree) { // Mais um DFS

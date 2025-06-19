@@ -181,13 +181,13 @@ A implementação da Árvore AVL é uma solução robusta e eficiente para o pro
 
 ### **Relatório de Análise da Implementação da Árvore Rubro-Negra (RBT)**
 
-### 1. Visão Geral
+### 1.4.1 Visão Geral
 
 O código implementa uma Árvore Rubro-Negra, um outro tipo de árvore de busca binária autobalanceada. Assim como as implementações de BST e AVL, seu propósito é servir como um índice invertido. O balanceamento na RBT não é alcançado através de um fator de balanceamento de altura (como na AVL), mas sim através de um conjunto de propriedades baseadas na coloração dos nós (vermelho ou preto). Após cada inserção, a árvore é verificada e reestruturada através de rotações e re-colorações para garantir que essas propriedades sejam mantidas.
 
 Uma característica fundamental desta implementação é o uso de um **nó sentinela `NIL`**, que representa todas as folhas da árvore, simplificando a lógica de balanceamento.
 
-### 2. Funcionalidades Públicas (API do Namespace `RBT`)
+### 1.4.2 Funcionalidades Públicas (API do Namespace `RBT`)
 
 Estas são as funções expostas pela interface `rbt.h` para manipulação da árvore.
 
@@ -200,7 +200,7 @@ Estas são as funções expostas pela interface `rbt.h` para manipulação da á
 - **`void destroy(BinaryTree* tree)`**
     - **Funcionalidade**: Libera toda a memória associada à árvore. Ela utiliza a função recursiva `destroyNode`, que usa o `NIL` como caso base, e ao final deleta também o próprio nó sentinela `NIL`.
 
-### 3. Mecanismos Internos e Lógica de Autobalanceamento
+### 1.4.3 Mecanismos Internos e Lógica de Autobalanceamento
 
 A "magia" da RBT reside em sua lógica interna de inserção e correção, que mantém a árvore aproximadamente balanceada.
 
@@ -217,7 +217,7 @@ A "magia" da RBT reside em sua lógica interna de inserção e correção, que m
 - **Operações de Rotação (`leftRotate` e `rightRotate`)**
     - **Funcionalidade**: São as mesmas operações estruturais vistas na AVL, usadas para rearranjar subárvores. No contexto da RBT, elas são chamadas pela `fixInsert` para resolver os casos em que o tio do nó inserido é preto.
 
-### 4. Análise e Conclusões
+### 1.4.4 Análise e Conclusões
 
 **Pontos Fortes:**
 
@@ -275,25 +275,154 @@ A etapa inicial de carregar os dados dos arquivos para a memória também teve s
 * **Implementação de Ordenação Customizada**: Uma versão do `data.cpp` implementa o algoritmo Heap Sort do zero para ordenar tanto os arquivos quanto as palavras (`heapifyFiles`, `sortWords`). Implementar um algoritmo de ordenação eficiente e sem bugs é um desafio clássico da ciência da computação. A outra versão utiliza uma biblioteca, mas ainda requer a criação de functores de comparação corretos.
 * **Eficiência e Uso de Memória**: O processo de ler múltiplos arquivos de texto e armazenar todas as palavras em um `std::vector<std::vector<std::string>>` pode consumir uma quantidade significativa de memória RAM. O desafio foi fazer isso de forma eficiente para que a etapa de pré-processamento não se tornasse um gargalo de desempenho maior que a própria indexação nas árvores.
 
+
+# Análise Comparativa: BST vs. AVL vs. RBT
+
+No mundo das estruturas de dados, as árvores de busca binária são fundamentais para armazenar e recuperar informações de forma eficiente. No entanto, nem todas são criadas iguais. A análise das implementações da Árvore de Busca Binária (BST) simples, da Árvore AVL e da Árvore Rubro-Negra (RBT) revela uma fascinante troca entre simplicidade, rigor de balanceamento e desempenho prático.
+
+A seguir, uma comparação detalhada baseada nas implementações fornecidas.
+
+## Tabela Comparativa Rápida
+
+| Critério                     | Árvore de Busca Binária (BST) | Árvore AVL | Árvore Rubro-Negra (RBT) |
+|------------------------------|-------------------------------|------------|--------------------------|
+| **Garantia de Desempenho**   | Nenhuma. Pode degenerar para O(n). | Estrita. Garante desempenho O(logn). | Forte. Garante desempenho O(logn). |
+| **Mecanismo de Balanceamento** | Inexistente. | Rígido, baseado no "fator de balanceamento" (altura das subárvores). | Flexível, baseado em 5 propriedades de coloração (vermelho/preto). |
+| **Velocidade de Busca**      | Rápida (O(logn)) no caso médio, mas lenta (O(n)) no pior caso. | A mais rápida na prática, pois a árvore é a mais compacta possível. | Muito rápida, ligeiramente mais lenta que a AVL em teoria, pois a árvore pode ser mais alta. |
+| **Velocidade de Inserção**   | A mais rápida quando não há degeneração. | Mais lenta, pois pode exigir múltiplas rotações e atualizações de altura. | Mais rápida que a AVL, pois requer menos rotações (máx. 2) e muitas correções são apenas recolorações. |
+| **Complexidade de Implementação** | Simples. | Intermediária. | Alta. A lógica de fixInsert e os casos do "tio" são complexos. |
+| **Cenário Ideal**            | Fins didáticos; dados comprovadamente aleatórios. | Aplicações com muito mais leituras do que escritas (Read-Heavy). | Uso geral; aplicações com um misto de leituras e escritas, ou muitas escritas (Write-Heavy). |
+
+## Análise Detalhada
+
+### 1. BST: A Simplicidade e seu Preço
+A Árvore de Busca Binária é a base de todas as outras. Sua regra é elegante e simples: para qualquer nó, os valores na subárvore esquerda são menores e os na direita são maiores.
+
+**Força:** A simplicidade de sua implementação [cite: bst.cpp] a torna uma excelente ferramenta pedagógica. Em cenários com dados perfeitamente aleatórios, seu desempenho é ótimo.
+
+**Fraqueza Fatal:** Sua maior fraqueza é a completa ausência de um mecanismo de autobalanceamento. Conforme observado no módulo de leitura de dados (data.cpp), que ordena as palavras antes da inserção [cite: data.cpp], alimentar uma BST com dados ordenados a transforma no seu pior inimigo: uma lista ligada. Nesse cenário, o desempenho de busca e inserção despenca de O(logn) para um desastroso O(n). Por essa razão, seu uso em sistemas de produção é extremamente arriscado e desaconselhado.
+
+### 2. Árvore AVL: O Perfeccionista Rígido
+A Árvore AVL foi a primeira árvore de busca binária autobalanceada inventada. Ela se impõe uma regra muito estrita: a diferença de altura entre as subárvores esquerda e direita de qualquer nó (o "fator de balanceamento") nunca pode ser maior que 1.
+
+**Força:** Esse rigor garante a árvore mais compacta e "baixa" possível. Como o tempo de busca é proporcional à altura da árvore, a AVL oferece, em teoria e na prática, os tempos de busca mais rápidos entre as três [cite: avl.cpp].
+
+**Custo do Rigor:** Manter esse balanceamento estrito tem um custo. Cada inserção exige a verificação do fator de balanceamento e, potencialmente, a execução de rotações (simples ou duplas) para corrigir qualquer desequilíbrio [cite: avl.cpp]. Embora uma única inserção exija no máximo duas rotações, o processo de verificação e atualização de altura pode percorrer o caminho de volta até a raiz, tornando a inserção um pouco mais lenta em comparação com a RBT. É a escolha ideal para cenários "Read-Heavy", onde a frequência de buscas justifica o custo maior das inserções.
+
+### 3. Árvore Rubro-Negra (RBT): O Pragmatismo Eficiente
+A Árvore Rubro-Negra adota uma abordagem mais pragmática para o balanceamento. Em vez de uma regra de altura estrita, ela utiliza cinco propriedades baseadas na coloração dos nós (vermelho ou preto) para garantir que a árvore seja "boa o suficiente". A regra chave é que o caminho mais longo da raiz até uma folha nunca será mais que o dobro do caminho mais curto.
+
+**Força:** O balanceamento mais "relaxado" da RBT reduz drasticamente o trabalho necessário durante uma inserção. A maioria das correções envolve apenas a troca de cores dos nós, uma operação extremamente rápida. As rotações, que são mais custosas, são menos frequentes do que na AVL (no máximo duas por inserção) [cite: rbt.cpp]. Isso torna a RBT significativamente mais rápida para aplicações com um grande volume de inserções e remoções ("Write-Heavy").
+
+**Complexidade:** Sua maior desvantagem é a complexidade de implementação. A lógica de fixInsert, que analisa a cor do "tio" para decidir entre recoloração e rotação, é notoriamente menos intuitiva do que o fator de balanceamento numérico da AVL [cite: rbt.cpp]. No entanto, seu desempenho equilibrado a tornou o padrão da indústria, sendo usada em muitas bibliotecas padrão de linguagens, como no std::map do C++.
+
+## Conclusão: Qual Árvore Escolher?
+A escolha entre BST, AVL e RBT depende inteiramente dos requisitos da aplicação.
+
+- **Use a BST** apenas para fins acadêmicos ou se puder garantir que os dados de entrada serão sempre aleatórios.
+- **Escolha a AVL** quando seu sistema realizar um volume muito maior de buscas do que de inserções. O custo extra para manter a árvore perfeitamente compacta se paga com buscas mais rápidas.
+- **Opte pela RBT** como a escolha padrão para a maioria das aplicações. Ela oferece um excelente equilíbrio entre o desempenho de leitura e escrita, sendo particularmente forte em cenários com modificações frequentes na estrutura de dados.
+
+# Análise Gráfica: BST vs AVL vs RBT
+
+## Gráficos BST
+
+### Análise Completa da BST
+![Análise completa da árvore BST](../analysis/graphs/bst_analise_completa.png)
+
+### Comparações Médias na BST
+![Média de comparações na BST](../analysis/graphs/bst_comparacoes_media.png)
+
+### Altura da BST
+![Altura da árvore BST](../analysis/graphs/bst_altura.png)
+
+### Profundidade Média na BST
+![Profundidade média na BST](../analysis/graphs/bst_profundidade_media.png)
+
+### Tempo de Busca na BST
+![Tempo de busca na BST](../analysis/graphs/bst_tempo_busca.png)
+
+### Tempo de Inserção na BST
+![Tempo de inserção na BST](../analysis/graphs/bst_tempo_insercao.png)
+
+### Total de Nós na BST
+![Total de nós na BST](../analysis/graphs/bst_total_nos.png)
+
+## Gráficos AVL
+
+### Análise Completa da AVL
+![Análise completa da árvore AVL](../analysis/graphs/avl_analise_completa.png)
+
+### Comparações Médias na AVL
+![Média de comparações na AVL](../analysis/graphs/avl_comparacoes_media.png)
+
+### Altura da AVL
+![Altura da árvore AVL](../analysis/graphs/avl_altura.png)
+
+### Profundidade Média na AVL
+![Profundidade média na AVL](../analysis/graphs/avl_profundidade_media.png)
+
+### Tempo de Busca na AVL
+![Tempo de busca na AVL](../analysis/graphs/avl_tempo_busca.png)
+
+### Tempo de Inserção na AVL
+![Tempo de inserção na AVL](../analysis/graphs/avl_tempo_insercao.png)
+
+### Total de Nós na AVL
+![Total de nós na AVL](../analysis/graphs/avl_total_nos.png)
+
+## Gráficos RBT
+
+### Análise Completa da RBT
+![Análise completa da árvore RBT](../analysis/graphs/rbt_analise_completa.png)
+
+### Comparações Médias na RBT
+![Média de comparações na RBT](../analysis/graphs/rbt_comparacoes_media.png)
+
+### Altura da RBT
+![Altura da árvore RBT](../analysis/graphs/rbt_altura.png)
+
+### Profundidade Média na RBT
+![Profundidade média na RBT](../analysis/graphs/rbt_profundidade_media.png)
+
+### Tempo de Busca na RBT
+![Tempo de busca na RBT](../analysis/graphs/rbt_tempo_busca.png)
+
+### Tempo de Inserção na RBT
+![Tempo de inserção na RBT](../analysis/graphs/rbt_tempo_insercao.png)
+
+### Total de Nós na RBT
+![Total de nós na RBT](../analysis/graphs/rbt_total_nos.png)
+
+
+
 # 3. Divisão de tarefas
 
 ### Bruno Cavalli  
+<<<<<<< HEAD:analysis/relatorio.md
 *Papel:* Responsável por Benchmarks e Implementação da AVL
+=======
+Papel: Responsável por Benchmarks e Implementação da AVL
+>>>>>>> blzrefactor:docs/relatorio.md
 
 - Organizou a estrutura inicial do repositório (src/, data/, docs/) e realocou arquivos nas pastas corretas.  
-- Implementou *AVL*: inserção, rotações, balanceamento e testes de getBalance/height; ajustou a lógica até compatibilizar com o framework.  
-- Escreveu rotinas de *leitura do corpus* (10 000 documentos) e integrou-as às mains.  
-- Criou benchmarks padronizados para *BST* e *AVL* — coleta de tempo, altura, nº de comparações — com *exportação CSV* automática.  
+- Implementou AVL: inserção, rotações, balanceamento e testes de getBalance/height; ajustou a lógica até compatibilizar com o framework.  
+- Escreveu rotinas de leitura do corpus (10 000 documentos) e integrou-as às mains.  
+- Criou benchmarks padronizados para BST e AVL — coleta de tempo, altura, nº de comparações — com exportação CSV automática.  
 - Documentou e expandiu value_utils; removeu binários/temporários, mantendo o repositório enxuto.  
 - Sincronizou constantemente a branch bruno2branch com main e blzrefactor, resolvendo conflitos de benchmarks e leitura.
 
 ---
 
 ### Bruno Luis Zerbinato Rosa
+<<<<<<< HEAD:analysis/relatorio.md
 *Papel:* Desenvolvedor Principal de Algoritmos e Benchmarks
+=======
+Papel: Desenvolvedor Principal de Algoritmos e Benchmarks
+>>>>>>> blzrefactor:docs/relatorio.md
 
-- Implementou a *BST* completa (v 1.0 → 2.0) e entregou a *RBT* estável (v 1.2.5); corrigiu pontos críticos da AVL.  
-- Criou o módulo **bench_utils**, programas bench_*, test_framework (v 0.1 → 1.2) e Makefiles dedicados.  
+- Implementou a BST completa (v 1.0 → 2.0) e entregou a RBT estável (v 1.2.5); corrigiu pontos críticos da AVL.  
+- Criou o módulo *bench_utils, programas bench_, test_framework (v 0.1 → 1.2) e Makefiles dedicados.  
 - Desenvolveu as mains main_bst, main_avl, main_rbt e iniciou cli_utils.  
 - Adicionou utilidades (value_utils, less_than, tree_utils) e heap-sort para ordenar arquivos.  
 - Automatizou build/limpeza (.gitignore) e conduziu merges entre main, blzbranch, kauanrefactor, revisando o código integrado.
@@ -301,32 +430,44 @@ A etapa inicial de carregar os dados dos arquivos para a memória também teve s
 ---
 
 ### Kauan Kevem Sousa Farias 
+<<<<<<< HEAD:analysis/relatorio.md
 *Papel:* Documentação e Integração
+=======
+Papel: Documentação e Integração
+>>>>>>> blzrefactor:docs/relatorio.md
 
-- Padronizou *todos os cabeçalhos* (*.h) com Doxygen, exemplos e pré/pós-condições.  
-- Atualizou o *README* com instruções de build (make) e uso da CLI (search, stats).  
-- Realizou múltiplos *merges* (main, kauan, blzbranch, kauanrefactor), resolvendo conflitos de código e documentação.  
+- Padronizou todos os cabeçalhos (*.h) com Doxygen, exemplos e pré/pós-condições.  
+- Atualizou o README com instruções de build (make) e uso da CLI (search, stats).  
+- Realizou múltiplos merges (main, kauan, blzbranch, kauanrefactor), resolvendo conflitos de código e documentação.  
 - Definiu convenções de nomenclatura/comentário; forneceu templates de docstring e checklist de boas práticas.  
 - Atuou como ponto de contato para dúvidas de documentação e estrutura de pastas.
 
 ---
 
 ### Gustavo Oliveira 
+<<<<<<< HEAD:analysis/relatorio.md
 *Papel:* Testes e Correções
+=======
+Papel: Testes e Correções
+>>>>>>> blzrefactor:docs/relatorio.md
 
-- Criou **test_bst.cpp**, **test_avl.cpp**, **test_rbt.cpp** cobrindo inserção, busca, rotações e destruição; ampliou a AVL para *17 cenários*.  
+- Criou *test_bst.cpp, **test_avl.cpp, **test_rbt.cpp* cobrindo inserção, busca, rotações e destruição; ampliou a AVL para 17 cenários.  
 - Refinou o framework de testes, Makefile dedicado e README da suíte.  
-- Corrigiu rebalanceamento da *AVL* e rotações da *RBT*; implementou funções de comparação em LessThan.  
+- Corrigiu rebalanceamento da AVL e rotações da RBT; implementou funções de comparação em LessThan.  
 - Removeu binários/temporários, padronizou .gitignore, limpou comentários obsoletos.  
 - Manteve integração contínua com main, blzbranch, kauan, artur.
 
 ---
 
 ### Artur Vidal Krause  
+<<<<<<< HEAD:analysis/relatorio.md
 *Papel:* Responsável pela CLI e Estrutura do Repositório
+=======
+Papel: Responsável pela CLI e Estrutura do Repositório
+>>>>>>> blzrefactor:docs/relatorio.md
 
-- Definiu a *estrutura de pastas* e adicionou o *corpus de 10 000 documentos*.  
-- Desenvolveu a *CLI completa* (search, stats) com parsing robusto; criou funções genéricas searchTree e runStats.  
+- Definiu a estrutura de pastas e adicionou o corpus de 10 000 documentos.  
+- Desenvolveu a CLI completa (search, stats) com parsing robusto; criou funções genéricas searchTree e runStats.  
 - Implementou main_avl integrando AVL ao fluxo da CLI.  
 - Atualizou o README com exemplos de uso e preparo do corpus.  
-- Realizou merges (main, kauan, blzbranch) para manter a branch artur sincronizada.
+- Realizou merges (main, kauan, blzbranch) para manter a branch artur sincronizada.
